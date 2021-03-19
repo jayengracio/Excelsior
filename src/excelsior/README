@@ -1,0 +1,21 @@
+To run:
+Runs on java 1.8 with javaFX
+
+Files created:
+-Main
+-UI
+-Button
+
+UI:
+-A class in which the user interface is created using javafx.
+-The user interface contains:
+ ->Scroll pane to contain past comic panel thumbnails.
+ ->Comic editing panel which is subdivided for later use.
+ ->Area sectioned off for colour panel
+ ->Area for comic editing buttons
+
+Main:
+-Runs the javafx application and calls a UI method to create the stage.
+
+Button:
+-A class which represents our stylised buttons for the GUI.
