@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -12,8 +13,10 @@ public class UI {
     Stage primaryStage;
     Label narrationTop;
     Label narrationBottom;
-    GridPane comic;
+    //GridPane comic;
     HBox allComics = new HBox(15);
+    ComicPane comic = new ComicPane();
+
 
 
     public UI(Stage primaryStage) {
@@ -25,7 +28,7 @@ public class UI {
         root.getChildren().add(createMenu());
         root.getChildren().add(createView());
         primaryStage.setResizable(false);
-        primaryStage.setScene(new Scene(root, 1100, 800));
+        primaryStage.setScene(new Scene(root, 1250, 800));
         primaryStage.show();
     }
 
@@ -59,13 +62,15 @@ public class UI {
         return view;
     }
 
-    public VBox createComic(){
-        VBox box = new VBox();
-        box.setPrefSize(625, 500);
+    public GridPane createComic(){
+        /*VBox box = new VBox();
+        box.setPrefSize(615, 500);
         box.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 2;");
-        box.setAlignment(Pos.CENTER);
+        box.setAlignment(Pos.CENTER);*/
 
-        comic = new GridPane();
+        //box.getChildren().add(comic);
+
+        /*comic = new GridPane();
         narrationTop = new Label("Top Narration...");
         narrationBottom = new Label("Bottom Narration...");
 
@@ -92,8 +97,8 @@ public class UI {
 
 
         comic.setGridLinesVisible(true);
-        box.getChildren().addAll(narrationTop, comic, narrationBottom);
-        return box;
+        box.getChildren().addAll(narrationTop, comic, narrationBottom);*/
+        return comic;
     }
 
     public HBox createColourPallet(){
