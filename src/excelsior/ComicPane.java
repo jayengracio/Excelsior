@@ -22,9 +22,9 @@ public class ComicPane extends GridPane {
 
     public ComicPane(){
         this.setPrefSize(615, 500);
-        this.setStyle("-fx-background-color: white;-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 2;");
+        this.setStyle("-fx-background-color: white;-fx-border-color: #000000; -fx-border-width: 2; -fx-border-radius: 2;");
         this.setHgap(15);
-        this.setGridLinesVisible(true);
+        this.setGridLinesVisible(false);
         ColumnConstraints col1 = new ColumnConstraints();
         col1.setMaxWidth(300);
         col1.setHalignment(HPos.CENTER);
