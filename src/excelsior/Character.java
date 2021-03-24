@@ -37,6 +37,11 @@ public class Character extends ImageView {
         return defaultOrientation;
     }
 
+    public void flipDefaultOrientation()
+    {
+        this.setScaleX(isDefaultOrientation() ? -1 : 1);
+        setDefaultOrientation(!isDefaultOrientation());
+    }
     public void setDefaultOrientation(boolean defaultOrientation) {
         this.defaultOrientation = defaultOrientation;
     }

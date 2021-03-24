@@ -9,6 +9,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 public class UI {
@@ -124,17 +125,19 @@ public class UI {
         buttonBox.setHgap(14);
         buttonBox.setAlignment(Pos.TOP_RIGHT);
         buttonBox.setPrefRows(4);
-        for (int i = 0; i < 2; i++) {
+       /* for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 4; j++) {
                 buttonBox.getChildren().add(new Button("Btn " + ((i*4)+j + 1)));
                 buttonBox.setTileAlignment(Pos.TOP_LEFT);
             }
-        }
+        }*/
 
-        buttonBox.getChildren().set(0, new Button("Left"));
-        buttonBox.getChildren().set(1, new Button("Right"));
+        buttonBox.getChildren().add(0, new Button("Left"));
+        buttonBox.getChildren().add(1, new Button("Right"));
+        buttonBox.getChildren().add(2, new Button("Flip"));
         leftCharacterButton(buttonBox.getChildren().get(0));
         rightCharacterButton(buttonBox.getChildren().get(1));
+        switchOrientationButton(buttonBox.getChildren().get(2));
 
         return buttonBox;
     }
@@ -162,6 +165,35 @@ public class UI {
 
             button.setEffect(dropShadow);
         });
+    }
+
+    private void switchOrientationButton(Node button) {
+        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            if(selectedCharacter == null || selectedCharacter.getCharacter() == null)
+            {
+                displaySelectCharacterWarning();
+            }else {
+                selectedCharacter.flipDefaultOrientation();
+                button.setEffect(dropShadow);
+            }
+        });
+    }
+
+    private void displaySelectCharacterWarning()
+    {
+        VBox container = new VBox();
+        container.setPadding(new Insets(15));
+        container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
+        container.setAlignment(Pos.CENTER);
+        final Label warning = new Label("Warning!");
+        warning.setStyle("-fx-font-size: 30px; -fx-text-fill: red; -fx-font-weight: bold;");
+        final Label selectCharacterWarning = new Label("You must select a character first.");
+        final Label closePrompt = new Label("Click anywhere to close.");
+        container.getChildren().addAll(warning,selectCharacterWarning,closePrompt);
+        Popup charWarningPopup = new Popup();
+        charWarningPopup.getContent().add(container);
+        charWarningPopup.setAutoHide(true);
+        charWarningPopup.show(primaryStage);
     }
 
     private void rightCharacterButton(Node button) {
