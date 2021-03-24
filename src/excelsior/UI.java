@@ -2,12 +2,14 @@ package excelsior;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Glow;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-
 
 public class UI {
     Stage primaryStage;
@@ -17,7 +19,9 @@ public class UI {
     HBox allComics = new HBox(15);
     ComicPane comic = new ComicPane();
 
+    Character selectedCharacter;
 
+    DropShadow dropShadow = new DropShadow();
 
     public UI(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -62,7 +66,7 @@ public class UI {
         return view;
     }
 
-    public GridPane createComic(){
+    public GridPane createComic() {
         /*VBox box = new VBox();
         box.setPrefSize(615, 500);
         box.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 2;");
@@ -127,6 +131,11 @@ public class UI {
             }
         }
 
+        buttonBox.getChildren().set(0, new Button("Left"));
+        buttonBox.getChildren().set(1, new Button("Right"));
+        leftCharacterButton(buttonBox.getChildren().get(0));
+        rightCharacterButton(buttonBox.getChildren().get(1));
+
         return buttonBox;
     }
 
@@ -140,5 +149,31 @@ public class UI {
         scroll.setContent(allComics);
         scroll.setPannable(true);
         return scroll;
+    }
+
+    private void leftCharacterButton(Node button) {
+        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            comic.getLeftCharacter().setCharacter("/Character_Images/charming.png");
+
+            // add functionalities here
+            selectedCharacter = comic.getLeftCharacter();
+            comic.getLeftCharacter().setEffect(dropShadow);
+            comic.getRightCharacter().setEffect(null);
+
+            button.setEffect(dropShadow);
+        });
+    }
+
+    private void rightCharacterButton(Node button) {
+        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            comic.getRightCharacter().setCharacter("/Character_Images/charming.png");
+
+            // add functionalities here
+            selectedCharacter = comic.getRightCharacter();
+            comic.getRightCharacter().setEffect(dropShadow);
+            comic.getLeftCharacter().setEffect(null);
+
+            button.setEffect(dropShadow);
+        });
     }
 }
