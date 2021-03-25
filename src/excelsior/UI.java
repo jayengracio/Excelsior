@@ -6,9 +6,11 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
@@ -156,13 +158,28 @@ public class UI {
 
     private void leftCharacterButton(Node button) {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            comic.getLeftCharacter().setCharacter("/Character_Images/charming.png");
+            if (selectedCharacter == comic.getLeftCharacter()) {
+                selectedCharacter = null;
+                comic.getLeftCharacter().setEffect(null);
+            } else {
+                selectedCharacter = comic.getLeftCharacter();
+                comic.getLeftCharacter().setEffect(dropShadow);
+                comic.getRightCharacter().setEffect(null);
+            }
+            button.setEffect(dropShadow);
+        });
+    }
 
-            // add functionalities here
-            selectedCharacter = comic.getLeftCharacter();
-            comic.getLeftCharacter().setEffect(dropShadow);
-            comic.getRightCharacter().setEffect(null);
-
+    private void rightCharacterButton(Node button) {
+        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            if (selectedCharacter == comic.getRightCharacter()) {
+                selectedCharacter = null;
+                comic.getRightCharacter().setEffect(null);
+            } else {
+                selectedCharacter = comic.getRightCharacter();
+                comic.getRightCharacter().setEffect(dropShadow);
+                comic.getLeftCharacter().setEffect(null);
+            }
             button.setEffect(dropShadow);
         });
     }
@@ -194,18 +211,5 @@ public class UI {
         charWarningPopup.getContent().add(container);
         charWarningPopup.setAutoHide(true);
         charWarningPopup.show(primaryStage);
-    }
-
-    private void rightCharacterButton(Node button) {
-        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            comic.getRightCharacter().setCharacter("/Character_Images/charming.png");
-
-            // add functionalities here
-            selectedCharacter = comic.getRightCharacter();
-            comic.getRightCharacter().setEffect(dropShadow);
-            comic.getLeftCharacter().setEffect(null);
-
-            button.setEffect(dropShadow);
-        });
     }
 }
