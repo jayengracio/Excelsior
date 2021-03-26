@@ -13,6 +13,7 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import java.io.File;
 
 public class UI {
     Stage primaryStage;
@@ -137,9 +138,11 @@ public class UI {
         buttonBox.getChildren().add(0, new Button("Left"));
         buttonBox.getChildren().add(1, new Button("Right"));
         buttonBox.getChildren().add(2, new Button("Flip"));
+        buttonBox.getChildren().add(3, new Button("Character Poses"));
         leftCharacterButton(buttonBox.getChildren().get(0));
         rightCharacterButton(buttonBox.getChildren().get(1));
         switchOrientationButton(buttonBox.getChildren().get(2));
+        characterPoses(buttonBox.getChildren().get(3));
 
         return buttonBox;
     }
@@ -155,6 +158,24 @@ public class UI {
         scroll.setPannable(true);
         return scroll;
     }
+
+    private void characterPoses(Node button){
+
+        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            if(selectedCharacter == null || selectedCharacter.getCharacter() == null)
+            {
+                displaySelectCharacterWarning();
+            }else {
+
+                displayCharacterPoses();
+                selectedCharacter.setCharacterPose("biting.png");
+                button.setEffect(dropShadow);
+            }
+        });
+
+
+    }
+
 
     private void leftCharacterButton(Node button) {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
@@ -194,6 +215,42 @@ public class UI {
                 button.setEffect(dropShadow);
             }
         });
+    }
+
+    private void displayCharacterPoses()
+    {
+
+        VBox container = new VBox();
+        container.setPadding(new Insets(15));
+        container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
+        container.setAlignment(Pos.CENTER_RIGHT);
+
+        container.getChildren().addAll();
+        Popup charWarningPopup = new Popup();
+        charWarningPopup.getContent().add(container);
+        charWarningPopup.setAutoHide(true);
+        charWarningPopup.show(primaryStage);
+    }
+
+    public TilePane createPoses(){
+
+        TilePane Poses = new TilePane();
+        Poses.setPrefSize(375, 500);
+        Poses.setPrefColumns(2);
+        Poses.setVgap(11);
+        Poses.setHgap(14);
+        Poses.setAlignment(Pos.TOP_RIGHT);
+
+        File folder = new File("src/Character_Images");
+        File[] listOfFiles = folder.listFiles();
+        int i = 0;
+        for (File file : listOfFiles){
+        if(file.isFile()){
+        Poses.getChildren().add(i,new Button(file.getName()));
+        Poses.setTileAlignment(Pos.TOP_LEFT);
+        i++; }
+        }
+        return Poses;
     }
 
     private void displaySelectCharacterWarning()

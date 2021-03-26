@@ -19,6 +19,11 @@ public class Character extends ImageView {
         setCharacter("/Character_Images/angry.png");    //setting a character as a default for testing
     }
 
+    public void setCharacterPose(String character){
+        String address = "/Character_Images/" + character ;
+        setCharacter(address);
+
+    }
     public Image getCharacter() {
         return character;
     }
