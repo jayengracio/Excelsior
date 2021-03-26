@@ -220,14 +220,14 @@ public class UI {
     private void displayCharacterPoses()
     {
 
-        VBox container = new VBox();
-        container.setPadding(new Insets(15));
-        container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
-        container.setAlignment(Pos.CENTER_RIGHT);
+        VBox selection = new VBox();
+       // selection.add(createPoses(), 2, 0);
+        selection.setPadding(new Insets(15));
+        selection.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
+        selection.setAlignment(Pos.TOP_RIGHT);
 
-        container.getChildren().addAll();
         Popup charWarningPopup = new Popup();
-        charWarningPopup.getContent().add(container);
+        charWarningPopup.getContent().add(createPoses());
         charWarningPopup.setAutoHide(true);
         charWarningPopup.show(primaryStage);
     }
@@ -239,8 +239,9 @@ public class UI {
         Poses.setPrefColumns(2);
         Poses.setVgap(11);
         Poses.setHgap(14);
-        Poses.setAlignment(Pos.TOP_RIGHT);
-
+        Poses.setAlignment(Pos.CENTER_RIGHT);
+        Poses.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
+        
         File folder = new File("src/Character_Images");
         File[] listOfFiles = folder.listFiles();
         int i = 0;
