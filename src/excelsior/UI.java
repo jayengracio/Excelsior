@@ -128,13 +128,6 @@ public class UI {
         buttonBox.setHgap(14);
         buttonBox.setAlignment(Pos.TOP_RIGHT);
         buttonBox.setPrefRows(4);
-       /* for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 4; j++) {
-                buttonBox.getChildren().add(new Button("Btn " + ((i*4)+j + 1)));
-                buttonBox.setTileAlignment(Pos.TOP_LEFT);
-            }
-        }*/
-
         buttonBox.getChildren().add(0, new Button("Left"));
         buttonBox.getChildren().add(1, new Button("Right"));
         buttonBox.getChildren().add(2, new Button("Flip"));
@@ -220,14 +213,13 @@ public class UI {
     {
 
         ScrollPane selection = new ScrollPane();
-        selection.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5;");
         selection.setPrefSize(300 ,750);
 
         selection.setContent(createPoses());
         selection.setPannable(true);
 
 
-        selection.setPadding(new Insets(15));
+        selection.setPadding(new Insets(22));
         selection.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
 
 
@@ -260,19 +252,15 @@ public class UI {
         Poses.getChildren().add(i,new Button(file.getName()));
         Poses.setTileAlignment(Pos.TOP_LEFT);
         changePose(Poses.getChildren().get(i) , file.getName());
-
         i++;
         }
         }
         return Poses;
     }
-
+//  waits for update for button being pressed and then changes the pose to the selected
     private void changePose(Node button , String pose){
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-
-
             selectedCharacter.setCharacterPose(pose);
-
             button.setEffect(dropShadow);
         });
 
