@@ -168,7 +168,6 @@ public class UI {
             }else {
 
                 displayCharacterPoses();
-                selectedCharacter.setCharacterPose("biting.png");
                 button.setEffect(dropShadow);
             }
         });
@@ -260,12 +259,26 @@ public class UI {
         if(file.isFile()){
         Poses.getChildren().add(i,new Button(file.getName()));
         Poses.setTileAlignment(Pos.TOP_LEFT);
+        changePose(Poses.getChildren().get(i) , file.getName());
 
         i++;
         }
         }
         return Poses;
     }
+
+    private void changePose(Node button , String pose){
+        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+
+
+            selectedCharacter.setCharacterPose(pose);
+
+            button.setEffect(dropShadow);
+        });
+
+
+    }
+
 
     private void displaySelectCharacterWarning()
     {
