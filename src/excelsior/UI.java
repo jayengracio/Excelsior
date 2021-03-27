@@ -220,28 +220,39 @@ public class UI {
     private void displayCharacterPoses()
     {
 
-        VBox selection = new VBox();
-       // selection.add(createPoses(), 2, 0);
+        ScrollPane selection = new ScrollPane();
+        selection.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5;");
+        selection.setPrefSize(300 ,750);
+
+        selection.setContent(createPoses());
+        selection.setPannable(true);
+
+
         selection.setPadding(new Insets(15));
         selection.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
-        selection.setAlignment(Pos.TOP_RIGHT);
 
-        Popup charWarningPopup = new Popup();
-        charWarningPopup.getContent().add(createPoses());
-        charWarningPopup.setAutoHide(true);
-        charWarningPopup.show(primaryStage);
+
+        Popup charPosesPopup = new Popup();
+        charPosesPopup.getContent().add(selection);
+        charPosesPopup.setAutoHide(true);
+        charPosesPopup.show(primaryStage);
+
+
     }
 
     public TilePane createPoses(){
 
         TilePane Poses = new TilePane();
-        Poses.setPrefSize(375, 500);
+        //Poses.setPrefSize(375, 100);
+        // Poses.setMaxHeight(100);
+        Poses.setMaxSize(500, 10);
         Poses.setPrefColumns(2);
+        Poses.setPrefRows(6);
         Poses.setVgap(11);
         Poses.setHgap(14);
         Poses.setAlignment(Pos.CENTER_RIGHT);
         Poses.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
-        
+
         File folder = new File("src/Character_Images");
         File[] listOfFiles = folder.listFiles();
         int i = 0;
@@ -249,7 +260,9 @@ public class UI {
         if(file.isFile()){
         Poses.getChildren().add(i,new Button(file.getName()));
         Poses.setTileAlignment(Pos.TOP_LEFT);
-        i++; }
+
+        i++;
+        }
         }
         return Poses;
     }
