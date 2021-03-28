@@ -16,7 +16,7 @@ public class Character extends ImageView {
         this.preserveRatioProperty().setValue(true);
         this.prefWidth(50);
         this.prefHeight(240);
-        setCharacter("/Character_Images/angry.png");    //setting a character as a default for testing
+       // setCharacter("/Character_Images/angry.png");    //setting a character as a default for testing
     }
 
     public void setCharacterPose(String character){

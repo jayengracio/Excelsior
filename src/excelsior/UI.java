@@ -17,8 +17,8 @@ import java.io.File;
 
 public class UI {
     Stage primaryStage;
-    Label narrationTop;
-    Label narrationBottom;
+    //Label narrationTop;
+   // Label narrationBottom;
     //GridPane comic;
     HBox allComics = new HBox(15);
     ComicPane comic = new ComicPane();
@@ -155,7 +155,7 @@ public class UI {
     private void characterPoses(Node button){
 
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if(selectedCharacter == null || selectedCharacter.getCharacter() == null)
+            if(selectedCharacter == null)
             {
                 displaySelectCharacterWarning();
             }else {
