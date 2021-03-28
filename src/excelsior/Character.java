@@ -2,7 +2,6 @@ package excelsior;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 
 public class Character extends ImageView {
     Image character = null;
@@ -15,15 +14,15 @@ public class Character extends ImageView {
         this.setFitHeight(240);
         this.setFitWidth(300);
         this.preserveRatioProperty().setValue(true);
-        this.prefWidth(50);
+        this.prefWidth(300);
         this.prefHeight(240);
-        setCharacter("/Character_Images/empty.png");    //setting a character as a default for testing
+        setCharacter("/Character_Images/#empty.png");    //setting a character as a default for testing
     }
 
     public void setCharacterPose(String character){
         String address = "/Character_Images/" + character ;
         setCharacter(address);
-        if(!character.equals("empty.png"))
+        if(!character.equals("#empty.png"))
         {
             setEmpty(false);
         }
