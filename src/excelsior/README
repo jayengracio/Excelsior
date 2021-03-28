@@ -26,5 +26,13 @@ Button:
 -made some event handlers which change the view of the button for aesthetic reasons
 
 Character:
+-contains details of the image to be placed in the comic pane.
+-extends imageview in order to store the image itself and stores details such as the orientation
+
 ComicPane:
+-stores all details of the comic such as the character, speech bubles and narration
+-extends gridpane for the layout of the comic
+
 CharacterPoseButton:
+-extends our Button class
+-displays images of the characters on the button for ease of selection.
