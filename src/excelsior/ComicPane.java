@@ -10,15 +10,15 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Text;
 
 public class ComicPane extends GridPane {
-    Label topNarration = new Label();
-    Character leftCharacter = new Character();
-    Character rightCharacter = new Character();
-    Label bottomNarration = new Label();
-    Label leftSpeechBubble = new Label();
-    Label rightSpeechBubble = new Label();
-    int leftSpeechType;
-    int rightSpeechType;
-    int width = 300;
+    private Label topNarration = new Label();
+    private Character leftCharacter = new Character();
+    private Character rightCharacter = new Character();
+    private Label bottomNarration = new Label();
+    private Label leftSpeechBubble = new Label();
+    private Label rightSpeechBubble = new Label();
+    private int leftSpeechType;
+    private int rightSpeechType;
+    private int width = 300;
 
     public ComicPane(){
         this.setPrefSize(615, 500);

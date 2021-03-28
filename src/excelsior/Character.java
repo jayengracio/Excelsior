@@ -4,11 +4,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Character extends ImageView {
-    Image character = null;
-    boolean defaultOrientation = true;
-    int skinColour = 1;
-    int hairColour = 1;
-    boolean empty = true;
+    private Image character = null;
+    private boolean defaultOrientation = true;
+    private int skinColour = 1;
+    private int hairColour = 1;
+    private boolean empty = true;
 
     public Character(){
         this.setFitHeight(240);

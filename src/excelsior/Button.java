@@ -6,8 +6,8 @@ import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseEvent;
 
 public class Button extends Label {
-    String value;
-    Glow glow = new Glow();
+    private String value;
+    private Glow glow = new Glow();
 
     Button(String label) {
         this.value = label;

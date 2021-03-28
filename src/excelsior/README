@@ -1,21 +1,30 @@
 To run:
-Runs on java 1.8 with javaFX
+code folder: Runs on java 14 with javaFX 16
+jar file: in console in same directory that jar is in run command "java -jar Tintin-Excelsior.jar"
+
+Note: We first implemented the dynamic way of getting all the images in the character images folder, but when switching to make it
+runnable from a jar file, our method of dynamically loading the files no longer worked. Since we couldn't find a suitable solution to do this
+within the jar format during this sprint, we hardcoded a temporary solution to show the functionality of the character choosing process.
+The code used in the jar is visible commented out in the code, so we decided to submit both the jar and the code.
 
 Files created:
--Main
--UI
--Button
+-ComicPane.java
+-Character.java
+-CharacterPoseButton.java
 
+Files Edited:
+-Button.java
+-Ui.java
+
+----------
+ChangeList
+----------
 UI:
--A class in which the user interface is created using javafx.
--The user interface contains:
- ->Scroll pane to contain past comic panel thumbnails.
- ->Comic editing panel which is subdivided for later use.
- ->Area sectioned off for colour panel
- ->Area for comic editing buttons
-
-Main:
--Runs the javafx application and calls a UI method to create the stage.
+-added implemented buttons and popup functionalities
 
 Button:
--A class which represents our stylised buttons for the GUI.
+-made some event handlers which change the view of the button for aesthetic reasons
+
+Character:
+ComicPane:
+CharacterPoseButton:

@@ -16,18 +16,19 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class UI {
-    Stage primaryStage;
-    HBox allComics = new HBox(15);
-    ComicPane comic = new ComicPane();
+    private Stage primaryStage;
+    private HBox allComics = new HBox(15);
+    private ComicPane comic = new ComicPane();
 
-    Character selectedCharacter;
+    private Character selectedCharacter;
 
-    DropShadow dropShadow = new DropShadow();
+    private DropShadow dropShadow = new DropShadow();
 
     public UI(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
+    //sets up the stage
     public void setStage(){
         VBox root = new VBox();
         root.getChildren().add(createMenu());
@@ -37,6 +38,7 @@ public class UI {
         primaryStage.show();
     }
 
+    //top menu pane for file dropdown
     public MenuBar createMenu(){
         Menu m = new Menu("File");
 
@@ -54,6 +56,8 @@ public class UI {
 
         return mb;
     }
+
+    //view for everything below the top menu
     public GridPane createView(){
         GridPane view = new GridPane();
         view.setPadding(new Insets(15));
@@ -67,6 +71,7 @@ public class UI {
         return view;
     }
 
+    //colour pallet pane
     public HBox createColourPallet(){
         HBox box = new HBox(10);
         box.setPadding(new Insets(5));
@@ -78,6 +83,7 @@ public class UI {
         return box;
     }
 
+    //pane for the buttons
     public TilePane createButtons(){
         TilePane buttonBox = new TilePane();
         buttonBox.setPrefSize(375, 500);
@@ -98,6 +104,7 @@ public class UI {
         return buttonBox;
     }
 
+    //pane to view past created comic panels
     public ScrollPane createComicsView(){
         ScrollPane scroll = new ScrollPane();
         scroll.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5;");
@@ -110,8 +117,8 @@ public class UI {
         return scroll;
     }
 
+    //adds event handler to display character image options for selected character when input button clicked
     private void characterPoses(Node button){
-
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if(selectedCharacter == null)
             {
@@ -119,12 +126,11 @@ public class UI {
             }else {
 
                 displayCharacterPoses();
-                //button.setEffect(dropShadow);
             }
         });
     }
 
-
+    //adds event handler for selecting or deselecting the left character
     private void leftCharacterButton(Node button) {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == comic.getLeftCharacter()) {
@@ -139,6 +145,7 @@ public class UI {
         });
     }
 
+    //adds event handler for selecting or deselecting the right character
     private void rightCharacterButton(Node button) {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == comic.getRightCharacter()) {
@@ -153,6 +160,7 @@ public class UI {
         });
     }
 
+    //adds event handler to flip currently selected character on x axis when button input is clicked
     private void switchOrientationButton(Node button) {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if(selectedCharacter == null || selectedCharacter.isEmpty())
@@ -165,6 +173,7 @@ public class UI {
         });
     }
 
+    //displays options for character choices in scrollable popup
     private void displayCharacterPoses()
     {
 
@@ -184,14 +193,12 @@ public class UI {
         charPosesPopup.setAutoHide(true);
         charPosesPopup.show(primaryStage);
 
-
     }
 
+    //creates and gets character image options in Tilepane
     public TilePane createPoses(){
 
         TilePane Poses = new TilePane();
-        //Poses.setPrefSize(375, 100);
-        // Poses.setMaxHeight(100);
         Poses.setMaxSize(500, 10);
         Poses.setPrefColumns(2);
         Poses.setPrefRows(6);
@@ -200,6 +207,7 @@ public class UI {
         Poses.setAlignment(Pos.CENTER_RIGHT);
         Poses.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
 
+        //dynamic version adds based on files in folder
         File folder = new File("src/Character_Images");
         File[] listOfFiles = folder.listFiles();
         int i = 0;
@@ -211,19 +219,32 @@ public class UI {
         i++;
         }
         }
+
+        //Hardcoded version because of jar issues (used for the jar)
+        /*String[] names = {"#empty.png","angry.png","accusing.png","attacking.png","biting.png","charming.png","confident.png",
+                "confused.png","conquering.png","denouncing.png","disappointed.png","disgusted.png","disgusting.png","embracing.png",
+                "goofy.png","guiding.png","hitting.png","inspired.png","inspiring.png","joy.png","laughing.png","neutral.png",
+                "posing.png","radicalizing.png","rude.png","sad.png","scared.png","sick.png","sneaky.png","surprised.png","toppled.png",
+                "working.png"};
+        int i = 0;
+        for(String name: names)
+        {
+            Poses.getChildren().add(i,new CharacterPoseButton(name));
+            Poses.setTileAlignment(Pos.TOP_LEFT);
+            changePose(Poses.getChildren().get(i) , name);
+            i++;
+        }*/
         return Poses;
     }
-//  waits for update for button being pressed and then changes the pose to the selected
+
+    //  waits for update for button being pressed and then changes the pose to the selected
     private void changePose(Node button , String pose){
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             selectedCharacter.setCharacterPose(pose);
-            //button.setEffect(dropShadow);
         });
-
-
     }
 
-
+    //displays a popup telling the user to select a character
     private void displaySelectCharacterWarning()
     {
         VBox container = new VBox();
