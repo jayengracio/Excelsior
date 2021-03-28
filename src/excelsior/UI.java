@@ -199,7 +199,7 @@ public class UI {
 
     private void switchOrientationButton(Node button) {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if(selectedCharacter == null || selectedCharacter.getCharacter() == null)
+            if(selectedCharacter == null || selectedCharacter.isEmpty())
             {
                 displaySelectCharacterWarning();
             }else {

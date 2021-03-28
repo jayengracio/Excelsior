@@ -9,6 +9,7 @@ public class Character extends ImageView {
     boolean defaultOrientation = true;
     int skinColour = 1;
     int hairColour = 1;
+    boolean empty = true;
 
     public Character(){
         this.setFitHeight(240);
@@ -16,13 +17,19 @@ public class Character extends ImageView {
         this.preserveRatioProperty().setValue(true);
         this.prefWidth(50);
         this.prefHeight(240);
-       // setCharacter("/Character_Images/angry.png");    //setting a character as a default for testing
+        setCharacter("/Character_Images/empty.png");    //setting a character as a default for testing
     }
 
     public void setCharacterPose(String character){
         String address = "/Character_Images/" + character ;
         setCharacter(address);
-
+        if(!character.equals("empty.png"))
+        {
+            setEmpty(false);
+        }
+        else{
+            setEmpty(true);
+        }
     }
     public Image getCharacter() {
         return character;
@@ -67,4 +74,11 @@ public class Character extends ImageView {
         this.hairColour = hairColour;
     }
 
+    public boolean isEmpty() {
+        return empty;
+    }
+
+    public void setEmpty(boolean empty) {
+        this.empty = empty;
+    }
 }
