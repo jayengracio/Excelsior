@@ -179,10 +179,12 @@ public class UI {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if(selectedCharacter == null || selectedCharacter.isEmpty()) {
                 displaySelectCharacterWarning();
-            } else {
+            } else if (selectedCharacter.isFemale()){
                 selectedCharacter.toMale();
-                button.setEffect(dropShadow);
+            } else {
+                selectedCharacter.toFemale();
             }
+            button.setEffect(dropShadow);
         });
     }
 
