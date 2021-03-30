@@ -96,10 +96,12 @@ public class UI {
         buttonBox.getChildren().add(1, new Button("Right"));
         buttonBox.getChildren().add(2, new Button("Flip"));
         buttonBox.getChildren().add(3, new Button("Character Poses"));
+        buttonBox.getChildren().add(4, new Button("M/F"));
         leftCharacterButton(buttonBox.getChildren().get(0));
         rightCharacterButton(buttonBox.getChildren().get(1));
         switchOrientationButton(buttonBox.getChildren().get(2));
         characterPoses(buttonBox.getChildren().get(3));
+        changeGenderButton(buttonBox.getChildren().get(4));
 
         return buttonBox;
     }
@@ -168,6 +170,17 @@ public class UI {
                 displaySelectCharacterWarning();
             }else {
                 selectedCharacter.flipDefaultOrientation();
+                button.setEffect(dropShadow);
+            }
+        });
+    }
+
+    private void changeGenderButton(Node button) {
+        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            if(selectedCharacter == null || selectedCharacter.isEmpty()) {
+                displaySelectCharacterWarning();
+            } else {
+                selectedCharacter.toMale();
                 button.setEffect(dropShadow);
             }
         });

@@ -1,7 +1,7 @@
 package excelsior;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.*;
+import javafx.scene.paint.Color;
 
 public class Character extends ImageView {
     private Image character = null;
@@ -79,5 +79,38 @@ public class Character extends ImageView {
 
     public void setEmpty(boolean empty) {
         this.empty = empty;
+    }
+
+    public void toMale() {
+        Image temp = character;
+
+        int width = (int) temp.getWidth();
+        int height = (int) temp.getHeight();
+        WritableImage output = new WritableImage(width, height);
+        PixelReader reader = temp.getPixelReader();
+        PixelWriter writer = output.getPixelWriter();
+
+        Color bowtie = Color.web("#ECB4B5");
+        Color hair = Color.web("#F0FF00");
+        Color background = Color.web("#FFFFFF");
+        Color lipstick = Color.web("FF0000");
+        Color skin = Color.web("#FFE8D8");
+
+        for (int w = 0; w < width; w++) {
+            for (int x = 0; x < height; x++) {
+                if (reader.getColor(w, x).equals(hair) || reader.getColor(w, x).equals(bowtie)) {
+                    writer.setColor(w, x, background);
+                } else if (reader.getColor(w, x).equals(lipstick)) {
+                    writer.setColor(w, x, skin);
+                } else {
+                    writer.setColor(w, x, reader.getColor(w, x));
+                }
+            }
+        }
+        this.setCharacter(output);
+    }
+
+    public void toFemale() {
+
     }
 }
