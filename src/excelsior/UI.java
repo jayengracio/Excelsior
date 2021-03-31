@@ -177,12 +177,10 @@ public class UI {
 
     private void changeGenderButton(Node button) {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if(selectedCharacter == null || selectedCharacter.isEmpty()) {
+            if (selectedCharacter == null || selectedCharacter.isEmpty()) {
                 displaySelectCharacterWarning();
-            } else if (selectedCharacter.isFemale()){
-                selectedCharacter.toMale();
             } else {
-                selectedCharacter.toFemale();
+                selectedCharacter.changeGender();
             }
             button.setEffect(dropShadow);
         });

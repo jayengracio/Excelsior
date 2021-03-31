@@ -10,7 +10,8 @@ public class Character extends ImageView {
     private final Color bowtie = Color.web("#ECB4B5");
     private final Color lipstick = Color.web("FF0000");
     private Color skinColour = Color.web("#FFE8D8");
-    private Color hairColour = Color.web("#F0FF00");
+    private Color hairColour = Color.web("#F9FF00");
+    private Color femaleHairColour = Color.web("#F0FF00");
 
     private boolean empty = true;
     private boolean isFemale = true;
@@ -78,6 +79,14 @@ public class Character extends ImageView {
         this.hairColour = hairColour;
     }
 
+    public Color getFemaleHairColour() {
+        return femaleHairColour;
+    }
+
+    public void setFemaleHairColour(Color femaleHairColour) {
+        this.femaleHairColour = femaleHairColour;
+    }
+
     public boolean isEmpty() {
         return empty;
     }
@@ -90,8 +99,18 @@ public class Character extends ImageView {
 
     public void setFemale(boolean female) { isFemale = female; }
 
-    public void toMale() {
-        this.setFemale(false);
+    public void changeGender() {
+        // switches to the other gender
+        this.setFemale(!this.isFemale);
+
+        /* sets the colour to be the same as the white background
+           but is set to 1 or 2 value less in the RGB spectrum (e.g 254 instead of 255)
+           so the algorithm knows which pixels are for the female hair and bowtie. */
+        Color noFemaleHair = Color.web("#FEFEFE");
+        Color noBowtie = Color.web("#FDFDFD");
+
+        // some work needed to dynamically work with different skin tones.
+        Color noLipstick = Color.web("#FFE8D7");
 
         int width = (int) this.character.getWidth();
         int height = (int) this.character.getHeight();
@@ -99,40 +118,21 @@ public class Character extends ImageView {
         PixelReader reader = this.character.getPixelReader();
         PixelWriter writer = output.getPixelWriter();
 
-        Color hairBG = Color.web("#FEFEFE");
-        Color bowtieBG = Color.web("#FDFDFD");
-        Color lipstickBG = Color.web("#FFE8D7");
-
         for (int y = 0; y < width; y++) {
             for (int x = 0; x < height; x++) {
-                if (reader.getColor(y, x).equals(hairColour)) { writer.setColor(y, x, hairBG); }
-                else if (reader.getColor(y, x).equals(bowtie)) { writer.setColor(y, x, bowtieBG); }
-                else if (reader.getColor(y, x).equals(lipstick)) { writer.setColor(y, x, lipstickBG); }
-                else { writer.setColor(y, x, reader.getColor(y, x)); }
-            }
-        }
-        this.setCharacter(output);
-    }
+                if (this.isFemale) {
+                    if (reader.getColor(y, x).equals(noFemaleHair)) { writer.setColor(y, x, femaleHairColour); }
+                    else if (reader.getColor(y, x).equals(noBowtie)) { writer.setColor(y, x, bowtie); }
+                    else if (reader.getColor(y, x).equals(noLipstick)) { writer.setColor(y, x, lipstick); }
+                    else { writer.setColor(y, x, reader.getColor(y, x)); }
+                }
 
-    public void toFemale() {
-        this.setFemale(true);
-
-        int width = (int) this.character.getWidth();
-        int height = (int) this.character.getHeight();
-        WritableImage output = new WritableImage(width, height);
-        PixelReader reader = this.character.getPixelReader();
-        PixelWriter writer = output.getPixelWriter();
-
-        Color hairBG = Color.web("#FEFEFE");
-        Color bowtieBG = Color.web("#FDFDFD");
-        Color lipstickBG = Color.web("#FFE8D7");
-
-        for (int y = 0; y < width; y++) {
-            for (int x = 0; x < height; x++) {
-                if (reader.getColor(y, x).equals(hairBG)) { writer.setColor(y, x, hairColour); }
-                else if (reader.getColor(y, x).equals(bowtieBG)) { writer.setColor(y, x, bowtie); }
-                else if (reader.getColor(y, x).equals(lipstickBG)) { writer.setColor(y, x, lipstick); }
-                else { writer.setColor(y, x, reader.getColor(y, x)); }
+                else {
+                    if (reader.getColor(y, x).equals(femaleHairColour)) { writer.setColor(y, x, noFemaleHair); }
+                    else if (reader.getColor(y, x).equals(bowtie)) { writer.setColor(y, x, noBowtie); }
+                    else if (reader.getColor(y, x).equals(lipstick)) { writer.setColor(y, x, noLipstick); }
+                    else { writer.setColor(y, x, reader.getColor(y, x)); }
+                }
             }
         }
         this.setCharacter(output);
