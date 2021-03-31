@@ -11,6 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import java.io.File;
@@ -19,7 +20,7 @@ public class UI {
     private Stage primaryStage;
     private HBox allComics = new HBox(15);
     private ComicPane comic = new ComicPane();
-
+    private TilePane buttonBox;
     private Character selectedCharacter;
 
     private DropShadow dropShadow = new DropShadow();
@@ -65,27 +66,75 @@ public class UI {
         view.setVgap(15);
         view.add(comic, 0, 0);
         view.add(createComicsView(), 0, 1, 3, 1);
-        view.add(createColourPallet(), 1, 0);
+        view.add(createColourPalette(), 1, 0);
         view.add(createButtons(), 2, 0);
 
         return view;
     }
 
     //colour pallet pane
-    public HBox createColourPallet(){
-        HBox box = new HBox(10);
-        box.setPadding(new Insets(5));
-        box.setPrefSize(450, 500);
-        box.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 2;");
-        VBox skin = new VBox(10);
-        VBox hair = new VBox(10);
-        box.getChildren().addAll(skin, hair);
-        return box;
+    public GridPane createColourPalette(){
+        GridPane palette = new GridPane();
+        palette.setPadding(new Insets(5));
+        palette.setPrefSize(450, 500);
+        palette.setHgap(30);
+        palette.setGridLinesVisible(true);
+        palette.setVgap(15);
+        palette.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 2;");
+        palette.add(new Label("Skin"),0,0);
+        palette.add(new Label("Hair"),1,0);
+        for(int i = 0;i<4;i++)
+        {
+            palette.add(getColours(i,true),0,i+1);
+            palette.add(getColours(i,false),1,i+1);
+        }
+
+        //palette.getChildren().add(3, getColours(0,false));
+        return palette;
+    }
+
+    private HBox getColours(int colourInd,boolean isSkin)
+    {
+        HBox choices = new HBox();
+        choices.setPrefSize(100,20);
+
+        //each row in this colour array will represent on bar of similar shade colours aka black/grays in one greens in another
+        //colour choice constraints, cannot have r value below 9 as male hair is always 9 r val higher than hair colour
+        String[][] colours = { {"#F0FF00","#F6614E","#F652D5","#601CFF","#26FF6D"},
+                               {"#741E00","#981D00","#CB443D","#DD5B55","#EF6D67"},
+                               {"#0A0A0A","#2B2B2B","#3B3B3B","#474747","#575757"},
+                                {"#6B6B6B","#7F7F7F","#989898","#B7B7B7","#C5C5C5"}};
+        for(int i=0;i<5;i++)
+        {
+            ColourBox cur = new ColourBox(colours[colourInd][i]);
+            if(isSkin)
+            {
+                //skinChange(cur);
+            }
+            else
+            {
+                hairChange(cur);
+            }
+            choices.getChildren().add(i,cur);
+        }
+        return choices;
+    }
+
+    private void hairChange(Node button) {
+        ColourBox cur = (ColourBox) button;
+        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            if(selectedCharacter == null || selectedCharacter.isEmpty())
+            {
+                displaySelectCharacterWarning();
+            }else {
+                selectedCharacter.setHairColour(cur.getBackground());
+            }
+        });
     }
 
     //pane for the buttons
     public TilePane createButtons(){
-        TilePane buttonBox = new TilePane();
+        buttonBox = new TilePane();
         buttonBox.setPrefSize(375, 500);
         buttonBox.setPrefColumns(2);
         buttonBox.setVgap(11);
@@ -95,13 +144,11 @@ public class UI {
         buttonBox.getChildren().add(0, new Button("Left"));
         buttonBox.getChildren().add(1, new Button("Right"));
         buttonBox.getChildren().add(2, new Button("Flip"));
-        buttonBox.getChildren().add(3, new Button("Character Poses"));
-        buttonBox.getChildren().add(4, new Button("M/F"));
+        buttonBox.getChildren().add(3, new Button("M/F"));
         leftCharacterButton(buttonBox.getChildren().get(0));
         rightCharacterButton(buttonBox.getChildren().get(1));
         switchOrientationButton(buttonBox.getChildren().get(2));
-        characterPoses(buttonBox.getChildren().get(3));
-        changeGenderButton(buttonBox.getChildren().get(4));
+        changeGenderButton(buttonBox.getChildren().get(3));
 
         return buttonBox;
     }
@@ -119,7 +166,7 @@ public class UI {
         return scroll;
     }
 
-    //adds event handler to display character image options for selected character when input button clicked
+    /*//adds event handler to display character image options for selected character when input button clicked
     private void characterPoses(Node button){
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if(selectedCharacter == null)
@@ -130,18 +177,21 @@ public class UI {
                 displayCharacterPoses();
             }
         });
-    }
+    }*/
 
     //adds event handler for selecting or deselecting the left character
     private void leftCharacterButton(Node button) {
+        Button cur = (Button) button;
+        Button right = (Button) buttonBox.getChildren().get(1);
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == comic.getLeftCharacter()) {
-                selectedCharacter = null;
-                comic.getLeftCharacter().setEffect(null);
+                displayCharacterPoses();
             } else {
                 selectedCharacter = comic.getLeftCharacter();
                 comic.getLeftCharacter().setEffect(dropShadow);
                 comic.getRightCharacter().setEffect(null);
+                right.setText("Right");
+                cur.setText("Select Pose");
             }
             button.setEffect(dropShadow);
         });
@@ -149,14 +199,17 @@ public class UI {
 
     //adds event handler for selecting or deselecting the right character
     private void rightCharacterButton(Node button) {
+        Button cur = (Button) button;
+        Button left = (Button) buttonBox.getChildren().get(0);
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == comic.getRightCharacter()) {
-                selectedCharacter = null;
-                comic.getRightCharacter().setEffect(null);
+                displayCharacterPoses();
             } else {
                 selectedCharacter = comic.getRightCharacter();
                 comic.getRightCharacter().setEffect(dropShadow);
                 comic.getLeftCharacter().setEffect(null);
+                left.setText("Left");
+                cur.setText("Select Pose");
             }
             button.setEffect(dropShadow);
         });

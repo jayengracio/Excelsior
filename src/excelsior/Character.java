@@ -12,7 +12,7 @@ public class Character extends ImageView {
     private Color skinColour = Color.web("#FFE8D8");
     private Color hairColour = Color.web("#F9FF00");
     private Color femaleHairColour = Color.web("#F0FF00");
-
+    private Color defaultHairColour = Color.web("#F9FF00");;
     private boolean empty = true;
     private boolean isFemale = true;
 
@@ -42,12 +42,12 @@ public class Character extends ImageView {
 
     public void setCharacter(Image character) {
         this.character = character;
-        this.setImage(this.character);
+        updateImage();
     }
 
     public void setCharacter(String url){
         this.character = new Image(url);
-        this.setImage(this.character);
+        updateImage();
     }
 
     public boolean isDefaultOrientation() {
@@ -75,8 +75,17 @@ public class Character extends ImageView {
         return hairColour;
     }
 
+    //called after an update to update displayed image
+    private void updateImage()
+    {
+        Image updated = character;
+        updated = makeHairColourChange(updated);
+        this.setImage(updated);
+    }
+
     public void setHairColour(Color hairColour) {
         this.hairColour = hairColour;
+        updateImage();
     }
 
     public Color getFemaleHairColour() {
@@ -93,6 +102,46 @@ public class Character extends ImageView {
 
     public void setEmpty(boolean empty) {
         this.empty = empty;
+    }
+
+    private Image makeHairColourChange(Image inputImage) {
+        int W = (int) inputImage.getWidth();
+        int H = (int) inputImage.getHeight();
+        WritableImage outputImage = new WritableImage(W, H);
+        PixelReader reader = inputImage.getPixelReader();
+        PixelWriter writer = outputImage.getPixelWriter();
+
+        int hairRed = (int) Math.round(defaultHairColour.getRed() * 255);
+        int hairGreen = (int) Math.round(defaultHairColour.getGreen() * 255);
+        int hairBlue = (int) Math.round(defaultHairColour.getBlue() * 255);
+
+        int newRed = (int) Math.round(hairColour.getRed() * 255);
+        int newGreen = (int) Math.round(hairColour.getGreen() * 255);
+        int newBlue = (int) Math.round(hairColour.getBlue() * 255);
+
+        for (int y = 0; y < H; y++) {
+            for (int x = 0; x < W; x++) {
+
+                Color current = reader.getColor(x,y);
+
+                int curPixelRed = (int) Math.round(current.getRed() * 255);
+                int curPixelGreen = (int) Math.round(current.getGreen() * 255);
+                int curPixelBlue = (int) Math.round(current.getBlue() * 255);
+
+                if(curPixelRed >= hairRed-9 && curPixelBlue == hairBlue && curPixelGreen == hairGreen && curPixelRed <= hairRed)
+                {
+                    //System.out.println(curPixelRed-red);
+                    //System.out.println(curPixelGreen-green);
+                    //System.out.println(curPixelBlue-blue);
+                    writer.setColor(x, y, Color.rgb(curPixelRed+(newRed-hairRed),curPixelGreen+(newGreen-hairGreen),curPixelBlue+(newBlue-hairBlue)));
+                }
+                else
+                {
+                    writer.setColor(x, y, current);
+                }
+            }
+        }
+        return outputImage;
     }
 
     public boolean isFemale() { return isFemale; }
