@@ -233,7 +233,7 @@ public class UI {
             if (selectedCharacter == null || selectedCharacter.isEmpty()) {
                 displaySelectCharacterWarning();
             } else {
-                selectedCharacter.changeGender();
+                selectedCharacter.setFemale(!selectedCharacter.isFemale());
             }
             button.setEffect(dropShadow);
         });
