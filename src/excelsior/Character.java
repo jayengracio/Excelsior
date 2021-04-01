@@ -12,11 +12,11 @@ public class Character extends ImageView {
     private Color skinColour = Color.web("#FFE8D8");
     private Color hairColour = Color.web("#F9FF00");
     private Color femaleHairColour = Color.web("#F0FF00");
-    private Color defaultHairColour = Color.web("#F9FF00");;
+    private Color defaultHairColour = Color.web("#F9FF00");
     private boolean empty = true;
     private boolean isFemale = true;
 
-    public Character(){
+    public Character() {
         this.setFitHeight(240);
         this.setFitWidth(300);
         this.preserveRatioProperty().setValue(true);
@@ -25,83 +25,26 @@ public class Character extends ImageView {
         setCharacter("/Character_Images/#empty.png");    //setting a character as a default for testing
     }
 
-    public void setCharacterPose(String character){
-        String address = "/Character_Images/" + character ;
+    public void setCharacterPose(String character) {
+        String address = "/Character_Images/" + character;
         setCharacter(address);
-        if(!character.equals("#empty.png"))
-        {
+        if (!character.equals("#empty.png")) {
             setEmpty(false);
-        }
-        else{
+        } else {
             setEmpty(true);
         }
     }
-    public Image getCharacter() {
-        return character;
-    }
 
-    public void setCharacter(Image character) {
-        this.character = character;
-        updateImage();
-    }
-
-    public void setCharacter(String url){
-        this.character = new Image(url);
-        updateImage();
-    }
-
-    public boolean isDefaultOrientation() {
-        return defaultOrientation;
-    }
-
-    public void flipDefaultOrientation()
-    {
+    public void flipDefaultOrientation() {
         this.setScaleX(isDefaultOrientation() ? -1 : 1);
         setDefaultOrientation(!isDefaultOrientation());
     }
-    public void setDefaultOrientation(boolean defaultOrientation) {
-        this.defaultOrientation = defaultOrientation;
-    }
-
-    public Color getSkinColour() {
-        return skinColour;
-    }
-
-    public void setSkinColour(Color skinColour) {
-        this.skinColour = skinColour;
-    }
-
-    public Color getHairColour() {
-        return hairColour;
-    }
 
     //called after an update to update displayed image
-    private void updateImage()
-    {
+    private void updateImage() {
         Image updated = character;
         updated = makeHairColourChange(updated);
         this.setImage(updated);
-    }
-
-    public void setHairColour(Color hairColour) {
-        this.hairColour = hairColour;
-        updateImage();
-    }
-
-    public Color getFemaleHairColour() {
-        return femaleHairColour;
-    }
-
-    public void setFemaleHairColour(Color femaleHairColour) {
-        this.femaleHairColour = femaleHairColour;
-    }
-
-    public boolean isEmpty() {
-        return empty;
-    }
-
-    public void setEmpty(boolean empty) {
-        this.empty = empty;
     }
 
     private Image makeHairColourChange(Image inputImage) {
@@ -122,31 +65,24 @@ public class Character extends ImageView {
         for (int y = 0; y < H; y++) {
             for (int x = 0; x < W; x++) {
 
-                Color current = reader.getColor(x,y);
+                Color current = reader.getColor(x, y);
 
                 int curPixelRed = (int) Math.round(current.getRed() * 255);
                 int curPixelGreen = (int) Math.round(current.getGreen() * 255);
                 int curPixelBlue = (int) Math.round(current.getBlue() * 255);
 
-                if(curPixelRed >= hairRed-9 && curPixelBlue == hairBlue && curPixelGreen == hairGreen && curPixelRed <= hairRed)
-                {
+                if (curPixelRed >= hairRed - 9 && curPixelBlue == hairBlue && curPixelGreen == hairGreen && curPixelRed <= hairRed) {
                     //System.out.println(curPixelRed-red);
                     //System.out.println(curPixelGreen-green);
                     //System.out.println(curPixelBlue-blue);
-                    writer.setColor(x, y, Color.rgb(curPixelRed+(newRed-hairRed),curPixelGreen+(newGreen-hairGreen),curPixelBlue+(newBlue-hairBlue)));
-                }
-                else
-                {
+                    writer.setColor(x, y, Color.rgb(curPixelRed + (newRed - hairRed), curPixelGreen + (newGreen - hairGreen), curPixelBlue + (newBlue - hairBlue)));
+                } else {
                     writer.setColor(x, y, current);
                 }
             }
         }
         return outputImage;
     }
-
-    public boolean isFemale() { return isFemale; }
-
-    public void setFemale(boolean female) { isFemale = female; }
 
     public void changeGender() {
         this.setFemale(!this.isFemale);
@@ -157,7 +93,7 @@ public class Character extends ImageView {
 
         Color noFemaleHair = Color.web("#FEFEFE");
         Color noBowtie = Color.web("#FDFDFD");
-        Color noLipstick = Color.rgb(skinRed-1, skinGreen-1, skinBlue-1);
+        Color noLipstick = Color.rgb(skinRed - 1, skinGreen - 1, skinBlue - 1);
 
         int width = (int) this.character.getWidth();
         int height = (int) this.character.getHeight();
@@ -186,7 +122,7 @@ public class Character extends ImageView {
         else writer.setColor(y, x, reader.getColor(y, x));
     }
 
-/*    public void changeGender() {
+    /*    public void changeGender() {
         this.setFemale(!this.isFemale);
 
         Color noFemaleHair = Color.web("#FEFEFE");
@@ -219,4 +155,67 @@ public class Character extends ImageView {
         }
         this.setCharacter(output);
     }*/
+
+    public Image getCharacter() {
+        return character;
+    }
+
+    public void setCharacter(Image character) {
+        this.character = character;
+        updateImage();
+    }
+
+    public void setCharacter(String url) {
+        this.character = new Image(url);
+        updateImage();
+    }
+
+    public boolean isDefaultOrientation() {
+        return defaultOrientation;
+    }
+
+    public void setDefaultOrientation(boolean defaultOrientation) {
+        this.defaultOrientation = defaultOrientation;
+    }
+
+    public Color getHairColour() {
+        return hairColour;
+    }
+
+    public void setHairColour(Color hairColour) {
+        this.hairColour = hairColour;
+        updateImage();
+    }
+
+    public Color getSkinColour() {
+        return skinColour;
+    }
+
+    public void setSkinColour(Color skinColour) {
+        this.skinColour = skinColour;
+    }
+
+    public boolean isFemale() {
+        return isFemale;
+    }
+
+    public void setFemale(boolean female) {
+        isFemale = female;
+    }
+
+    public Color getFemaleHairColour() {
+        return femaleHairColour;
+    }
+
+    public void setFemaleHairColour(Color femaleHairColour) {
+        this.femaleHairColour = femaleHairColour;
+    }
+
+    public boolean isEmpty() {
+        return empty;
+    }
+
+    public void setEmpty(boolean empty) {
+        this.empty = empty;
+    }
 }
