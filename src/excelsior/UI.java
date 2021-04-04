@@ -78,12 +78,12 @@ public class UI {
         palette.setPadding(new Insets(5));
         palette.setPrefSize(450, 500);
         palette.setHgap(30);
-        palette.setGridLinesVisible(true);
+        palette.setAlignment(Pos.TOP_CENTER);
         palette.setVgap(15);
         palette.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 2;");
-        palette.add(new Label("Skin"),0,0);
-        palette.add(new Label("Hair"),1,0);
-        for(int i = 0;i<4;i++)
+        palette.add(new Label("Skin Colour"),0,0);
+        palette.add(new Label("Hair Colour"),1,0);
+        for(int i = 0;i<12;i++)
         {
             palette.add(getColours(i,true),0,i+1);
             palette.add(getColours(i,false),1,i+1);
@@ -96,14 +96,23 @@ public class UI {
     private HBox getColours(int colourInd,boolean isSkin)
     {
         HBox choices = new HBox();
+        choices.setStyle("-fx-border-color: #000000;");
         choices.setPrefSize(100,20);
 
         //each row in this colour array will represent on bar of similar shade colours aka black/grays in one greens in another
         //colour choice constraints, cannot have r value below 9 as male hair is always 9 r val higher than hair colour
-        String[][] colours = { {"#F0FF01","#F6614E","#F652D5","#601CFF","#26FF6D"},
-                               {"#741E01","#981D01","#CB443D","#DD5B55","#EF6D67"},
-                               {"#0A0A0A","#2B2B2B","#3B3B3B","#474747","#575757"},
-                                {"#6B6B6B","#7F7F7F","#989898","#B7B7B7","#C5C5C5"}};
+        String[][] colours = {  {"#0A0A0A","#2B2B2B","#3B3B3B","#474747","#575757"},
+                                {"#6B6B6B","#7F7F7F","#989898","#B7B7B7","#C5C5C5"},
+                                {"#342316","#463417","#624F1A","#776035","#9D846A"},
+                                {"#5F4C46","#947D76","#CBAEA3","#FFE8D8","#FFF3EE"},
+                                {"#741E01","#981D01","#CB443D","#DD5B55","#EF6D67"},
+                                {"#B36F00","#CE8400","#FE9F00","#FEAF57","#FED884"},
+                                {"#979E00","#CBD200","#F9FF00","#DBFF69","#E6FFAE"},
+                                {"#0F4217","#12621E","#17962C","#1FFF43","#7CFF76"},
+                                {"#156363","#189797","#1ACECE","#1BFFFF","#71FFEC"},
+                                {"#09055F","#0B0690","#0C06E2","#4632FF","#6395FF"},
+                                {"#420057","#570072","#7A0097","#9611B8","#D556FF"},
+                                {"#7F0065","#AC008E","#CE00A7","#FF00D2","#FF75D9"}};
         for(int i=0;i<5;i++)
         {
             ColourBox cur = new ColourBox(colours[colourInd][i]);
