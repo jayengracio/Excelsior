@@ -195,7 +195,7 @@ public class Character extends ImageView {
 
         Color noFemaleHair = Color.web("#FEFEFE");
         Color noBowtie = Color.web("#FDFDFD");
-        Color noLipstick = Color.rgb(skinRed - 1, skinGreen - 1, skinBlue - 1);
+        Color noLipstick = Color.rgb(skinRed, skinGreen, skinBlue);
 
         int width = (int) inputImage.getWidth();
         int height = (int) inputImage.getHeight();
@@ -205,10 +205,10 @@ public class Character extends ImageView {
 
         for (int y = 0; y < width; y++) {
             for (int x = 0; x < height; x++) {
-                if (this.isFemale) {
-                    change(noFemaleHair, noBowtie, noLipstick, reader, writer, y, x, femaleHairColour, bowtie, lipstick);
-                } else {
+                if (!this.isFemale) {
                     change(femaleHairColour, bowtie, lipstick, reader, writer, y, x, noFemaleHair, noBowtie, noLipstick);
+                } else {
+                    return this.character;
                 }
             }
         }
