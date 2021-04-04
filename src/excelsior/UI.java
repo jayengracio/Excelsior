@@ -89,7 +89,7 @@ public class UI {
             palette.add(getColours(i,false),1,i+1);
         }
 
-        //palette.getChildren().add(3, getColours(0,false));
+        // palette.getChildren().add(3, getColours(0,false));
         return palette;
     }
 
@@ -100,8 +100,8 @@ public class UI {
 
         //each row in this colour array will represent on bar of similar shade colours aka black/grays in one greens in another
         //colour choice constraints, cannot have r value below 9 as male hair is always 9 r val higher than hair colour
-        String[][] colours = { {"#F0FF00","#F6614E","#F652D5","#601CFF","#26FF6D"},
-                               {"#741E00","#981D00","#CB443D","#DD5B55","#EF6D67"},
+        String[][] colours = { {"#F0FF01","#F6614E","#F652D5","#601CFF","#26FF6D"},
+                               {"#741E01","#981D01","#CB443D","#DD5B55","#EF6D67"},
                                {"#0A0A0A","#2B2B2B","#3B3B3B","#474747","#575757"},
                                 {"#6B6B6B","#7F7F7F","#989898","#B7B7B7","#C5C5C5"}};
         for(int i=0;i<5;i++)
@@ -109,10 +109,11 @@ public class UI {
             ColourBox cur = new ColourBox(colours[colourInd][i]);
             if(isSkin)
             {
-                //skinChange(cur);
+                skinChange(cur);
             }
             else
             {
+
                 hairChange(cur);
             }
             choices.getChildren().add(i,cur);
@@ -128,6 +129,18 @@ public class UI {
                 displaySelectCharacterWarning();
             }else {
                 selectedCharacter.setHairColour(cur.getBackground());
+            }
+        });
+    }
+
+    private void skinChange(Node button) {
+        ColourBox cur = (ColourBox) button;
+        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            if(selectedCharacter == null || selectedCharacter.isEmpty())
+            {
+                displaySelectCharacterWarning();
+            }else {
+                selectedCharacter.setSkinColour(cur.getBackground());
             }
         });
     }

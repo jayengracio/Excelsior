@@ -8,6 +8,7 @@ public class Character extends ImageView {
     private boolean defaultOrientation = true;
 
     private final Color defaultHairColour = Color.web("#F9FF00");
+    private final Color defaultSkinColour = Color.web("#FFE8D8");
     private Color skinColour = Color.web("#FFE8D8");
     private Color hairColour = Color.web("#F9FF00");
     private Color femaleHairColour = Color.web("#F0FF00");
@@ -71,6 +72,7 @@ public class Character extends ImageView {
 
     public void setSkinColour(Color skinColour) {
         this.skinColour = skinColour;
+        updateImage();
     }
 
     public boolean isFemale() {
@@ -103,6 +105,7 @@ public class Character extends ImageView {
         Image updated = character;
         updated = changeGender(updated);
         updated = makeHairColourChange(updated);
+        updated = makeSkinColourChange(updated);
         this.setImage(updated);
     }
 
@@ -142,6 +145,45 @@ public class Character extends ImageView {
         }
         return outputImage;
     }
+
+    private Image makeSkinColourChange(Image inputImage) {
+        int W = (int) inputImage.getWidth();
+        int H = (int) inputImage.getHeight();
+        WritableImage outputImage = new WritableImage(W, H);
+        PixelReader reader = inputImage.getPixelReader();
+        PixelWriter writer = outputImage.getPixelWriter();
+
+        int skinRed = (int) Math.round(defaultSkinColour.getRed() * 255);
+        int skinGreen = (int) Math.round(defaultSkinColour.getGreen() * 255);
+        int skinBlue = (int) Math.round(defaultSkinColour.getBlue() * 255);
+
+        int newRed = (int) Math.round(skinColour.getRed() * 255);
+        int newGreen = (int) Math.round(skinColour.getGreen() * 255);
+        int newBlue = (int) Math.round(skinColour.getBlue() * 255);
+
+        for (int y = 0; y < H; y++) {
+            for (int x = 0; x < W; x++) {
+
+                Color current = reader.getColor(x, y);
+
+                int curPixelRed = (int) Math.round(current.getRed() * 255);
+                int curPixelGreen = (int) Math.round(current.getGreen() * 255);
+                int curPixelBlue = (int) Math.round(current.getBlue() * 255);
+
+                if (curPixelRed >= skinRed - 9 && curPixelBlue == skinBlue && curPixelGreen == skinGreen && curPixelRed <= skinRed) {
+                    //System.out.println(curPixelRed-red);
+                    //System.out.println(curPixelGreen-green);
+                    //System.out.println(curPixelBlue-blue);
+                    writer.setColor(x, y, Color.rgb(curPixelRed + (newRed - skinRed), curPixelGreen + (newGreen - skinGreen), curPixelBlue + (newBlue - skinBlue)));
+                } else {
+                    writer.setColor(x, y, current);
+                }
+            }
+        }
+        return outputImage;
+    }
+
+
 
     private Image changeGender(Image inputImage) {
         int skinRed = (int) Math.round(skinColour.getRed() * 255);
