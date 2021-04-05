@@ -29,3 +29,5 @@ Character:
     -change method
         ->A helper method for changeGender
         ->Checks if the current pixel is a colour that shouldn't be removed by the tolerance
+    -change skin colour
+        ->Reuses majority of the features of change hair colour to work for the skin colour
