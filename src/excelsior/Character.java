@@ -125,10 +125,8 @@ public class Character extends ImageView {
                 int curPixelGreen = (int) Math.round(current.getGreen() * 255);
                 int curPixelBlue = (int) Math.round(current.getBlue() * 255);
 
+                //if male or female hair colour, incl. anti aliasing between the two. Add offset.
                 if (curPixelRed >= hairRed - 9 && curPixelBlue == hairBlue && curPixelGreen == hairGreen && curPixelRed <= hairRed) {
-                    //System.out.println(curPixelRed-red);
-                    //System.out.println(curPixelGreen-green);
-                    //System.out.println(curPixelBlue-blue);
                     writer.setColor(x, y, Color.rgb(curPixelRed + (newRed - hairRed), curPixelGreen + (newGreen - hairGreen), curPixelBlue + (newBlue - hairBlue)));
                 } else {
                     writer.setColor(x, y, current);
@@ -163,9 +161,6 @@ public class Character extends ImageView {
                 int curPixelBlue = (int) Math.round(current.getBlue() * 255);
 
                 if (curPixelRed >= skinRed - 9 && curPixelBlue == skinBlue && curPixelGreen == skinGreen && curPixelRed <= skinRed) {
-                    //System.out.println(curPixelRed-red);
-                    //System.out.println(curPixelGreen-green);
-                    //System.out.println(curPixelBlue-blue);
                     writer.setColor(x, y, Color.rgb(curPixelRed + (newRed - skinRed), curPixelGreen + (newGreen - skinGreen), curPixelBlue + (newBlue - skinBlue)));
                 } else {
                     writer.setColor(x, y, current);
