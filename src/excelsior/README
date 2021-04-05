@@ -35,3 +35,5 @@ Character:
         ->Changes hair colour to the desired colour using a tolerance of 9 for the red value to get male/female hair and the anti
           aliasing between them.
         ->Adds an offset to each hair pixel to change the colour.
+    -change skin colour
+        ->Reuses majority of the features of change hair colour to work for the skin colour

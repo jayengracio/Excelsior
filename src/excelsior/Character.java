@@ -101,59 +101,34 @@ public class Character extends ImageView {
         this.setImage(updated);
     }
 
+    // changes the hair colour
     private Image makeHairColourChange(Image inputImage) {
-        int W = (int) inputImage.getWidth();
-        int H = (int) inputImage.getHeight();
-        WritableImage outputImage = new WritableImage(W, H);
-        PixelReader reader = inputImage.getPixelReader();
-        PixelWriter writer = outputImage.getPixelWriter();
-
-        int hairRed = (int) Math.round(defaultHairColour.getRed() * 255);
-        int hairGreen = (int) Math.round(defaultHairColour.getGreen() * 255);
-        int hairBlue = (int) Math.round(defaultHairColour.getBlue() * 255);
-
-        int newRed = (int) Math.round(hairColour.getRed() * 255);
-        int newGreen = (int) Math.round(hairColour.getGreen() * 255);
-        int newBlue = (int) Math.round(hairColour.getBlue() * 255);
-
-        for (int y = 0; y < H; y++) {
-            for (int x = 0; x < W; x++) {
-
-                Color current = reader.getColor(x, y);
-
-                int curPixelRed = (int) Math.round(current.getRed() * 255);
-                int curPixelGreen = (int) Math.round(current.getGreen() * 255);
-                int curPixelBlue = (int) Math.round(current.getBlue() * 255);
-
-                //if male or female hair colour, incl. anti aliasing between the two. Add offset.
-                if (curPixelRed >= hairRed - 9 && curPixelBlue == hairBlue && curPixelGreen == hairGreen && curPixelRed <= hairRed) {
-                    writer.setColor(x, y, Color.rgb(curPixelRed + (newRed - hairRed), curPixelGreen + (newGreen - hairGreen), curPixelBlue + (newBlue - hairBlue)));
-                } else {
-                    writer.setColor(x, y, current);
-                }
-            }
-        }
-        return outputImage;
+        return updateColour(inputImage, defaultHairColour, hairColour);
     }
 
+    // changes the skin colour
     private Image makeSkinColourChange(Image inputImage) {
+        return updateColour(inputImage, defaultSkinColour, skinColour);
+    }
+
+    // helper function to change skin or hair colour
+    private Image updateColour(Image inputImage, Color defaultColour, Color newColour) {
         int W = (int) inputImage.getWidth();
         int H = (int) inputImage.getHeight();
         WritableImage outputImage = new WritableImage(W, H);
         PixelReader reader = inputImage.getPixelReader();
         PixelWriter writer = outputImage.getPixelWriter();
 
-        int skinRed = (int) Math.round(defaultSkinColour.getRed() * 255);
-        int skinGreen = (int) Math.round(defaultSkinColour.getGreen() * 255);
-        int skinBlue = (int) Math.round(defaultSkinColour.getBlue() * 255);
+        int skinRed = (int) Math.round(defaultColour.getRed() * 255);
+        int skinGreen = (int) Math.round(defaultColour.getGreen() * 255);
+        int skinBlue = (int) Math.round(defaultColour.getBlue() * 255);
 
-        int newRed = (int) Math.round(skinColour.getRed() * 255);
-        int newGreen = (int) Math.round(skinColour.getGreen() * 255);
-        int newBlue = (int) Math.round(skinColour.getBlue() * 255);
+        int newRed = (int) Math.round(newColour.getRed() * 255);
+        int newGreen = (int) Math.round(newColour.getGreen() * 255);
+        int newBlue = (int) Math.round(newColour.getBlue() * 255);
 
         for (int y = 0; y < H; y++) {
             for (int x = 0; x < W; x++) {
-
                 Color current = reader.getColor(x, y);
 
                 int curPixelRed = (int) Math.round(current.getRed() * 255);
