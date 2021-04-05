@@ -188,19 +188,6 @@ public class UI {
         return scroll;
     }
 
-    /*//adds event handler to display character image options for selected character when input button clicked
-    private void characterPoses(Node button){
-        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if(selectedCharacter == null)
-            {
-                displaySelectCharacterWarning();
-            }else {
-
-                displayCharacterPoses();
-            }
-        });
-    }*/
-
     //adds event handler for selecting or deselecting the left character
     private void leftCharacterButton(Node button) {
         Button cur = (Button) button;

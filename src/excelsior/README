@@ -8,31 +8,24 @@ within the jar format during this sprint, we hardcoded a temporary solution to s
 The code used in the jar is visible commented out in the code, so we decided to submit both the jar and the code.
 
 Files created:
--ComicPane.java
--Character.java
--CharacterPoseButton.java
+-ColourBox
 
 Files Edited:
--Button.java
--Ui.java
+-UI
+-Character
 
 ----------
 ChangeList
 ----------
 UI:
--added implemented buttons and popup functionalities
-
-Button:
--made some event handlers which change the view of the button for aesthetic reasons
+    -Changed colour pallet to allow for dynamic changing of colours. Changes colour when a colour is selected.
 
 Character:
--contains details of the image to be placed in the comic pane.
--extends imageview in order to store the image itself and stores details such as the orientation
-
-ComicPane:
--stores all details of the comic such as the character, speech bubles and narration
--extends gridpane for the layout of the comic
-
-CharacterPoseButton:
--extends our Button class
--displays images of the characters on the button for ease of selection.
+    -changeGender method
+        ->Removes female hair, lips and pigtails from the default female image to change to male.
+        ->Returns the default image when changing to female
+        ->Uses a tolerance when removing hair lips and pigtails to remove anti aliasing
+        ->Tolerance includes colours not supposed to be removed. Those colours are exempted in the change method
+    -change method
+        ->A helper method for changeGender
+        ->Checks if the current pixel is a colour that shouldn't be removed by the tolerance

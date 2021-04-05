@@ -11,7 +11,6 @@ public class Character extends ImageView {
     private final Color defaultSkinColour = Color.web("#FFE8D8");
     private Color skinColour = Color.web("#FFE8D8");
     private Color hairColour = Color.web("#F9FF00");
-    private Color femaleHairColour = Color.web("#F0FF00");
     private boolean empty = true;
     private boolean isFemale = true;
 
@@ -84,13 +83,6 @@ public class Character extends ImageView {
         updateImage();
     }
 
-    public Color getFemaleHairColour() {
-        return femaleHairColour;
-    }
-
-    public void setFemaleHairColour(Color femaleHairColour) {
-        this.femaleHairColour = femaleHairColour;
-    }
 
     public boolean isEmpty() {
         return empty;
@@ -183,6 +175,7 @@ public class Character extends ImageView {
         return outputImage;
     }
 
+    //removes female hair, lips and pigtails to change gender
     private Image changeGender(Image inputImage) {
         if (!this.isFemale) {
             int W = (int) inputImage.getWidth();
