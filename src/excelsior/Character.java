@@ -183,9 +183,61 @@ public class Character extends ImageView {
         return outputImage;
     }
 
-
-
     private Image changeGender(Image inputImage) {
+        if (!this.isFemale) {
+            int W = (int) inputImage.getWidth();
+            int H = (int) inputImage.getHeight();
+            WritableImage outputImage = new WritableImage(W, H);
+            PixelReader reader = inputImage.getPixelReader();
+            PixelWriter writer = outputImage.getPixelWriter();
+
+            int hairRed = (int) Math.round(defaultHairColour.getRed() * 255);
+            int hairGreen = (int) Math.round(defaultHairColour.getGreen() * 255);
+            int hairBlue = (int) Math.round(defaultHairColour.getBlue() * 255);
+
+            int newRed = (int) Math.round(hairColour.getRed() * 255);
+            int newGreen = (int) Math.round(hairColour.getGreen() * 255);
+            int newBlue = (int) Math.round(hairColour.getBlue() * 255);
+
+            for (int y = 0; y < H; y++) {
+                for (int x = 0; x < W; x++) {
+
+                    Color current = reader.getColor(x, y);
+
+                    int curPixelRed = (int) Math.round(current.getRed() * 255);
+                    int curPixelGreen = (int) Math.round(current.getGreen() * 255);
+                    int curPixelBlue = (int) Math.round(current.getBlue() * 255);
+
+                    if (curPixelRed >= 240 && curPixelGreen == 255 && curPixelRed <= 255 && !current.equals(defaultHairColour)) { //hair
+                        change(writer, x, y, current, Color.rgb(255, 255, 255));
+                    } else if (curPixelRed == 255 && curPixelGreen <= 232 && curPixelBlue <= 216) { //lips
+                        change(writer, x, y, current, Color.rgb(255, 232, 216));
+                    } else if (curPixelRed >= 236 && curPixelGreen >= 180 && !current.equals(defaultHairColour)) { //pigtails
+                        change(writer, x, y, current, Color.rgb(255, 255, 255));
+                    } else {
+                        writer.setColor(x, y, current);
+                    }
+                }
+            }
+            return outputImage;
+        }
+        else
+            return this.character;
+    }
+
+    // Change gender helper function
+    private void change(PixelWriter writer, int x, int y, Color current, Color newColour) {
+        if(current.equals(Color.web("#FBFF5E")) || current.equals(Color.web("#FDFC9E")))            //yellow exemptions
+            writer.setColor(x, y, current);
+        else if(current.equals(Color.web("#FF4D00")) || current.equals(Color.web("#FFBC89")))           //red exemptions
+            writer.setColor(x, y, current);
+        else
+            writer.setColor(x, y, newColour);
+    }
+
+
+
+    /*private Image changeGender(Image inputImage) {
         int skinRed = (int) Math.round(skinColour.getRed() * 255);
         int skinGreen = (int) Math.round(skinColour.getGreen() * 255);
         int skinBlue = (int) Math.round(skinColour.getBlue() * 255);
@@ -222,5 +274,5 @@ public class Character extends ImageView {
         else if (reader.getColor(y, x).equals(noBowtie)) writer.setColor(y, x, bowtie);
         else if (reader.getColor(y, x).equals(noLipstick)) writer.setColor(y, x, lipstick);
         else writer.setColor(y, x, reader.getColor(y, x));
-    }
+    }*/
 }
