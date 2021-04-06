@@ -6,8 +6,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.text.Text;
 
 public class ComicPane extends GridPane {
     private Label topNarration = new Label();
@@ -104,10 +102,14 @@ public class ComicPane extends GridPane {
         bottomNarration.setAlignment(Pos.CENTER);
         leftSpeechBubble.setAlignment(Pos.CENTER);
         rightSpeechBubble.setAlignment(Pos.CENTER);
-        topNarration.setPrefSize(width, 50);
-        bottomNarration.setPrefSize(width, 50);
+        topNarration.setPrefSize(this.getPrefWidth(), 50);
+        bottomNarration.setPrefSize(this.getPrefWidth(), 50);
         leftSpeechBubble.setPrefSize(width, 100);
         rightSpeechBubble.setPrefSize(width, 100);
+        leftSpeechBubble.setStyle("-fx-font-size: 22px");
+        rightSpeechBubble.setStyle("-fx-font-size: 22px");
+        topNarration.setStyle("-fx-font-size: 24px");
+        bottomNarration.setStyle("-fx-font-size: 24px");
         ImageView leftSpeech = new ImageView();
         ImageView rightSpeech = new ImageView();
         leftSpeech.prefHeight(60);
