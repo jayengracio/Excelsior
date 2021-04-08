@@ -255,7 +255,7 @@ public class UI {
             if (selectedCharacter == null || selectedCharacter.isEmpty()) {
                 displaySelectCharacterWarning();
             } else {
-                displayTextForBubble();
+                displayTextForBubble(0);
                 button.setEffect(dropShadow);
             }
         });
@@ -267,7 +267,7 @@ public class UI {
             if (selectedCharacter == null || selectedCharacter.isEmpty()) {
                 displaySelectCharacterWarning();
             } else {
-                displayTextForBubble();
+                displayTextForBubble(1);
                 button.setEffect(dropShadow);
             }
         });
@@ -290,7 +290,7 @@ public class UI {
     }
 
     // speech bubble helper
-    private void displayTextForBubble() {
+    private void displayTextForBubble(int type) {
         TextBubble speechBubble;
         Label text = new Label();
         if (selectedCharacter == comic.getRightCharacter()) {
@@ -298,7 +298,7 @@ public class UI {
         } else {
             speechBubble = comic.getLeftSpeechBubble();
         }
-        createTextBox(speechBubble, text);
+        createTextBox(speechBubble, text, type);
     }
 
     // top narration helper
@@ -338,7 +338,7 @@ public class UI {
         };
         textBox.setOnAction(eventHandler);
     }
-    private void createTextBox(TextBubble tBub, Label input) {
+    private void createTextBox(TextBubble tBub, Label input, int type) {
         VBox container = new VBox();
         container.setPadding(new Insets(15));
         container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3; -fx-font-size: 18px;");
@@ -357,8 +357,12 @@ public class UI {
             inputWindow.hide();
             if(tBub.isEmpty())
                 tBub.setEmpty();
-            else
-                tBub.setSpeech();
+            else {
+                if(type == 0)
+                    tBub.setSpeech();
+                else
+                    tBub.setThought();
+            }
         };
         textBox.setOnAction(eventHandler);
     }

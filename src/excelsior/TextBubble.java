@@ -50,7 +50,7 @@ public class TextBubble extends StackPane {
     }
 
     public void setThought(){
-
+        bubble.setImage(new Image("/Character_Images/thought_bubble.png"));
     }
 
     public void setEmpty(){
