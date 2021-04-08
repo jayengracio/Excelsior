@@ -12,10 +12,8 @@ public class ComicPane extends GridPane {
     private Character leftCharacter = new Character();
     private Character rightCharacter = new Character();
     private Label bottomNarration = new Label();
-    private Label leftSpeechBubble = new Label();
-    private Label rightSpeechBubble = new Label();
-    private int leftSpeechType;
-    private int rightSpeechType;
+    private TextBubble leftSpeechBubble = new TextBubble();
+    private TextBubble rightSpeechBubble = new TextBubble();
     private int width = 300;
 
     public ComicPane(){
@@ -65,36 +63,20 @@ public class ComicPane extends GridPane {
         this.bottomNarration = bottomNarration;
     }
 
-    public Label getLeftSpeechBubble() {
+    public TextBubble getLeftSpeechBubble() {
         return leftSpeechBubble;
     }
 
-    public void setLeftSpeechBubble(Label leftSpeechBubble) {
+    public void setLeftSpeechBubble(TextBubble leftSpeechBubble) {
         this.leftSpeechBubble = leftSpeechBubble;
     }
 
-    public Label getRightSpeechBubble() {
+    public TextBubble getRightSpeechBubble() {
         return rightSpeechBubble;
     }
 
-    public void setRightSpeechBubble(Label rightSpeechBubble) {
+    public void setRightSpeechBubble(TextBubble rightSpeechBubble) {
         this.rightSpeechBubble = rightSpeechBubble;
-    }
-
-    public int getLeftSpeechType() {
-        return leftSpeechType;
-    }
-
-    public void setLeftSpeechType(int leftSpeechType) {
-        this.leftSpeechType = leftSpeechType;
-    }
-
-    public int getRightSpeechType() {
-        return rightSpeechType;
-    }
-
-    public void setRightSpeechType(int rightSpeechType) {
-        this.rightSpeechType = rightSpeechType;
     }
 
     private void fillPane(){
@@ -104,13 +86,9 @@ public class ComicPane extends GridPane {
         rightSpeechBubble.setAlignment(Pos.CENTER);
         topNarration.setPrefSize(this.getPrefWidth(), 50);
         bottomNarration.setPrefSize(this.getPrefWidth(), 50);
-        leftSpeechBubble.setPrefSize(width, 100);
-        rightSpeechBubble.setPrefSize(width, 100);
-        leftSpeechBubble.setStyle("-fx-font-size: 22px");
-        rightSpeechBubble.setStyle("-fx-font-size: 22px");
-        topNarration.setStyle("-fx-font-size: 24px");
-        bottomNarration.setStyle("-fx-font-size: 24px");
-        ImageView leftSpeech = new ImageView();
+        leftSpeechBubble.setPrefSize(width, 160);
+        rightSpeechBubble.setPrefSize(width, 160);
+        /*ImageView leftSpeech = new ImageView();
         ImageView rightSpeech = new ImageView();
         leftSpeech.prefHeight(60);
         leftSpeech.setFitHeight(60);
@@ -119,14 +97,12 @@ public class ComicPane extends GridPane {
         leftSpeech.prefWidth(width);
         leftSpeech.setFitWidth(width);
         rightSpeech.prefWidth(width);
-        rightSpeech.setFitWidth(width);
+        rightSpeech.setFitWidth(width);*/
         this.add(topNarration, 0, 0, 2, 1);
         this.add(leftSpeechBubble, 0, 1);
         this.add(rightSpeechBubble, 1, 1);
-        this.add(leftSpeech, 0, 2);
-        this.add(rightSpeech, 1, 2);
-        this.add(leftCharacter, 0, 3);
-        this.add(rightCharacter, 1, 3);
-        this.add(bottomNarration, 0, 4, 2, 1);
+        this.add(leftCharacter, 0, 2);
+        this.add(rightCharacter, 1, 2);
+        this.add(bottomNarration, 0, 3, 2, 1);
     }
 }

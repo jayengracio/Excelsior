@@ -291,7 +291,7 @@ public class UI {
 
     // speech bubble helper
     private void displayTextForBubble() {
-        Label speechBubble;
+        TextBubble speechBubble;
         Label text = new Label();
         if (selectedCharacter == comic.getRightCharacter()) {
             speechBubble = comic.getRightSpeechBubble();
@@ -335,6 +335,30 @@ public class UI {
             input.setText(textBox.getText());
             type.setText(input.getText());
             inputWindow.hide();
+        };
+        textBox.setOnAction(eventHandler);
+    }
+    private void createTextBox(TextBubble tBub, Label input) {
+        VBox container = new VBox();
+        container.setPadding(new Insets(15));
+        container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3; -fx-font-size: 18px;");
+        container.setAlignment(Pos.CENTER);
+        TextField textBox = new TextField("Enter text");
+        container.getChildren().add(textBox);
+
+        Popup inputWindow = new Popup();
+        inputWindow.getContent().add(container);
+        inputWindow.show(primaryStage);
+        inputWindow.setAutoHide(true);
+
+        EventHandler<ActionEvent> eventHandler = e -> {
+            input.setText(textBox.getText());
+            tBub.setText(input.getText());
+            inputWindow.hide();
+            if(tBub.isEmpty())
+                tBub.setEmpty();
+            else
+                tBub.setSpeech();
         };
         textBox.setOnAction(eventHandler);
     }
@@ -404,7 +428,15 @@ public class UI {
 
     //  waits for update for button being pressed and then changes the pose to the selected
     private void changePose(Node button, String pose) {
-        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> selectedCharacter.setCharacterPose(pose));
+        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            selectedCharacter.setCharacterPose(pose);
+            if(selectedCharacter.isEmpty()) {
+                if (comic.getLeftCharacter() == selectedCharacter)
+                    comic.getLeftSpeechBubble().setEmpty();
+                else
+                    comic.getRightSpeechBubble().setEmpty();
+            }
+        });
     }
 
     //displays a popup telling the user to select a character
