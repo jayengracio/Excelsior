@@ -370,12 +370,12 @@ public class UI {
                 }
             }
             else
-                warning.setText("too long");
-                //System.out.println("lol too many");
+                warning.setText("Text Too Long");
         };
         textBox.setOnAction(eventHandler);
     }
 
+    //prepares String for text bubbles and returns null if exceeds acceptable length
     public String prepareString(String s, int numLines, int charPerLine){
         String output = "";
         int lastSpace =0;
@@ -400,8 +400,6 @@ public class UI {
             else
                 output = output + curr;
         }
-        System.out.println(index+ ", " + numLines);
-        System.out.println(output);
         if(index +1 > numLines)
             output = null;
         return output;
@@ -440,7 +438,7 @@ public class UI {
         Poses.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
 
         //dynamic version adds based on files in folder
-        File folder = new File("src/Character_Images");
+        /*File folder = new File("src/Character_Images");
         File[] listOfFiles = folder.listFiles();
         int i = 0;
         if (listOfFiles != null) {
@@ -452,10 +450,10 @@ public class UI {
                     i++;
                 }
             }
-        }
+        }*/
 
         //Hardcoded version because of jar issues (used for the jar)
-        /*String[] names = {"#empty.png","angry.png","accusing.png","attacking.png","biting.png","charming.png","confident.png",
+        String[] names = {"#empty.png","angry.png","accusing.png","attacking.png","biting.png","charming.png","confident.png",
                 "confused.png","conquering.png","denouncing.png","disappointed.png","disgusted.png","disgusting.png","embracing.png",
                 "goofy.png","guiding.png","hitting.png","inspired.png","inspiring.png","joy.png","laughing.png","neutral.png",
                 "posing.png","radicalizing.png","rude.png","sad.png","scared.png","sick.png","sneaky.png","surprised.png","toppled.png",
@@ -467,7 +465,7 @@ public class UI {
             Poses.setTileAlignment(Pos.TOP_LEFT);
             changePose(Poses.getChildren().get(i) , name);
             i++;
-        }*/
+        }
         return Poses;
     }
 

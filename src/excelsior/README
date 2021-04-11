@@ -1,6 +1,10 @@
 To run:
 code folder: Runs on java 14 with javaFX 16
-jar file: in console in same directory that jar is in run command "java -jar Tintin-Excelsior.jar"
+jar file:
+-Using Java 8 in console
+ In console in same directory that jar is in run command "java -jar Tintin-Excelsior.jar"
+-Using java 14 in console
+ In console in same directory that jar is in run command "java --module-path "Path to javafx sdk (e.g C:\Program Files\Java\javafx-sdk-16\lib)" --add-modules javafx.controls,javafx.fxml -jar Tintin-Excelsior.jar"
 
 Note: We first implemented the dynamic way of getting all the images in the character images folder, but when switching to make it
 runnable from a jar file, our method of dynamically loading the files no longer worked. Since we couldn't find a suitable solution to do this
