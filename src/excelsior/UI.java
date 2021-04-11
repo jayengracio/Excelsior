@@ -345,6 +345,9 @@ public class UI {
         container.setAlignment(Pos.CENTER);
         TextField textBox = new TextField("Enter text");
         container.getChildren().add(textBox);
+        Label warning = new Label();
+        warning.setStyle("-fx-font-size: 16; -fx-text-fill: red");
+        container.getChildren().add(warning);
 
         Popup inputWindow = new Popup();
         inputWindow.getContent().add(container);
@@ -352,20 +355,58 @@ public class UI {
         inputWindow.setAutoHide(true);
 
         EventHandler<ActionEvent> eventHandler = e -> {
-            input.setText(textBox.getText());
-            tBub.setText(input.getText());
-            inputWindow.hide();
-            if(tBub.isEmpty())
-                tBub.setEmpty();
-            else {
-                if(type == 0)
-                    tBub.setSpeech();
-                else
-                    tBub.setThought();
+            String output = prepareString(textBox.getText(), 4, 19);
+            if(output != null) {
+                input.setText(textBox.getText());
+                tBub.setText(output);
+                inputWindow.hide();
+                if (tBub.isEmpty())
+                    tBub.setEmpty();
+                else {
+                    if (type == 0)
+                        tBub.setSpeech();
+                    else
+                        tBub.setThought();
+                }
             }
+            else
+                warning.setText("too long");
+                //System.out.println("lol too many");
         };
         textBox.setOnAction(eventHandler);
     }
+
+    public String prepareString(String s, int numLines, int charPerLine){
+        String output = "";
+        int lastSpace =0;
+        int lineLength=0;
+        char curr;
+        int index = 0;
+        for(int i=0; i< s.length(); i++){
+            curr = s.charAt(i);
+            lineLength++;
+            if(curr == ' '){
+                lastSpace = i;
+            }
+            if(lineLength == charPerLine){
+                if(i == lastSpace || (i-lastSpace >= charPerLine-1))
+                    output = output + curr +"\n";
+                else {
+                    output = output.substring(0, lastSpace+index+1) + "\n" + output.substring(lastSpace+index+1) + curr;
+                }
+                lineLength = 0;
+                index++;
+            }
+            else
+                output = output + curr;
+        }
+        System.out.println(index+ ", " + numLines);
+        System.out.println(output);
+        if(index +1 > numLines)
+            output = null;
+        return output;
+    }
+
 
     //displays options for character choices in scrollable popup
     private void displayCharacterPoses() {

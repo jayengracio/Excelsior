@@ -17,8 +17,8 @@ public class TextBubble extends StackPane {
         this.setAlignment(text, Pos.CENTER);
         bubble.setFitWidth(300);
         bubble.setFitHeight(160);
-        text.setPadding(new Insets(20, 45 , 50, 45));
-        text.setStyle("-fx-font-size: 14; -fx-wrap-text:true;");
+        text.setPadding(new Insets(15, 38 , 55, 50));
+        text.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-font-family: 'monospaced';");
         text.setAlignment(Pos.CENTER);
         text.maxWidth(300);
         this.getChildren().add(bubble);
