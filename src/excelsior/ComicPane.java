@@ -85,7 +85,9 @@ public class ComicPane extends GridPane {
         leftSpeechBubble.setAlignment(Pos.CENTER);
         rightSpeechBubble.setAlignment(Pos.CENTER);
         topNarration.setPrefSize(this.getPrefWidth(), 50);
+        topNarration.setStyle("-fx-font-size: 13; -fx-font-weight: bold;");
         bottomNarration.setPrefSize(this.getPrefWidth(), 50);
+        bottomNarration.setStyle("-fx-font-size: 13; -fx-font-weight: bold;");
         leftSpeechBubble.setPrefSize(width, 160);
         rightSpeechBubble.setPrefSize(width, 160);
         /*ImageView leftSpeech = new ImageView();

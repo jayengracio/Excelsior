@@ -1,6 +1,10 @@
 To run:
 code folder: Runs on java 14 with javaFX 16
-jar file: in console in same directory that jar is in run command "java -jar Tintin-Excelsior.jar"
+jar file:
+-Using Java 8 in console
+ In console in same directory that jar is in run command "java -jar Tintin-Excelsior.jar"
+-Using java 14 in console
+ In console in same directory that jar is in run command "java --module-path "Path to javafx sdk (e.g C:\Program Files\Java\javafx-sdk-16\lib)" --add-modules javafx.controls,javafx.fxml -jar Tintin-Excelsior.jar"
 
 Note: We first implemented the dynamic way of getting all the images in the character images folder, but when switching to make it
 runnable from a jar file, our method of dynamically loading the files no longer worked. Since we couldn't find a suitable solution to do this
@@ -8,32 +12,26 @@ within the jar format during this sprint, we hardcoded a temporary solution to s
 The code used in the jar is visible commented out in the code, so we decided to submit both the jar and the code.
 
 Files created:
--ColourBox
+-TextBubble
 
 Files Edited:
 -UI
--Character
+-ComicPane
 
 ----------
 ChangeList
 ----------
-UI:
-    -Changed colour pallet to allow for dynamic changing of colours. Changes colour when a colour is selected.
+TextBubble:
+    -A class which represents a characters speech or thought bubble
+    -Extends StackPane in order to display text over the bubble image
 
-Character:
-    -changeGender method
-        ->Removes female hair, lips and pigtails from the default female image to change to male.
-        ->Returns the default image when changing to female
-        ->Uses a tolerance when removing hair lips and pigtails to remove anti aliasing
-        ->Tolerance includes colours not supposed to be removed. Those colours are exempted in the change method
-    -change method
-        ->A helper method for changeGender
-        ->Checks if the current pixel is a colour that shouldn't be removed by the tolerance
-    -updateImage method
-        ->Updates image dynamically, called every time change is made
-    -makeHairColourChange method
-        ->Changes hair colour to the desired colour using a tolerance of 9 for the red value to get male/female hair and the anti
-          aliasing between them.
-        ->Adds an offset to each hair pixel to change the colour.
-    -change skin colour
-        ->Reuses majority of the features of change hair colour to work for the skin colour
+UI:
+    -When the speech or thought bubble buttons are pressed a textfield is displayed and prompts the user for input.
+     The text enters the bubble when the user presses enter.
+    -prepareString method
+        ->when the user presses enter the String in the textfield is passed to this method as a parameter.
+        ->The method ensures the string is not too long for the bubble.
+        ->Only a certain number of characters are allowed in a line and 4 lines are allowed
+
+ComicPane:
+    -TextBubble class replaced the text and image rows of the ComicPane

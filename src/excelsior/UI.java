@@ -345,6 +345,9 @@ public class UI {
         container.setAlignment(Pos.CENTER);
         TextField textBox = new TextField("Enter text");
         container.getChildren().add(textBox);
+        Label warning = new Label();
+        warning.setStyle("-fx-font-size: 16; -fx-text-fill: red");
+        container.getChildren().add(warning);
 
         Popup inputWindow = new Popup();
         inputWindow.getContent().add(container);
@@ -352,20 +355,56 @@ public class UI {
         inputWindow.setAutoHide(true);
 
         EventHandler<ActionEvent> eventHandler = e -> {
-            input.setText(textBox.getText());
-            tBub.setText(input.getText());
-            inputWindow.hide();
-            if(tBub.isEmpty())
-                tBub.setEmpty();
-            else {
-                if(type == 0)
-                    tBub.setSpeech();
-                else
-                    tBub.setThought();
+            String output = prepareString(textBox.getText(), 4, 19);
+            if(output != null) {
+                input.setText(textBox.getText());
+                tBub.setText(output);
+                inputWindow.hide();
+                if (tBub.isEmpty())
+                    tBub.setEmpty();
+                else {
+                    if (type == 0)
+                        tBub.setSpeech();
+                    else
+                        tBub.setThought();
+                }
             }
+            else
+                warning.setText("Text Too Long");
         };
         textBox.setOnAction(eventHandler);
     }
+
+    //prepares String for text bubbles and returns null if exceeds acceptable length
+    public String prepareString(String s, int numLines, int charPerLine){
+        String output = "";
+        int lastSpace =0;
+        int lineLength=0;
+        char curr;
+        int index = 0;
+        for(int i=0; i< s.length(); i++){
+            curr = s.charAt(i);
+            lineLength++;
+            if(curr == ' '){
+                lastSpace = i;
+            }
+            if(lineLength == charPerLine){
+                if(i == lastSpace || (i-lastSpace >= charPerLine-1))
+                    output = output + curr +"\n";
+                else {
+                    output = output.substring(0, lastSpace+index+1) + "\n" + output.substring(lastSpace+index+1) + curr;
+                }
+                lineLength = 0;
+                index++;
+            }
+            else
+                output = output + curr;
+        }
+        if(index +1 > numLines)
+            output = null;
+        return output;
+    }
+
 
     //displays options for character choices in scrollable popup
     private void displayCharacterPoses() {
@@ -399,7 +438,7 @@ public class UI {
         Poses.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
 
         //dynamic version adds based on files in folder
-        File folder = new File("src/Character_Images");
+        /*File folder = new File("src/Character_Images");
         File[] listOfFiles = folder.listFiles();
         int i = 0;
         if (listOfFiles != null) {
@@ -411,10 +450,10 @@ public class UI {
                     i++;
                 }
             }
-        }
+        }*/
 
         //Hardcoded version because of jar issues (used for the jar)
-        /*String[] names = {"#empty.png","angry.png","accusing.png","attacking.png","biting.png","charming.png","confident.png",
+        String[] names = {"#empty.png","angry.png","accusing.png","attacking.png","biting.png","charming.png","confident.png",
                 "confused.png","conquering.png","denouncing.png","disappointed.png","disgusted.png","disgusting.png","embracing.png",
                 "goofy.png","guiding.png","hitting.png","inspired.png","inspiring.png","joy.png","laughing.png","neutral.png",
                 "posing.png","radicalizing.png","rude.png","sad.png","scared.png","sick.png","sneaky.png","surprised.png","toppled.png",
@@ -426,7 +465,7 @@ public class UI {
             Poses.setTileAlignment(Pos.TOP_LEFT);
             changePose(Poses.getChildren().get(i) , name);
             i++;
-        }*/
+        }
         return Poses;
     }
 
