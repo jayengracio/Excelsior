@@ -306,7 +306,7 @@ public class UI {
         Label narration;
         Label text = new Label();
         narration = comic.getTopNarration();
-        createTextBox(narration, text);
+        createNarrationInput(narration, text);
     }
 
     // bottom narration helper
@@ -314,17 +314,19 @@ public class UI {
         Label narration;
         Label text = new Label();
         narration = comic.getBottomNarration();
-        createTextBox(narration, text);
+        createNarrationInput(narration, text);
     }
 
-    // input text box for speech/thought bubble
-    private void createTextBox(Label type, Label input) {
+    // input text box for top and bottom narration
+    private void createNarrationInput(Label narration, Label input) {
         VBox container = new VBox();
         container.setPadding(new Insets(15));
         container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3; -fx-font-size: 18px;");
         container.setAlignment(Pos.CENTER);
         TextField textBox = new TextField("Enter text");
-        container.getChildren().add(textBox);
+        Label warning = new Label();
+        warning.setStyle("-fx-font-size: 16px; -fx-text-fill: red");
+        container.getChildren().addAll(textBox, warning);
 
         Popup inputWindow = new Popup();
         inputWindow.getContent().add(container);
@@ -332,12 +334,19 @@ public class UI {
         inputWindow.setAutoHide(true);
 
         EventHandler<ActionEvent> eventHandler = e -> {
-            input.setText(textBox.getText());
-            type.setText(input.getText());
-            inputWindow.hide();
+            String output = prepareString(textBox.getText(), 1, 54);
+            if (output != null) {
+                input.setText(textBox.getText());
+                narration.setText(input.getText());
+                inputWindow.hide();
+            } else {
+                int count = textBox.getText().length();
+                warning.setText("Text cannot be longer than 53 characters. \nCurrent length: " + count);
+            }
         };
         textBox.setOnAction(eventHandler);
     }
+
     private void createTextBox(TextBubble tBub, Label input, int type) {
         VBox container = new VBox();
         container.setPadding(new Insets(15));
