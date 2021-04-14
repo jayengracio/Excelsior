@@ -15,6 +15,7 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 
@@ -189,10 +190,12 @@ public class UI {
         return scroll;
     }
 
-    //adds event handler for selecting or deselecting the left character
+    // button function to select left character and/or select pose
     private void leftCharacterButton(Node button) {
         Button cur = (Button) button;
         Button right = (Button) buttonBox.getChildren().get(1);
+        buttonTooltip(button, "Select Character");
+
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == comic.getLeftCharacter()) {
                 displayCharacterPoses();
@@ -201,16 +204,18 @@ public class UI {
                 comic.getLeftCharacter().setEffect(dropShadow);
                 comic.getRightCharacter().setEffect(null);
                 right.setText("Right");
-                cur.setText("Select Pose");
+                createCharacterButtonTooltip(cur, right);
             }
             button.setEffect(dropShadow);
         });
     }
 
-    //adds event handler for selecting or deselecting the right character
+    // button function to select right character and/or select pose
     private void rightCharacterButton(Node button) {
         Button cur = (Button) button;
         Button left = (Button) buttonBox.getChildren().get(0);
+        buttonTooltip(button, "Select Character");
+
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == comic.getRightCharacter()) {
                 displayCharacterPoses();
@@ -219,14 +224,26 @@ public class UI {
                 comic.getRightCharacter().setEffect(dropShadow);
                 comic.getLeftCharacter().setEffect(null);
                 left.setText("Left");
-                cur.setText("Select Pose");
+                createCharacterButtonTooltip(cur, left);
             }
             button.setEffect(dropShadow);
         });
     }
 
-    //adds event handler to flip currently selected character on x axis when button input is clicked
+    // help function to create the tooltips for character button
+    private void createCharacterButtonTooltip(Button current, Button next) {
+        current.setText("Select Pose");
+        current.setTooltip(new Tooltip("Change character pose"));
+        next.setTooltip(new Tooltip("Select Character"));
+        current.getTooltip().setShowDelay(Duration.seconds(0.1));
+        next.getTooltip().setShowDelay(Duration.seconds(0.1));
+        current.getTooltip().setStyle("-fx-font-size: 12;");
+        next.getTooltip().setStyle("-fx-font-size: 12;");
+    }
+
+    // adds event handler to flip currently selected character on x axis when button input is clicked
     private void switchOrientationButton(Node button) {
+        buttonTooltip(button, "Flip where the character is facing");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == null || selectedCharacter.isEmpty()) {
                 displaySelectCharacterWarning();
@@ -239,6 +256,7 @@ public class UI {
 
     // button function to change character's gender
     private void changeGenderButton(Node button) {
+        buttonTooltip(button, "Change the gender of the character");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == null || selectedCharacter.isEmpty()) {
                 displaySelectCharacterWarning();
@@ -251,6 +269,7 @@ public class UI {
 
     // button function to insert a speech bubble
     private void speechBubbleButton(Node button) {
+        buttonTooltip(button, "Add a speech bubble for the selected character");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == null || selectedCharacter.isEmpty()) {
                 displaySelectCharacterWarning();
@@ -263,6 +282,7 @@ public class UI {
 
     // button function to insert a thought bubble
     private void thoughtBubbleButton(Node button) {
+        buttonTooltip(button, "Add a thought bubble for the selected character");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == null || selectedCharacter.isEmpty()) {
                 displaySelectCharacterWarning();
@@ -275,6 +295,7 @@ public class UI {
 
     // button function to insert the top narration text
     private void topNarrationButton(Node button) {
+        buttonTooltip(button, "Add the top narration of the panel");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             displayTopNarrate();
             button.setEffect(dropShadow);
@@ -283,10 +304,19 @@ public class UI {
 
     // button function to insert the bottom narration text
     private void botNarrationButton(Node button) {
+        buttonTooltip(button, "Add the bottom narration of the panel");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             displayBottomNarrate();
             button.setEffect(dropShadow);
         });
+    }
+
+    // help function to help create tooltips for buttons
+    private void buttonTooltip(Node button, String text) {
+        Button castedButton = (Button) button;
+        castedButton.setTooltip(new Tooltip(text));
+        castedButton.getTooltip().setShowDelay(Duration.seconds(0.1));
+        castedButton.getTooltip().setStyle("-fx-font-size: 12;");
     }
 
     // speech bubble helper
