@@ -34,6 +34,9 @@ public class UI {
 
     //sets up the stage
     public void setStage() {
+        String s = "hello my name is time. i am seven years old.";
+        prepareString(s, 4, 20);
+        System.out.print(prepareString(s, 4, 20));
         VBox root = new VBox();
         root.getChildren().add(createMenu());
         root.getChildren().add(createView());
@@ -394,7 +397,7 @@ public class UI {
         inputWindow.setAutoHide(true);
 
         EventHandler<ActionEvent> eventHandler = e -> {
-            String output = prepareString(textBox.getText(), 4, 19);
+            String output = prepareTBub(textBox.getText(), tBub);
             if(output != null) {
                 input.setText(textBox.getText());
                 tBub.setText(output);
@@ -412,6 +415,31 @@ public class UI {
                 warning.setText("Text Too Long");
         };
         textBox.setOnAction(eventHandler);
+    }
+
+    //method to sort through fonts for text bubble
+    public String prepareTBub(String s, TextBubble tBub){
+        String output;
+        int largeFont = 20;
+        int mediumFont = 16;
+        int smallFont = 13;
+        output = prepareString(s, 3, 17);
+        if(output != null) {
+            tBub.textSize(largeFont);
+            return output;
+        }
+        output = prepareString(s, 4, 18);
+        if(output != null){
+            tBub.textSize(mediumFont);
+            return output;
+        }
+        output = prepareString(s, 5, 25);
+        if(output != null){
+            tBub.textSize(smallFont);
+            return output;
+        }
+
+        return null;
     }
 
     //prepares String for text bubbles and returns null if exceeds acceptable length
