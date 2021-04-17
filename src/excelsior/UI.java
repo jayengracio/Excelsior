@@ -1,6 +1,7 @@
 package excelsior;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,11 +9,13 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -25,6 +28,7 @@ public class UI {
     private final ComicPane comic = new ComicPane();
     private TilePane buttonBox;
     private Character selectedCharacter;
+    private VBox root;
 
     private final DropShadow dropShadow = new DropShadow();
 
@@ -34,10 +38,7 @@ public class UI {
 
     //sets up the stage
     public void setStage() {
-        String s = "hello my name is time. i am seven years old.";
-        prepareString(s, 4, 20);
-        System.out.print(prepareString(s, 4, 20));
-        VBox root = new VBox();
+        root = new VBox();
         root.getChildren().add(createMenu());
         root.getChildren().add(createView());
         primaryStage.setResizable(false);
@@ -117,6 +118,7 @@ public class UI {
                 {"#09055F", "#0B0690", "#0C06E2", "#4632FF", "#6395FF"},
                 {"#420057", "#570072", "#7A0097", "#9611B8", "#D556FF"},
                 {"#7F0065", "#AC008E", "#CE00A7", "#FF00D2", "#FF75D9"}};
+
         for (int i = 0; i < 5; i++) {
             ColourBox cur = new ColourBox(colours[colourInd][i]);
             if (isSkin) {
@@ -352,6 +354,7 @@ public class UI {
 
     // input text box for top and bottom narration
     private void createNarrationInput(Label narration, Label input) {
+        toggleBlur();
         VBox container = new VBox();
         container.setPadding(new Insets(15));
         container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3; -fx-font-size: 18px;");
@@ -365,13 +368,14 @@ public class UI {
         inputWindow.getContent().add(container);
         inputWindow.show(primaryStage);
         inputWindow.setAutoHide(true);
-
+        addToggleBlurEventHandler(inputWindow);
         EventHandler<ActionEvent> eventHandler = e -> {
             String output = prepareString(textBox.getText(), 1, 54);
             if (output != null) {
                 input.setText(textBox.getText());
                 narration.setText(input.getText());
                 inputWindow.hide();
+                toggleBlur();
             } else {
                 int count = textBox.getText().length();
                 warning.setText("Text cannot be longer than 53 characters. \nCurrent length: " + count);
@@ -381,6 +385,7 @@ public class UI {
     }
 
     private void createTextBox(TextBubble tBub, Label input, int type) {
+        toggleBlur();
         VBox container = new VBox();
         container.setPadding(new Insets(15));
         container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3; -fx-font-size: 18px;");
@@ -395,6 +400,7 @@ public class UI {
         inputWindow.getContent().add(container);
         inputWindow.show(primaryStage);
         inputWindow.setAutoHide(true);
+        addToggleBlurEventHandler(inputWindow);
 
         EventHandler<ActionEvent> eventHandler = e -> {
             String output = prepareTBub(textBox.getText(), tBub);
@@ -402,6 +408,7 @@ public class UI {
                 input.setText(textBox.getText());
                 tBub.setText(output);
                 inputWindow.hide();
+                toggleBlur();
                 if (tBub.isEmpty())
                     tBub.setEmpty();
                 else {
@@ -472,23 +479,42 @@ public class UI {
         return output;
     }
 
+    // adds event handler to close popup input as parameter when clicked
+    private void closePopupButton(Node button,Popup popup) {
+        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            popup.hide();
+            toggleBlur();
+        });
+    }
 
     //displays options for character choices in scrollable popup
     private void displayCharacterPoses() {
+        toggleBlur();
         ScrollPane selection = new ScrollPane();
-        selection.setPrefSize(300, 750);
+        selection.setPrefSize(261, 750);
 
         selection.setContent(createPoses());
         selection.setPannable(true);
 
 
-        selection.setPadding(new Insets(22));
+        selection.setPadding(new Insets(5));
         selection.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
 
+        Button closeButton = new Button("Confirm");
+        closeButton.setPrefSize(255, 10);
+        closeButton.setStyle("-fx-border-color: #000000; -fx-border-radius: 10px; -fx-text-fill : #ffffff; -fx-background-color: #1CC415; -fx-background-radius: 10px");
+
+        VBox container = new VBox(10);
+        container.setPadding(new Insets(10,1,0,1));
+        container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
+        container.setAlignment(Pos.CENTER);
+        container.getChildren().addAll(closeButton,selection);
 
         Popup charPosesPopup = new Popup();
-        charPosesPopup.getContent().add(selection);
+        charPosesPopup.getContent().add(container);
+        closePopupButton(closeButton, charPosesPopup);
         charPosesPopup.setAutoHide(true);
+        addToggleBlurEventHandler(charPosesPopup);
         charPosesPopup.show(primaryStage);
 
     }
@@ -502,10 +528,10 @@ public class UI {
         Poses.setVgap(11);
         Poses.setHgap(14);
         Poses.setAlignment(Pos.CENTER_RIGHT);
-        Poses.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
+        Poses.setStyle("-fx-background-color: white;-fx-font-size: 18px;");
 
         //dynamic version adds based on files in folder
-        /*File folder = new File("src/Character_Images");
+        File folder = new File("src/Character_Images");
         File[] listOfFiles = folder.listFiles();
         int i = 0;
         if (listOfFiles != null) {
@@ -517,9 +543,9 @@ public class UI {
                     i++;
                 }
             }
-        }*/
+        }
 
-        //Hardcoded version because of jar issues (used for the jar)
+        /*//Hardcoded version because of jar issues (used for the jar)
         String[] names = {"#empty.png","angry.png","accusing.png","attacking.png","biting.png","charming.png","confident.png",
                 "confused.png","conquering.png","denouncing.png","disappointed.png","disgusted.png","disgusting.png","embracing.png",
                 "goofy.png","guiding.png","hitting.png","inspired.png","inspiring.png","joy.png","laughing.png","neutral.png",
@@ -532,7 +558,7 @@ public class UI {
             Poses.setTileAlignment(Pos.TOP_LEFT);
             changePose(Poses.getChildren().get(i) , name);
             i++;
-        }
+        }*/
         return Poses;
     }
 
@@ -549,8 +575,26 @@ public class UI {
         });
     }
 
+    //adds event handler which toggles the blur on the main view when the popup autohides
+    private void addToggleBlurEventHandler(Popup popup) {
+        popup.setOnAutoHide(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+                toggleBlur();
+            }
+        });
+    }
+
+    //function which toggles the blur effect on the main view
+    private void toggleBlur()
+    {
+        root.setEffect( (root.getEffect() == null) ? new GaussianBlur() : null);
+    }
+
+
     //displays a popup telling the user to select a character
     private void displaySelectCharacterWarning() {
+        toggleBlur();
         VBox container = new VBox();
         container.setPadding(new Insets(15));
         container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
@@ -563,6 +607,7 @@ public class UI {
         Popup charWarningPopup = new Popup();
         charWarningPopup.getContent().add(container);
         charWarningPopup.setAutoHide(true);
+        addToggleBlurEventHandler(charWarningPopup);
         charWarningPopup.show(primaryStage);
     }
 }

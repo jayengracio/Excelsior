@@ -12,26 +12,13 @@ within the jar format during this sprint, we hardcoded a temporary solution to s
 The code used in the jar is visible commented out in the code, so we decided to submit both the jar and the code.
 
 Files created:
--TextBubble
 
 Files Edited:
 -UI
--ComicPane
 
 ----------
 ChangeList
 ----------
-TextBubble:
-    -A class which represents a characters speech or thought bubble
-    -Extends StackPane in order to display text over the bubble image
-
 UI:
-    -When the speech or thought bubble buttons are pressed a textfield is displayed and prompts the user for input.
-     The text enters the bubble when the user presses enter.
-    -prepareString method
-        ->when the user presses enter the String in the textfield is passed to this method as a parameter.
-        ->The method ensures the string is not too long for the bubble.
-        ->Only a certain number of characters are allowed in a line and 4 lines are allowed
-
-ComicPane:
-    -TextBubble class replaced the text and image rows of the ComicPane
+    -Changed popup effects so that background gets blurred while popup is active.
+    -Added extra button to exit popup when pose is chosen, for ease of use.
