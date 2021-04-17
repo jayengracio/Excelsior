@@ -62,4 +62,9 @@ public class TextBubble extends StackPane {
         String s = text.getText();
         return s.isEmpty();
     }
+
+    public void textSize(int size){
+        String style = "-fx-font-weight: bold; -fx-font-family: 'monospaced'; -fx-font-size: " + size + ";";
+        text.setStyle(style);
+    }
 }
