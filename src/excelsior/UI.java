@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -163,14 +165,14 @@ public class UI {
         buttonBox.setHgap(14);
         buttonBox.setAlignment(Pos.TOP_RIGHT);
         buttonBox.setPrefRows(4);
-        buttonBox.getChildren().add(0, new Button("Left"));
-        buttonBox.getChildren().add(1, new Button("Right"));
-        buttonBox.getChildren().add(2, new Button("Flip"));
-        buttonBox.getChildren().add(3, new Button("M/F"));
-        buttonBox.getChildren().add(4, new Button("Speech Bubble"));
-        buttonBox.getChildren().add(5, new Button("Top Narration"));
-        buttonBox.getChildren().add(6, new Button("Thought Bubble"));
-        buttonBox.getChildren().add(7, new Button("Bot Narration"));
+        buttonBox.getChildren().add(0, new IconButtons("Left.png"));
+        buttonBox.getChildren().add(1, new IconButtons("Right.png"));
+        buttonBox.getChildren().add(2, new IconButtons("Flip.png"));
+        buttonBox.getChildren().add(3, new IconButtons("Gender.png"));
+        buttonBox.getChildren().add(4, new IconButtons("Speech Bubble.png"));
+        buttonBox.getChildren().add(5, new IconButtons("Top Narration.png"));
+        buttonBox.getChildren().add(6, new IconButtons("Thought Bubble.png"));
+        buttonBox.getChildren().add(7, new IconButtons("Bot Narration.png"));
         leftCharacterButton(buttonBox.getChildren().get(0));
         rightCharacterButton(buttonBox.getChildren().get(1));
         switchOrientationButton(buttonBox.getChildren().get(2));
@@ -208,7 +210,13 @@ public class UI {
                 selectedCharacter = comic.getLeftCharacter();
                 comic.getLeftCharacter().setEffect(dropShadow);
                 comic.getRightCharacter().setEffect(null);
-                right.setText("Right");
+
+                ImageView graphic = new ImageView(new Image("/Icons/Right.png"));
+                graphic.setStyle("-fx-background-radius: 20px; -fx-border-radius: 20px;");
+                graphic.setFitWidth(90);
+                graphic.setFitHeight(90);
+                right.setGraphic(graphic);
+
                 createCharacterButtonTooltip(cur, right);
             }
             button.setEffect(dropShadow);
@@ -228,7 +236,13 @@ public class UI {
                 selectedCharacter = comic.getRightCharacter();
                 comic.getRightCharacter().setEffect(dropShadow);
                 comic.getLeftCharacter().setEffect(null);
-                left.setText("Left");
+
+                ImageView graphic = new ImageView(new Image("/Icons/Left.png"));
+                graphic.setStyle("-fx-background-radius: 20px; -fx-border-radius: 20px;");
+                graphic.setFitWidth(90);
+                graphic.setFitHeight(90);
+                left.setGraphic(graphic);
+
                 createCharacterButtonTooltip(cur, left);
             }
             button.setEffect(dropShadow);
@@ -237,7 +251,13 @@ public class UI {
 
     // help function to create the tooltips for character button
     private void createCharacterButtonTooltip(Button current, Button next) {
-        current.setText("Select Pose");
+
+        ImageView graphic = new ImageView(new Image("/Icons/SelectPose.png"));
+        graphic.setStyle("-fx-background-radius: 20px; -fx-border-radius: 20px;");
+        graphic.setFitWidth(90);
+        graphic.setFitHeight(90);
+        current.setGraphic(graphic);
+
         current.setTooltip(new Tooltip("Change character pose"));
         next.setTooltip(new Tooltip("Select Character"));
         current.getTooltip().setShowDelay(Duration.seconds(0.1));

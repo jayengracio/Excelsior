@@ -22,3 +22,7 @@ ChangeList
 UI:
     -Changed popup effects so that background gets blurred while popup is active.
     -Added extra button to exit popup when pose is chosen, for ease of use.
+
+Icons:
+    -Created a new IconButtons class to allow Icons for the different buttons while also not adding the icons to character pose pool
+    -implemented all the icons to each respective button
