@@ -14,9 +14,13 @@ HOW TO RUN:
 Using IntelliJ (Or any other IDE):
 -> Run the Main class
 
+(May have to import Java FX 16 library in order to work)
+
 Using the jar file:
 1. In command line: Change the working directory to where the jar file is located.
 2. Type in: java --module-path "PATH_TO_JAVAFX16_LIB" --add-modules javafx.controls,javafx.fxml -jar Tintin-Excelsior.jar
+
+(Command line's java runtime must be using Java 14)
 ------------------
 
 Note: We first implemented the dynamic way of getting all the images in the character images folder, but when switching to make it
