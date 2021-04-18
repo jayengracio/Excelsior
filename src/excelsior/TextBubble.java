@@ -6,7 +6,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 
 
 public class TextBubble extends StackPane {
@@ -46,11 +45,11 @@ public class TextBubble extends StackPane {
     }
 
     public void setSpeech(){
-        bubble.setImage(new Image("/Character_Images/speech_bubble.png"));
+        bubble.setImage(new Image("/Icons/speech_bubble.png"));
     }
 
     public void setThought(){
-        bubble.setImage(new Image("/Character_Images/thought_bubble.png"));
+        bubble.setImage(new Image("/Icons/thought_bubble.png"));
     }
 
     public void setEmpty(){
