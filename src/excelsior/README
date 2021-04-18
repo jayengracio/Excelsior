@@ -29,6 +29,8 @@ within the jar format during this sprint, we hardcoded a temporary solution to s
 The code used in the jar is visible commented out in the code, so we decided to submit both the jar and the code.
 
 Files created:
+-IconButtons
+-HighlightedPopup
 
 Files Edited:
 -UI
@@ -37,11 +39,14 @@ Files Edited:
 ChangeList
 ----------
 UI:
-    -Changed popup effects so that background gets blurred while popup is active.
+    -Refactored code so popups are created on application startup instead of being created each time they are needed.
     -Added extra button to exit popup when pose is chosen, for ease of use.
     -Built more upon the top and bottom narration (Now has limits to the text length)
     -Buttons now have tooltips when hovering over them to give better context as to what they do
     -Length of text in text bubble affects the size of the font
+
+HighlightedPopup:
+    -Class that extends popup to blur background stage when popup is active
 
 Icons:
     -Created a new IconButtons class to allow Icons for the different buttons while also not adding the icons to character pose pool

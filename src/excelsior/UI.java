@@ -1,7 +1,6 @@
 package excelsior;
 
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -9,7 +8,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -17,7 +15,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -30,7 +27,6 @@ public class UI {
     private final ComicPane comic = new ComicPane();
     private TilePane buttonBox;
     private Character selectedCharacter;
-    private VBox root;
     private Boolean isSpeechBubble = true;
     private HighlightedPopup charWarningPopup;
     private HighlightedPopup charPosesPopup;
@@ -46,7 +42,7 @@ public class UI {
 
     //sets up the stage
     public void setStage() {
-        root = new VBox();
+        VBox root = new VBox();
         root.getChildren().add(createMenu());
         root.getChildren().add(createView());
         primaryStage.setResizable(false);
@@ -521,7 +517,7 @@ public class UI {
     //displays options for character choices in scrollable popup
     private void createCharacterPoses() {
         ScrollPane selection = new ScrollPane();
-        selection.setPrefSize(261, 750);
+        selection.setPrefSize(261, 360);
 
         selection.setContent(createPoses());
         selection.setPannable(true);
