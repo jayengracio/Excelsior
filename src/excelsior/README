@@ -41,6 +41,7 @@ UI:
     -Added extra button to exit popup when pose is chosen, for ease of use.
     -Built more upon the top and bottom narration (Now has limits to the text length)
     -Buttons now have tooltips when hovering over them to give better context as to what they do
+    -Length of text in text bubble affects the size of the font
 
 Icons:
     -Created a new IconButtons class to allow Icons for the different buttons while also not adding the icons to character pose pool
