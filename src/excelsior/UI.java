@@ -29,6 +29,12 @@ public class UI {
     private TilePane buttonBox;
     private Character selectedCharacter;
     private VBox root;
+    private Boolean isSpeechBubble = true;
+    private HighlightedPopup charWarningPopup;
+    private HighlightedPopup charPosesPopup;
+    private HighlightedPopup bottomNarrationInput;
+    private HighlightedPopup topNarrationInput;
+    private HighlightedPopup textBubbleInput;
 
     private final DropShadow dropShadow = new DropShadow();
 
@@ -43,7 +49,18 @@ public class UI {
         root.getChildren().add(createView());
         primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root, 1250, 800));
+        createPopups();
         primaryStage.show();
+    }
+
+    //create all of the popups at the start of the application instead of creating them each time a popup is used
+    private void createPopups()
+    {
+        createSelectCharacterWarning();
+        createBottomNarrationPopup();
+        createTopNarrationPopup();
+        createCharacterPoses();
+        createTextBubbleInput();
     }
 
     //top menu pane for file dropdown
@@ -136,7 +153,7 @@ public class UI {
         ColourBox cur = (ColourBox) button;
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == null || selectedCharacter.isEmpty()) {
-                displaySelectCharacterWarning();
+                charWarningPopup.show(primaryStage);
             } else {
                 selectedCharacter.setHairColour(cur.getBackground());
             }
@@ -147,7 +164,7 @@ public class UI {
         ColourBox cur = (ColourBox) button;
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == null || selectedCharacter.isEmpty()) {
-                displaySelectCharacterWarning();
+                charWarningPopup.show(primaryStage);
             } else {
                 selectedCharacter.setSkinColour(cur.getBackground());
             }
@@ -203,7 +220,7 @@ public class UI {
 
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == comic.getLeftCharacter()) {
-                displayCharacterPoses();
+                charPosesPopup.show(primaryStage);
             } else {
                 selectedCharacter = comic.getLeftCharacter();
                 comic.getLeftCharacter().setEffect(dropShadow);
@@ -223,7 +240,7 @@ public class UI {
 
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == comic.getRightCharacter()) {
-                displayCharacterPoses();
+                charPosesPopup.show(primaryStage);
             } else {
                 selectedCharacter = comic.getRightCharacter();
                 comic.getRightCharacter().setEffect(dropShadow);
@@ -251,7 +268,7 @@ public class UI {
         buttonTooltip(button, "Flip where the character is facing");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == null || selectedCharacter.isEmpty()) {
-                displaySelectCharacterWarning();
+                charWarningPopup.show(primaryStage);
             } else {
                 selectedCharacter.flipDefaultOrientation();
                 button.setEffect(dropShadow);
@@ -264,7 +281,7 @@ public class UI {
         buttonTooltip(button, "Change the gender of the character");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == null || selectedCharacter.isEmpty()) {
-                displaySelectCharacterWarning();
+                charWarningPopup.show(primaryStage);
             } else {
                 selectedCharacter.setFemale(!selectedCharacter.isFemale());
             }
@@ -277,9 +294,10 @@ public class UI {
         buttonTooltip(button, "Add a speech bubble for the selected character");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == null || selectedCharacter.isEmpty()) {
-                displaySelectCharacterWarning();
+                charWarningPopup.show(primaryStage);
             } else {
-                displayTextForBubble(0);
+                isSpeechBubble = true;
+                textBubbleInput.show(primaryStage);
                 button.setEffect(dropShadow);
             }
         });
@@ -290,9 +308,10 @@ public class UI {
         buttonTooltip(button, "Add a thought bubble for the selected character");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (selectedCharacter == null || selectedCharacter.isEmpty()) {
-                displaySelectCharacterWarning();
+                charWarningPopup.show(primaryStage);
             } else {
-                displayTextForBubble(1);
+                isSpeechBubble = false;
+                textBubbleInput.show(primaryStage);
                 button.setEffect(dropShadow);
             }
         });
@@ -302,7 +321,7 @@ public class UI {
     private void topNarrationButton(Node button) {
         buttonTooltip(button, "Add the top narration of the panel");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            displayTopNarrate();
+            topNarrationInput.show(primaryStage);
             button.setEffect(dropShadow);
         });
     }
@@ -311,7 +330,7 @@ public class UI {
     private void botNarrationButton(Node button) {
         buttonTooltip(button, "Add the bottom narration of the panel");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            displayBottomNarrate();
+            bottomNarrationInput.show(primaryStage);
             button.setEffect(dropShadow);
         });
     }
@@ -325,94 +344,35 @@ public class UI {
     }
 
     // speech bubble helper
-    private void displayTextForBubble(int type) {
-        TextBubble speechBubble;
-        Label text = new Label();
-        if (selectedCharacter == comic.getRightCharacter()) {
-            speechBubble = comic.getRightSpeechBubble();
-        } else {
-            speechBubble = comic.getLeftSpeechBubble();
-        }
-        createTextBox(speechBubble, text, type);
-    }
-
-    // top narration helper
-    private void displayTopNarrate() {
-        Label narration;
-        Label text = new Label();
-        narration = comic.getTopNarration();
-        createNarrationInput(narration, text);
-    }
-
-    // bottom narration helper
-    private void displayBottomNarrate() {
-        Label narration;
-        Label text = new Label();
-        narration = comic.getBottomNarration();
-        createNarrationInput(narration, text);
-    }
-
-    // input text box for top and bottom narration
-    private void createNarrationInput(Label narration, Label input) {
-        toggleBlur();
+    private void createTextBubbleInput() {
+        Label input = new Label();
         VBox container = new VBox();
         container.setPadding(new Insets(15));
         container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3; -fx-font-size: 18px;");
         container.setAlignment(Pos.CENTER);
-        TextField textBox = new TextField("Enter text");
-        Label warning = new Label();
-        warning.setStyle("-fx-font-size: 16px; -fx-text-fill: red");
-        container.getChildren().addAll(textBox, warning);
 
-        Popup inputWindow = new Popup();
-        inputWindow.getContent().add(container);
-        inputWindow.show(primaryStage);
-        inputWindow.setAutoHide(true);
-        addToggleBlurEventHandler(inputWindow);
-        EventHandler<ActionEvent> eventHandler = e -> {
-            String output = prepareString(textBox.getText(), 1, 54);
-            if (output != null) {
-                input.setText(textBox.getText());
-                narration.setText(input.getText());
-                inputWindow.hide();
-                toggleBlur();
-            } else {
-                int count = textBox.getText().length();
-                warning.setText("Text cannot be longer than 53 characters. \nCurrent length: " + count);
-            }
-        };
-        textBox.setOnAction(eventHandler);
-    }
-
-    private void createTextBox(TextBubble tBub, Label input, int type) {
-        toggleBlur();
-        VBox container = new VBox();
-        container.setPadding(new Insets(15));
-        container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3; -fx-font-size: 18px;");
-        container.setAlignment(Pos.CENTER);
         TextField textBox = new TextField("Enter text");
         container.getChildren().add(textBox);
         Label warning = new Label();
         warning.setStyle("-fx-font-size: 16; -fx-text-fill: red");
         container.getChildren().add(warning);
 
-        Popup inputWindow = new Popup();
-        inputWindow.getContent().add(container);
-        inputWindow.show(primaryStage);
-        inputWindow.setAutoHide(true);
-        addToggleBlurEventHandler(inputWindow);
+        textBubbleInput = new HighlightedPopup(primaryStage);
+        textBubbleInput.getContent().add(container);
 
         EventHandler<ActionEvent> eventHandler = e -> {
+            TextBubble tBub = getCurrentSpeechBubble();
             String output = prepareTBub(textBox.getText(), tBub);
             if(output != null) {
                 input.setText(textBox.getText());
                 tBub.setText(output);
-                inputWindow.hide();
-                toggleBlur();
+                textBubbleInput.hide();
+                textBox.setText("Enter text");
+
                 if (tBub.isEmpty())
                     tBub.setEmpty();
                 else {
-                    if (type == 0)
+                    if (isSpeechBubble)
                         tBub.setSpeech();
                     else
                         tBub.setThought();
@@ -422,6 +382,58 @@ public class UI {
                 warning.setText("Text Too Long");
         };
         textBox.setOnAction(eventHandler);
+    }
+
+    private TextBubble getCurrentSpeechBubble()
+    {
+        return selectedCharacter == comic.getRightCharacter() ? comic.getRightSpeechBubble() : comic.getLeftSpeechBubble();
+    }
+    // top narration helper
+    private void createTopNarrationPopup() {
+        Label narration;
+        Label text = new Label();
+        narration = comic.getTopNarration();
+        topNarrationInput = createNarrationInput(narration, text);
+    }
+
+    // bottom narration helper
+    private void createBottomNarrationPopup() {
+        Label narration;
+        Label text = new Label();
+        narration = comic.getBottomNarration();
+        bottomNarrationInput = createNarrationInput(narration, text);
+    }
+
+    // input text box for top and bottom narration
+    private HighlightedPopup createNarrationInput(Label narration, Label input) {
+        VBox container = new VBox();
+        container.setPadding(new Insets(15));
+        container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3; -fx-font-size: 18px;");
+        container.setAlignment(Pos.CENTER);
+
+        TextField textBox = new TextField("Enter text");
+        Label warning = new Label();
+        warning.setStyle("-fx-font-size: 16px; -fx-text-fill: red");
+        container.getChildren().addAll(textBox, warning);
+
+        HighlightedPopup inputWindow = new HighlightedPopup(primaryStage);
+        inputWindow.getContent().add(container);
+
+        EventHandler<ActionEvent> eventHandler = e -> {
+            String output = prepareString(textBox.getText(), 1, 54);
+            if (output != null) {
+                input.setText(textBox.getText());
+                narration.setText(input.getText());
+                inputWindow.hide();
+                textBox.setText("Enter text");
+
+            } else {
+                int count = textBox.getText().length();
+                warning.setText("Text cannot be longer than 53 characters. \nCurrent length: " + count);
+            }
+        };
+        textBox.setOnAction(eventHandler);
+        return inputWindow;
     }
 
     //method to sort through fonts for text bubble
@@ -483,13 +495,11 @@ public class UI {
     private void closePopupButton(Node button,Popup popup) {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             popup.hide();
-            toggleBlur();
         });
     }
 
     //displays options for character choices in scrollable popup
-    private void displayCharacterPoses() {
-        toggleBlur();
+    private void createCharacterPoses() {
         ScrollPane selection = new ScrollPane();
         selection.setPrefSize(261, 750);
 
@@ -510,13 +520,9 @@ public class UI {
         container.setAlignment(Pos.CENTER);
         container.getChildren().addAll(closeButton,selection);
 
-        Popup charPosesPopup = new Popup();
+        charPosesPopup = new HighlightedPopup(primaryStage);
         charPosesPopup.getContent().add(container);
         closePopupButton(closeButton, charPosesPopup);
-        charPosesPopup.setAutoHide(true);
-        addToggleBlurEventHandler(charPosesPopup);
-        charPosesPopup.show(primaryStage);
-
     }
 
     //creates and gets character image options in Tilepane
@@ -530,7 +536,7 @@ public class UI {
         Poses.setAlignment(Pos.CENTER_RIGHT);
         Poses.setStyle("-fx-background-color: white;-fx-font-size: 18px;");
 
-        //dynamic version adds based on files in folder
+        /*//dynamic version adds based on files in folder
         File folder = new File("src/Character_Images");
         File[] listOfFiles = folder.listFiles();
         int i = 0;
@@ -543,9 +549,9 @@ public class UI {
                     i++;
                 }
             }
-        }
+        }*/
 
-        /*//Hardcoded version because of jar issues (used for the jar)
+        //Hardcoded version because of jar issues (used for the jar)
         String[] names = {"#empty.png","angry.png","accusing.png","attacking.png","biting.png","charming.png","confident.png",
                 "confused.png","conquering.png","denouncing.png","disappointed.png","disgusted.png","disgusting.png","embracing.png",
                 "goofy.png","guiding.png","hitting.png","inspired.png","inspiring.png","joy.png","laughing.png","neutral.png",
@@ -558,7 +564,7 @@ public class UI {
             Poses.setTileAlignment(Pos.TOP_LEFT);
             changePose(Poses.getChildren().get(i) , name);
             i++;
-        }*/
+        }
         return Poses;
     }
 
@@ -575,39 +581,21 @@ public class UI {
         });
     }
 
-    //adds event handler which toggles the blur on the main view when the popup autohides
-    private void addToggleBlurEventHandler(Popup popup) {
-        popup.setOnAutoHide(new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                toggleBlur();
-            }
-        });
-    }
-
-    //function which toggles the blur effect on the main view
-    private void toggleBlur()
-    {
-        root.setEffect( (root.getEffect() == null) ? new GaussianBlur() : null);
-    }
-
-
-    //displays a popup telling the user to select a character
-    private void displaySelectCharacterWarning() {
-        toggleBlur();
+    //creates a popup telling the user to select a character
+    private void createSelectCharacterWarning() {
         VBox container = new VBox();
         container.setPadding(new Insets(15));
         container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
         container.setAlignment(Pos.CENTER);
+
         final Label warning = new Label("Warning!");
         warning.setStyle("-fx-font-size: 30px; -fx-text-fill: red; -fx-font-weight: bold;");
         final Label selectCharacterWarning = new Label("You must select a character first.");
         final Label closePrompt = new Label("Click anywhere to close.");
+
         container.getChildren().addAll(warning, selectCharacterWarning, closePrompt);
-        Popup charWarningPopup = new Popup();
+
+        charWarningPopup = new HighlightedPopup(primaryStage);
         charWarningPopup.getContent().add(container);
-        charWarningPopup.setAutoHide(true);
-        addToggleBlurEventHandler(charWarningPopup);
-        charWarningPopup.show(primaryStage);
     }
 }
