@@ -1,10 +1,23 @@
-To run:
-code folder: Runs on java 14 with javaFX 16
-jar file:
--Using Java 8 in console
- In console in same directory that jar is in run command "java -jar Tintin-Excelsior.jar"
--Using java 14 in console
- In console in same directory that jar is in run command "java --module-path "Path to javafx sdk (e.g C:\Program Files\Java\javafx-sdk-16\lib)" --add-modules javafx.controls,javafx.fxml -jar Tintin-Excelsior.jar"
+------------------
+Team: Tintin
+------------------
+> Adam Caffrey
+> John Engracio
+> John Keegan
+> Sean Mc Donnell
+------------------
+
+Project built with IntelliJ using Java 14 and JavaFX 16.
+
+HOW TO RUN:
+------------------
+Using IntelliJ (Or any other IDE):
+-> Run the Main class
+
+Using the jar file:
+1. In command line: Change the working directory to where the jar file is located.
+2. Type in: java --module-path "PATH_TO_JAVAFX16_LIB" --add-modules javafx.controls,javafx.fxml -jar Tintin-Excelsior.jar
+------------------
 
 Note: We first implemented the dynamic way of getting all the images in the character images folder, but when switching to make it
 runnable from a jar file, our method of dynamically loading the files no longer worked. Since we couldn't find a suitable solution to do this
@@ -22,6 +35,8 @@ ChangeList
 UI:
     -Changed popup effects so that background gets blurred while popup is active.
     -Added extra button to exit popup when pose is chosen, for ease of use.
+    -Built more upon the top and bottom narration (Now has limits to the text length)
+    -Buttons now have tooltips when hovering over them to give better context as to what they do
 
 Icons:
     -Created a new IconButtons class to allow Icons for the different buttons while also not adding the icons to character pose pool
