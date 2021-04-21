@@ -5,6 +5,8 @@ import javafx.scene.paint.Color;
 
 public class Character extends ImageView {
     private Image character = null;
+    private Image updated;
+    private String currentPose;
     private boolean defaultOrientation = true;
 
     private final Color defaultHairColour = Color.web("#F9FF00");
@@ -27,6 +29,15 @@ public class Character extends ImageView {
         String address = "/Character_Images/" + character;
         setCharacter(address);
         setEmpty(character.equals("#empty.png"));
+    }
+
+    public String getCurrentPose() {
+        //System.out.println("/Character_Images/" + currentPose);
+        return "/Character_Images/" + currentPose;
+    }
+
+    public void setCurrentPose(String currentPose) {
+        this.currentPose = currentPose;
     }
 
     public void flipDefaultOrientation() {
@@ -83,7 +94,6 @@ public class Character extends ImageView {
         updateImage();
     }
 
-
     public boolean isEmpty() {
         return empty;
     }
@@ -94,11 +104,15 @@ public class Character extends ImageView {
 
     //called after an update to update displayed image
     private void updateImage() {
-        Image updated = character;
+        updated = character;
         updated = changeGender(updated);
         updated = makeHairColourChange(updated);
         updated = makeSkinColourChange(updated);
         this.setImage(updated);
+    }
+
+    public Image getUpdatedImage() {
+        return updated;
     }
 
     // changes the hair colour
