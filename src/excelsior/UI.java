@@ -10,6 +10,9 @@ import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -23,8 +26,9 @@ import java.io.File;
 
 public class UI {
     private final Stage primaryStage;
-    private final HBox allComics = new HBox(15);
+    private final HBox comicPanels = new HBox(15);
     private final ComicPane comic = new ComicPane();
+    private ComicPane selectedPanel;
     private TilePane buttonBox;
     private Character selectedCharacter;
     private Boolean isSpeechBubble = true;
@@ -63,21 +67,68 @@ public class UI {
 
     //top menu pane for file dropdown
     public MenuBar createMenu() {
-        Menu m = new Menu("File");
+        Menu file = new Menu("File");
+        Menu editPanel = comicPanelMenu();
 
         MenuItem m1 = new MenuItem("New");
         MenuItem m2 = new MenuItem("Delete");
         MenuItem m3 = new MenuItem("Save");
 
-        m.getItems().add(m1);
-        m.getItems().add(m2);
-        m.getItems().add(m3);
+        file.getItems().addAll(m1, m2, m3);
 
         MenuBar mb = new MenuBar();
-
-        mb.getMenus().add(m);
+        mb.getMenus().add(file);
+        mb.getMenus().add(editPanel);
 
         return mb;
+    }
+
+    private Menu comicPanelMenu() {
+        Menu menu = new Menu("Panel");
+
+        MenuItem create = new MenuItem("New");
+        MenuItem save = new MenuItem("Save");
+        MenuItem delete = new MenuItem("Delete");
+        MenuItem edit = new MenuItem("Edit");
+
+        KeyCombination newPanelKeyBinding = new KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN);
+        KeyCombination SaveKeyBinding = new KeyCodeCombination(KeyCode.S, KeyCombination.SHIFT_DOWN);
+        KeyCombination DeleteKeyBinding = new KeyCodeCombination(KeyCode.X, KeyCombination.SHIFT_DOWN);
+        KeyCombination EditKeyBinding = new KeyCodeCombination(KeyCode.G, KeyCombination.SHIFT_DOWN);
+
+        create.setAccelerator(newPanelKeyBinding);
+        save.setAccelerator(SaveKeyBinding);
+        delete.setAccelerator(DeleteKeyBinding);
+        edit.setAccelerator(EditKeyBinding);
+
+        menu.getItems().addAll(create, edit, delete, save);
+
+        delete.setDisable(true);
+
+        save.setOnAction(actionEvent -> {
+            saveComicPanel();
+            if (!comicPanels.getChildren().isEmpty()) {
+                delete.setDisable(false);
+            }
+        });
+
+        delete.setOnAction(actionEvent -> {
+            deleteComicPanel();
+            if (comicPanels.getChildren().isEmpty()) {
+                delete.setDisable(true);
+            }
+        });
+
+        edit.setOnAction(actionEvent -> {
+            editComicPanel();
+        });
+
+        create.setOnAction(actionEvent -> {
+            comic.clear();
+            unselectComicPanel();
+        });
+
+        return menu;
     }
 
     //view for everything below the top menu
@@ -202,12 +253,76 @@ public class UI {
         ScrollPane scroll = new ScrollPane();
         scroll.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5;");
         scroll.setPrefHeight(300);
-        allComics.setPrefSize(2000, 235);
-        allComics.setAlignment(Pos.CENTER_LEFT);
-        allComics.setPadding(new Insets(0, 0, 0, 15));
-        scroll.setContent(allComics);
+        comicPanels.setPrefSize(2000, 235);
+        comicPanels.setAlignment(Pos.CENTER_LEFT);
+        comicPanels.setPadding(new Insets(0, 0, 0, 15));
+        scroll.setContent(comicPanels);
         scroll.setPannable(true);
         return scroll;
+    }
+
+    private void saveComicPanel() {
+        ComicPane newPanel = new ComicPane();
+
+        // sets the new panel to the current workspace panel
+        newPanel.setTo(comic);
+        selectComicPanel(newPanel);
+
+        // Checks if the character's orientation is flipped in the current panel
+        if (!comic.getRightCharacter().isDefaultOrientation()) {
+            newPanel.getRightCharacter().flipDefaultOrientation();
+        } else if (!comic.getLeftCharacter().isDefaultOrientation()) {
+            newPanel.getLeftCharacter().flipDefaultOrientation();
+        }
+
+        // checks if the selected panel already exists within in comicPanels before saving/overwriting
+        if (comicPanels.getChildren().contains(selectedPanel)) {
+            int index = comicPanels.getChildren().indexOf(selectedPanel);
+            comicPanels.getChildren().set(index, newPanel);
+        } else {
+            comicPanels.getChildren().add(newPanel);
+        }
+
+        comic.clear();
+    }
+
+    private void deleteComicPanel() {
+        comicPanels.getChildren().remove(selectedPanel);
+    }
+
+    private void editComicPanel() {
+        if (selectedPanel != null) {
+            comic.setWorkspaceTo(selectedPanel);
+        }
+    }
+
+    private void unselectComicPanel() {
+        for (int i=0; i<comicPanels.getChildren().size(); i++) {
+            Node temp = comicPanels.getChildren().get(i);
+            temp.setEffect(null);
+        }
+        selectedPanel = null;
+    }
+
+    private void selectComicPanel(ComicPane panel) {
+        DropShadow drop = new DropShadow();
+        drop.setSpread(0.30);
+
+        panel.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+            for (int i=0; i<comicPanels.getChildren().size(); i++) {
+                Node temp = comicPanels.getChildren().get(i);
+                temp.setEffect(null);
+            }
+
+            if (selectedPanel == null) {
+                panel.setEffect(drop);
+                selectedPanel = panel;
+            } else {
+                panel.setEffect(null);
+                selectedPanel = null;
+            }
+
+        });
     }
 
     // button function to select left character and/or select pose
@@ -588,7 +703,8 @@ public class UI {
     private void changePose(Node button, String pose) {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             selectedCharacter.setCharacterPose(pose);
-            if(selectedCharacter.isEmpty()) {
+            selectedCharacter.setCurrentPose(pose);
+            if (selectedCharacter.isEmpty()) {
                 if (comic.getLeftCharacter() == selectedCharacter)
                     comic.getLeftSpeechBubble().setEmpty();
                 else

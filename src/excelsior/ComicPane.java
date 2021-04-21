@@ -3,7 +3,6 @@ package excelsior;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
@@ -106,5 +105,47 @@ public class ComicPane extends GridPane {
         this.add(leftCharacter, 0, 2);
         this.add(rightCharacter, 1, 2);
         this.add(bottomNarration, 0, 3, 2, 1);
+    }
+
+    public void clear() {
+        this.getTopNarration().setText(null);
+        this.getBottomNarration().setText(null);
+        this.getRightCharacter().setCharacter("/Character_Images/#empty.png");
+        this.getLeftCharacter().setCharacter("/Character_Images/#empty.png");
+        this.getRightSpeechBubble().setEmpty();
+        this.getLeftSpeechBubble().setEmpty();
+    }
+
+    public void setTo(ComicPane panel) {
+        this.getLeftCharacter().setCharacter(panel.getLeftCharacter().getUpdatedImage());
+        this.getRightCharacter().setCharacter(panel.getRightCharacter().getUpdatedImage());
+
+        this.getLeftCharacter().setCurrentPose(panel.getLeftCharacter().getCurrentPose());
+        this.getRightCharacter().setCurrentPose(panel.getRightCharacter().getCurrentPose());
+
+        getNarrationsAndBubbles(panel);
+    }
+
+    public void setWorkspaceTo(ComicPane panel) {
+        if (this.getRightCharacter().getCurrentPose().equals("/Character_Images/null")) {
+            this.getRightCharacter().setCharacter("/Character_Images/#empty.png");
+        } else this.getRightCharacter().setCharacter(this.getRightCharacter().getCurrentPose());
+
+        if (this.getLeftCharacter().getCurrentPose().equals("/Character_Images/null")) {
+            this.getLeftCharacter().setCharacter("/Character_Images/#empty.png");
+        } else this.getLeftCharacter().setCharacter(this.getLeftCharacter().getCurrentPose());
+
+        getNarrationsAndBubbles(panel);
+    }
+
+    private void getNarrationsAndBubbles(ComicPane panel) {
+        this.getTopNarration().setText(panel.getTopNarration().getText());
+        this.getBottomNarration().setText(panel.getBottomNarration().getText());
+
+        this.getLeftSpeechBubble().getBubble().setImage(panel.getLeftSpeechBubble().getBubble().getImage());
+        this.getLeftSpeechBubble().getText().setText(panel.getLeftSpeechBubble().getText().getText());
+
+        this.getRightSpeechBubble().getBubble().setImage(panel.getRightSpeechBubble().getBubble().getImage());
+        this.getRightSpeechBubble().getText().setText(panel.getRightSpeechBubble().getText().getText());
     }
 }
