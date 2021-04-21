@@ -32,8 +32,7 @@ public class Character extends ImageView {
     }
 
     public String getCurrentPose() {
-        //System.out.println("/Character_Images/" + currentPose);
-        return "/Character_Images/" + currentPose;
+        return currentPose;
     }
 
     public void setCurrentPose(String currentPose) {

@@ -89,19 +89,16 @@ public class UI {
         MenuItem create = new MenuItem("New");
         MenuItem save = new MenuItem("Save");
         MenuItem delete = new MenuItem("Delete");
-        MenuItem edit = new MenuItem("Edit");
 
         KeyCombination newPanelKeyBinding = new KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN);
         KeyCombination SaveKeyBinding = new KeyCodeCombination(KeyCode.S, KeyCombination.SHIFT_DOWN);
         KeyCombination DeleteKeyBinding = new KeyCodeCombination(KeyCode.X, KeyCombination.SHIFT_DOWN);
-        KeyCombination EditKeyBinding = new KeyCodeCombination(KeyCode.G, KeyCombination.SHIFT_DOWN);
 
         create.setAccelerator(newPanelKeyBinding);
         save.setAccelerator(SaveKeyBinding);
         delete.setAccelerator(DeleteKeyBinding);
-        edit.setAccelerator(EditKeyBinding);
 
-        menu.getItems().addAll(create, edit, delete, save);
+        menu.getItems().addAll(create, delete, save);
 
         delete.setDisable(true);
 
@@ -113,14 +110,11 @@ public class UI {
         });
 
         delete.setOnAction(actionEvent -> {
+            comic.clear();
             deleteComicPanel();
             if (comicPanels.getChildren().isEmpty()) {
                 delete.setDisable(true);
             }
-        });
-
-        edit.setOnAction(actionEvent -> {
-            editComicPanel();
         });
 
         create.setOnAction(actionEvent -> {
@@ -266,7 +260,7 @@ public class UI {
 
         // sets the new panel to the current workspace panel
         newPanel.setTo(comic);
-        selectComicPanel(newPanel);
+        makePanelSelectable(newPanel);
 
         // Checks if the character's orientation is flipped in the current panel
         if (!comic.getRightCharacter().isDefaultOrientation()) {
@@ -293,6 +287,10 @@ public class UI {
     private void editComicPanel() {
         if (selectedPanel != null) {
             comic.setWorkspaceTo(selectedPanel);
+            comic.getLeftCharacter().setHairColour(selectedPanel.getLeftCharacter().getHairColour());
+            comic.getRightCharacter().setHairColour(selectedPanel.getRightCharacter().getHairColour());
+            comic.getLeftCharacter().setSkinColour(selectedPanel.getLeftCharacter().getSkinColour());
+            comic.getRightCharacter().setSkinColour(selectedPanel.getRightCharacter().getSkinColour());
         }
     }
 
@@ -304,24 +302,18 @@ public class UI {
         selectedPanel = null;
     }
 
-    private void selectComicPanel(ComicPane panel) {
+    private void makePanelSelectable(ComicPane panel) {
         DropShadow drop = new DropShadow();
         drop.setSpread(0.30);
 
-        panel.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
+        panel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             for (int i=0; i<comicPanels.getChildren().size(); i++) {
                 Node temp = comicPanels.getChildren().get(i);
                 temp.setEffect(null);
             }
-
-            if (selectedPanel == null) {
-                panel.setEffect(drop);
-                selectedPanel = panel;
-            } else {
-                panel.setEffect(null);
-                selectedPanel = null;
-            }
-
+            selectedPanel = panel;
+            editComicPanel();
+            panel.setEffect(drop);
         });
     }
 

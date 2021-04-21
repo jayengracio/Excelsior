@@ -112,33 +112,45 @@ public class ComicPane extends GridPane {
         this.getBottomNarration().setText(null);
         this.getRightCharacter().setCharacter("/Character_Images/#empty.png");
         this.getLeftCharacter().setCharacter("/Character_Images/#empty.png");
+        this.getRightCharacter().setCurrentPose(null);
+        this.getLeftCharacter().setCurrentPose(null);
         this.getRightSpeechBubble().setEmpty();
         this.getLeftSpeechBubble().setEmpty();
     }
 
     public void setTo(ComicPane panel) {
+        this.clear();
         this.getLeftCharacter().setCharacter(panel.getLeftCharacter().getUpdatedImage());
         this.getRightCharacter().setCharacter(panel.getRightCharacter().getUpdatedImage());
 
         this.getLeftCharacter().setCurrentPose(panel.getLeftCharacter().getCurrentPose());
         this.getRightCharacter().setCurrentPose(panel.getRightCharacter().getCurrentPose());
 
-        getNarrationsAndBubbles(panel);
+        getNarrationsAndBubblesAndColours(panel);
     }
 
     public void setWorkspaceTo(ComicPane panel) {
-        if (this.getRightCharacter().getCurrentPose().equals("/Character_Images/null")) {
+        this.clear();
+
+        if (panel.getRightCharacter().getCurrentPose() == null) {
             this.getRightCharacter().setCharacter("/Character_Images/#empty.png");
-        } else this.getRightCharacter().setCharacter(this.getRightCharacter().getCurrentPose());
+        } else {
+            this.getRightCharacter().setCharacter("/Character_Images/" + panel.getRightCharacter().getCurrentPose());
+        }
 
-        if (this.getLeftCharacter().getCurrentPose().equals("/Character_Images/null")) {
+        if (panel.getLeftCharacter().getCurrentPose() == null) {
             this.getLeftCharacter().setCharacter("/Character_Images/#empty.png");
-        } else this.getLeftCharacter().setCharacter(this.getLeftCharacter().getCurrentPose());
+        } else {
+            this.getLeftCharacter().setCharacter("/Character_Images/" + panel.getLeftCharacter().getCurrentPose());
+        }
 
-        getNarrationsAndBubbles(panel);
+        this.getRightCharacter().setCurrentPose(panel.getRightCharacter().getCurrentPose());
+        this.getLeftCharacter().setCurrentPose(panel.getLeftCharacter().getCurrentPose());
+
+        getNarrationsAndBubblesAndColours(panel);
     }
 
-    private void getNarrationsAndBubbles(ComicPane panel) {
+    private void getNarrationsAndBubblesAndColours(ComicPane panel) {
         this.getTopNarration().setText(panel.getTopNarration().getText());
         this.getBottomNarration().setText(panel.getBottomNarration().getText());
 
@@ -147,5 +159,11 @@ public class ComicPane extends GridPane {
 
         this.getRightSpeechBubble().getBubble().setImage(panel.getRightSpeechBubble().getBubble().getImage());
         this.getRightSpeechBubble().getText().setText(panel.getRightSpeechBubble().getText().getText());
+
+        this.getRightCharacter().setSkinColour(panel.getRightCharacter().getSkinColour());
+        this.getRightCharacter().setHairColour(panel.getRightCharacter().getHairColour());
+
+        this.getLeftCharacter().setSkinColour(panel.getLeftCharacter().getSkinColour());
+        this.getLeftCharacter().setHairColour(panel.getLeftCharacter().getHairColour());
     }
 }
