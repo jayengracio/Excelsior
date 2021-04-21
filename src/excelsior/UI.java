@@ -295,7 +295,7 @@ public class UI {
     }
 
     private void unselectComicPanel() {
-        for (int i=0; i<comicPanels.getChildren().size(); i++) {
+        for (int i = 0; i < comicPanels.getChildren().size(); i++) {
             Node temp = comicPanels.getChildren().get(i);
             temp.setEffect(null);
         }
@@ -307,7 +307,7 @@ public class UI {
         drop.setSpread(0.30);
 
         panel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            for (int i=0; i<comicPanels.getChildren().size(); i++) {
+            for (int i = 0; i < comicPanels.getChildren().size(); i++) {
                 Node temp = comicPanels.getChildren().get(i);
                 temp.setEffect(null);
             }

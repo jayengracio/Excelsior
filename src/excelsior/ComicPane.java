@@ -7,13 +7,12 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
 public class ComicPane extends GridPane {
-    private Label topNarration = new Label();
-    private Character leftCharacter = new Character();
-    private Character rightCharacter = new Character();
-    private Label bottomNarration = new Label();
-    private TextBubble leftSpeechBubble = new TextBubble();
-    private TextBubble rightSpeechBubble = new TextBubble();
-    private int width = 300;
+    private final Label topNarration = new Label();
+    private final Character leftCharacter = new Character();
+    private final Character rightCharacter = new Character();
+    private final Label bottomNarration = new Label();
+    private final TextBubble leftSpeechBubble = new TextBubble();
+    private final TextBubble rightSpeechBubble = new TextBubble();
 
     public ComicPane(){
         this.setPrefSize(615, 500);
@@ -34,79 +33,27 @@ public class ComicPane extends GridPane {
         return topNarration;
     }
 
-    public void setTopNarration(Label topNarration) {
-        this.topNarration = topNarration;
+    public Label getBottomNarration() {
+        return bottomNarration;
     }
 
     public Character getLeftCharacter() {
         return leftCharacter;
     }
 
-    public void setLeftCharacter(Character leftCharacter) {
-        this.leftCharacter = leftCharacter;
-    }
-
     public Character getRightCharacter() {
         return rightCharacter;
-    }
-
-    public void setRightCharacter(Character rightCharacter) {
-        this.rightCharacter = rightCharacter;
-    }
-
-    public Label getBottomNarration() {
-        return bottomNarration;
-    }
-
-    public void setBottomNarration(Label bottomNarration) {
-        this.bottomNarration = bottomNarration;
     }
 
     public TextBubble getLeftSpeechBubble() {
         return leftSpeechBubble;
     }
 
-    public void setLeftSpeechBubble(TextBubble leftSpeechBubble) {
-        this.leftSpeechBubble = leftSpeechBubble;
-    }
-
     public TextBubble getRightSpeechBubble() {
         return rightSpeechBubble;
     }
 
-    public void setRightSpeechBubble(TextBubble rightSpeechBubble) {
-        this.rightSpeechBubble = rightSpeechBubble;
-    }
-
-    private void fillPane(){
-        topNarration.setAlignment(Pos.CENTER);
-        bottomNarration.setAlignment(Pos.CENTER);
-        leftSpeechBubble.setAlignment(Pos.CENTER);
-        rightSpeechBubble.setAlignment(Pos.CENTER);
-        topNarration.setPrefSize(this.getPrefWidth(), 50);
-        topNarration.setStyle("-fx-font-size: 19; -fx-font-weight: bold; -fx-font-family: Monospaced");
-        bottomNarration.setPrefSize(this.getPrefWidth(), 50);
-        bottomNarration.setStyle("-fx-font-size: 19; -fx-font-weight: bold; -fx-font-family: Monospaced");
-        leftSpeechBubble.setPrefSize(width, 160);
-        rightSpeechBubble.setPrefSize(width, 160);
-        /*ImageView leftSpeech = new ImageView();
-        ImageView rightSpeech = new ImageView();
-        leftSpeech.prefHeight(60);
-        leftSpeech.setFitHeight(60);
-        rightSpeech.prefHeight(60);
-        rightSpeech.setFitHeight(60);
-        leftSpeech.prefWidth(width);
-        leftSpeech.setFitWidth(width);
-        rightSpeech.prefWidth(width);
-        rightSpeech.setFitWidth(width);*/
-        this.add(topNarration, 0, 0, 2, 1);
-        this.add(leftSpeechBubble, 0, 1);
-        this.add(rightSpeechBubble, 1, 1);
-        this.add(leftCharacter, 0, 2);
-        this.add(rightCharacter, 1, 2);
-        this.add(bottomNarration, 0, 3, 2, 1);
-    }
-
+    // empties the class
     public void clear() {
         this.getTopNarration().setText(null);
         this.getBottomNarration().setText(null);
@@ -118,6 +65,7 @@ public class ComicPane extends GridPane {
         this.getLeftSpeechBubble().setEmpty();
     }
 
+    //Used for saving a comic panel from the workspace panel
     public void setTo(ComicPane panel) {
         this.clear();
         this.getLeftCharacter().setCharacter(panel.getLeftCharacter().getUpdatedImage());
@@ -129,6 +77,7 @@ public class ComicPane extends GridPane {
         getNarrationsAndBubblesAndColours(panel);
     }
 
+    // used for bringing a saved comic panel into the workspace panel for editing
     public void setWorkspaceTo(ComicPane panel) {
         this.clear();
 
@@ -150,6 +99,7 @@ public class ComicPane extends GridPane {
         getNarrationsAndBubblesAndColours(panel);
     }
 
+    // essentially 'clones' the rest of the Comic Panel
     private void getNarrationsAndBubblesAndColours(ComicPane panel) {
         this.getTopNarration().setText(panel.getTopNarration().getText());
         this.getBottomNarration().setText(panel.getBottomNarration().getText());
@@ -165,5 +115,24 @@ public class ComicPane extends GridPane {
 
         this.getLeftCharacter().setSkinColour(panel.getLeftCharacter().getSkinColour());
         this.getLeftCharacter().setHairColour(panel.getLeftCharacter().getHairColour());
+    }
+
+    private void fillPane(){
+        topNarration.setAlignment(Pos.CENTER);
+        bottomNarration.setAlignment(Pos.CENTER);
+        leftSpeechBubble.setAlignment(Pos.CENTER);
+        rightSpeechBubble.setAlignment(Pos.CENTER);
+        topNarration.setPrefSize(this.getPrefWidth(), 50);
+        topNarration.setStyle("-fx-font-size: 19; -fx-font-weight: bold; -fx-font-family: Monospaced");
+        bottomNarration.setPrefSize(this.getPrefWidth(), 50);
+        bottomNarration.setStyle("-fx-font-size: 19; -fx-font-weight: bold; -fx-font-family: Monospaced");
+        leftSpeechBubble.setPrefSize(300, 160);
+        rightSpeechBubble.setPrefSize(300, 160);
+        this.add(topNarration, 0, 0, 2, 1);
+        this.add(leftSpeechBubble, 0, 1);
+        this.add(rightSpeechBubble, 1, 1);
+        this.add(leftCharacter, 0, 2);
+        this.add(rightCharacter, 1, 2);
+        this.add(bottomNarration, 0, 3, 2, 1);
     }
 }
