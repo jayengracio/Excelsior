@@ -498,8 +498,7 @@ public class UI {
                 input.setText(textBox.getText());
                 tBub.setText(output);
                 textBubbleInput.hide();
-                textBox.setText("Enter text");
-
+                textBox.selectAll();
                 if (tBub.isEmpty())
                     tBub.setEmpty();
                 else {
@@ -556,8 +555,7 @@ public class UI {
                 input.setText(textBox.getText());
                 narration.setText(input.getText());
                 inputWindow.hide();
-                textBox.setText("Enter text");
-
+                textBox.selectAll();
             } else {
                 int count = textBox.getText().length();
                 warning.setText("Text cannot be longer than 53 characters. \nCurrent length: " + count);
