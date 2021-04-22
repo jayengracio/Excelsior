@@ -13,8 +13,9 @@ public class ComicPane extends GridPane {
     private final Label bottomNarration = new Label();
     private final TextBubble leftSpeechBubble = new TextBubble();
     private final TextBubble rightSpeechBubble = new TextBubble();
+    private boolean inEditMode = false;
 
-    public ComicPane(){
+    public ComicPane() {
         this.setPrefSize(615, 500);
         this.setStyle("-fx-background-color: white;-fx-border-color: #000000; -fx-border-width: 2; -fx-border-radius: 2;");
         this.setHgap(15);
@@ -25,7 +26,7 @@ public class ComicPane extends GridPane {
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setMaxWidth(300);
         col2.setHalignment(HPos.CENTER);
-        this.getColumnConstraints().addAll(col1,col2);
+        this.getColumnConstraints().addAll(col1, col2);
         fillPane();
     }
 
@@ -53,8 +54,17 @@ public class ComicPane extends GridPane {
         return rightSpeechBubble;
     }
 
+    public void setEditMode(boolean inEditMode) {
+        this.inEditMode = inEditMode;
+    }
+
+    public boolean isInEditMode() {
+        return inEditMode;
+    }
+
     // empties the class
     public void clear() {
+        this.setEditMode(false);
         this.getTopNarration().setText(null);
         this.getBottomNarration().setText(null);
         this.getRightCharacter().setCharacter("/Character_Images/#empty.png");
@@ -65,22 +75,22 @@ public class ComicPane extends GridPane {
         this.getLeftSpeechBubble().setEmpty();
     }
 
-    //Used for saving a comic panel from the workspace panel
+    // replace the contents the panel with another
     public void setTo(ComicPane panel) {
-        this.clear();
         this.getLeftCharacter().setCharacter(panel.getLeftCharacter().getUpdatedImage());
         this.getRightCharacter().setCharacter(panel.getRightCharacter().getUpdatedImage());
 
         this.getLeftCharacter().setCurrentPose(panel.getLeftCharacter().getCurrentPose());
         this.getRightCharacter().setCurrentPose(panel.getRightCharacter().getCurrentPose());
 
-        getNarrationsAndBubblesAndColours(panel);
+        clone(panel);
     }
 
-    // used for bringing a saved comic panel into the workspace panel for editing
+    /* used for bringing a saved comic panel into the workspace panel for editing.
+    the difference between this and the setTo function is that this sets the characters to their .png counterparts
+    rather than the updated image as most of the functionalities of Character relies on these .png images.
+    */
     public void setWorkspaceTo(ComicPane panel) {
-        this.clear();
-
         if (panel.getRightCharacter().getCurrentPose() == null) {
             this.getRightCharacter().setCharacter("/Character_Images/#empty.png");
         } else {
@@ -96,11 +106,14 @@ public class ComicPane extends GridPane {
         this.getRightCharacter().setCurrentPose(panel.getRightCharacter().getCurrentPose());
         this.getLeftCharacter().setCurrentPose(panel.getLeftCharacter().getCurrentPose());
 
-        getNarrationsAndBubblesAndColours(panel);
+        this.getRightCharacter().setDefaultOrientation(panel.getRightCharacter().isDefaultOrientation());
+        this.getLeftCharacter().setDefaultOrientation(panel.getLeftCharacter().isDefaultOrientation());
+
+        clone(panel);
     }
 
-    // essentially 'clones' the rest of the Comic Panel
-    private void getNarrationsAndBubblesAndColours(ComicPane panel) {
+    // 'clones' the rest of the Comic Panel
+    private void clone(ComicPane panel) {
         this.getTopNarration().setText(panel.getTopNarration().getText());
         this.getBottomNarration().setText(panel.getBottomNarration().getText());
 
@@ -115,9 +128,12 @@ public class ComicPane extends GridPane {
 
         this.getLeftCharacter().setSkinColour(panel.getLeftCharacter().getSkinColour());
         this.getLeftCharacter().setHairColour(panel.getLeftCharacter().getHairColour());
+
+        this.getRightCharacter().setFemale(panel.getRightCharacter().isFemale());
+        this.getLeftCharacter().setFemale(panel.getLeftCharacter().isFemale());
     }
 
-    private void fillPane(){
+    private void fillPane() {
         topNarration.setAlignment(Pos.CENTER);
         bottomNarration.setAlignment(Pos.CENTER);
         leftSpeechBubble.setAlignment(Pos.CENTER);

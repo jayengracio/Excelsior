@@ -18,11 +18,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.File;
+import java.util.Optional;
 
 public class UI {
     private final Stage primaryStage;
@@ -110,7 +111,6 @@ public class UI {
         });
 
         delete.setOnAction(actionEvent -> {
-            comic.clear();
             deleteComicPanel();
             if (comicPanels.getChildren().isEmpty()) {
                 delete.setDisable(true);
@@ -118,7 +118,6 @@ public class UI {
         });
 
         create.setOnAction(actionEvent -> {
-            comic.clear();
             unselectComicPanel();
         });
 
@@ -199,6 +198,9 @@ public class UI {
                 charWarningPopup.show(primaryStage);
             } else {
                 selectedCharacter.setHairColour(cur.getBackground());
+                if (!comic.getLeftCharacter().isEmpty() || !comic.getRightCharacter().isEmpty()) {
+                    comic.setEditMode(true);
+                }
             }
         });
     }
@@ -210,6 +212,9 @@ public class UI {
                 charWarningPopup.show(primaryStage);
             } else {
                 selectedCharacter.setSkinColour(cur.getBackground());
+                if (!comic.getLeftCharacter().isEmpty() || !comic.getRightCharacter().isEmpty()) {
+                    comic.setEditMode(true);
+                }
             }
         });
     }
@@ -258,11 +263,11 @@ public class UI {
     private void saveComicPanel() {
         ComicPane newPanel = new ComicPane();
 
-        // sets the new panel to the current workspace panel
+        // sets the new panel as the current workspace panel
         newPanel.setTo(comic);
         makePanelSelectable(newPanel);
 
-        // Checks if the character's orientation is flipped in the current panel
+        // checks if the character's orientation is flipped in the current panel
         if (!comic.getRightCharacter().isDefaultOrientation()) {
             newPanel.getRightCharacter().flipDefaultOrientation();
         } else if (!comic.getLeftCharacter().isDefaultOrientation()) {
@@ -281,20 +286,16 @@ public class UI {
     }
 
     private void deleteComicPanel() {
+        comic.clear();
         comicPanels.getChildren().remove(selectedPanel);
     }
 
     private void editComicPanel() {
-        if (selectedPanel != null) {
-            comic.setWorkspaceTo(selectedPanel);
-            comic.getLeftCharacter().setHairColour(selectedPanel.getLeftCharacter().getHairColour());
-            comic.getRightCharacter().setHairColour(selectedPanel.getRightCharacter().getHairColour());
-            comic.getLeftCharacter().setSkinColour(selectedPanel.getLeftCharacter().getSkinColour());
-            comic.getRightCharacter().setSkinColour(selectedPanel.getRightCharacter().getSkinColour());
-        }
+        comic.setWorkspaceTo(selectedPanel);
     }
 
     private void unselectComicPanel() {
+        comic.clear();
         for (int i = 0; i < comicPanels.getChildren().size(); i++) {
             Node temp = comicPanels.getChildren().get(i);
             temp.setEffect(null);
@@ -305,16 +306,60 @@ public class UI {
     private void makePanelSelectable(ComicPane panel) {
         DropShadow drop = new DropShadow();
         drop.setSpread(0.30);
+        drop.setColor(Color.DARKORANGE);
 
         panel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            for (int i = 0; i < comicPanels.getChildren().size(); i++) {
-                Node temp = comicPanels.getChildren().get(i);
-                temp.setEffect(null);
+            if (comic.isInEditMode()) {
+                Alert alert = changesAlert();
+
+                ButtonType save = new ButtonType("Save");
+                ButtonType cont = new ButtonType("Continue anyway");
+                ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+                alert.getButtonTypes().setAll(save, cont, cancel);
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == save) {
+                    comic.setEditMode(false);
+                    saveComicPanel();
+
+                    selectedPanel = panel;
+                    editComicPanel();
+
+                    unselectAllPanels();
+                    panel.setEffect(drop);
+                } else if (result.get() == cont) {
+                    comic.setEditMode(false);
+                    selectedPanel = panel;
+                    editComicPanel();
+
+                    unselectAllPanels();
+                    panel.setEffect(drop);
+                }
+            } else {
+                selectedPanel = panel;
+                editComicPanel();
+
+                unselectAllPanels();
+                panel.setEffect(drop);
             }
-            selectedPanel = panel;
-            editComicPanel();
-            panel.setEffect(drop);
         });
+    }
+
+    private Alert changesAlert() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Unsaved Changes");
+        alert.setHeaderText(null);
+        alert.setContentText("You have unsaved changes in the workspace");
+
+        return alert;
+    }
+
+    private void unselectAllPanels() {
+        for (int i = 0; i < comicPanels.getChildren().size(); i++) {
+            Node temp = comicPanels.getChildren().get(i);
+            temp.setEffect(null);
+        }
     }
 
     // button function to select left character and/or select pose
@@ -395,6 +440,7 @@ public class UI {
             } else {
                 selectedCharacter.flipDefaultOrientation();
                 button.setEffect(dropShadow);
+                comic.setEditMode(true);
             }
         });
     }
@@ -407,6 +453,7 @@ public class UI {
                 charWarningPopup.show(primaryStage);
             } else {
                 selectedCharacter.setFemale(!selectedCharacter.isFemale());
+                comic.setEditMode(true);
             }
             button.setEffect(dropShadow);
         });
@@ -422,6 +469,7 @@ public class UI {
                 isSpeechBubble = true;
                 textBubbleInput.show(primaryStage);
                 button.setEffect(dropShadow);
+                comic.setEditMode(true);
             }
         });
     }
@@ -436,6 +484,7 @@ public class UI {
                 isSpeechBubble = false;
                 textBubbleInput.show(primaryStage);
                 button.setEffect(dropShadow);
+                comic.setEditMode(true);
             }
         });
     }
@@ -446,6 +495,7 @@ public class UI {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             topNarrationInput.show(primaryStage);
             button.setEffect(dropShadow);
+            comic.setEditMode(true);
         });
     }
 
@@ -455,6 +505,7 @@ public class UI {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             bottomNarrationInput.show(primaryStage);
             button.setEffect(dropShadow);
+            comic.setEditMode(true);
         });
     }
 
@@ -694,6 +745,7 @@ public class UI {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             selectedCharacter.setCharacterPose(pose);
             selectedCharacter.setCurrentPose(pose);
+            comic.setEditMode(true);
             if (selectedCharacter.isEmpty()) {
                 if (comic.getLeftCharacter() == selectedCharacter)
                     comic.getLeftSpeechBubble().setEmpty();
