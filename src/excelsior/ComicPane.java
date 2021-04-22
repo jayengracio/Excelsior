@@ -1,6 +1,7 @@
 package excelsior;
 
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
@@ -84,6 +85,7 @@ public class ComicPane extends GridPane {
         this.getRightCharacter().setCurrentPose(panel.getRightCharacter().getCurrentPose());
 
         clone(panel);
+        this.minimise();
     }
 
     /* used for bringing a saved comic panel into the workspace panel for editing.
@@ -119,9 +121,11 @@ public class ComicPane extends GridPane {
 
         this.getLeftSpeechBubble().getBubble().setImage(panel.getLeftSpeechBubble().getBubble().getImage());
         this.getLeftSpeechBubble().getText().setText(panel.getLeftSpeechBubble().getText().getText());
+        this.getLeftSpeechBubble().setTextSize(panel.getLeftSpeechBubble().getTextSize());
 
         this.getRightSpeechBubble().getBubble().setImage(panel.getRightSpeechBubble().getBubble().getImage());
         this.getRightSpeechBubble().getText().setText(panel.getRightSpeechBubble().getText().getText());
+        this.getRightSpeechBubble().setTextSize(panel.getRightSpeechBubble().getTextSize());
 
         this.getRightCharacter().setSkinColour(panel.getRightCharacter().getSkinColour());
         this.getRightCharacter().setHairColour(panel.getRightCharacter().getHairColour());
@@ -150,5 +154,17 @@ public class ComicPane extends GridPane {
         this.add(leftCharacter, 0, 2);
         this.add(rightCharacter, 1, 2);
         this.add(bottomNarration, 0, 3, 2, 1);
+    }
+
+    private void minimise(){
+        this.setPrefSize(280, 230);
+        this.setHgap(5);
+        topNarration.setStyle("-fx-font-size: 9; -fx-font-weight: bold; -fx-font-family: Monospaced");
+        bottomNarration.setStyle("-fx-font-size: 9; -fx-font-weight: bold; -fx-font-family: Monospaced");
+        this.setPadding(new Insets(5));
+        leftSpeechBubble.minimise();
+        rightSpeechBubble.minimise();
+        leftCharacter.minimise();
+        rightCharacter.minimise();
     }
 }

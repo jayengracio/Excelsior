@@ -11,6 +11,7 @@ import javafx.scene.layout.StackPane;
 public class TextBubble extends StackPane {
     ImageView bubble = new ImageView();
     Label text = new Label();
+    private int fontSize = 16;
 
     public TextBubble(){
         this.setAlignment(text, Pos.CENTER);
@@ -62,8 +63,22 @@ public class TextBubble extends StackPane {
         return s.isEmpty();
     }
 
-    public void textSize(int size){
+    public void setTextSize(int size){
         String style = "-fx-font-weight: bold; -fx-font-family: 'monospaced'; -fx-font-size: " + size + ";";
+        fontSize = size;
         text.setStyle(style);
+    }
+
+    public int getTextSize(){
+        return fontSize;
+    }
+
+    public void minimise()
+    {
+        bubble.setFitWidth(135);
+        bubble.setFitHeight(80);
+        text.setPadding(new Insets(5, 15 , 23, 22));
+        text.setStyle("-fx-font-size:"+ (fontSize/2) +"; -fx-font-weight: bold; -fx-font-family: 'monospaced';");
+        text.maxWidth(135);
     }
 }

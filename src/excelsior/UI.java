@@ -252,9 +252,9 @@ public class UI {
         ScrollPane scroll = new ScrollPane();
         scroll.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5;");
         scroll.setPrefHeight(300);
-        comicPanels.setPrefSize(2000, 235);
+        comicPanels.setPrefSize(0, 235);
         comicPanels.setAlignment(Pos.CENTER_LEFT);
-        comicPanels.setPadding(new Insets(0, 0, 0, 15));
+        comicPanels.setPadding(new Insets(0, 0, 0, 6));
         scroll.setContent(comicPanels);
         scroll.setPannable(true);
         return scroll;
@@ -541,6 +541,7 @@ public class UI {
                 input.setText(textBox.getText());
                 tBub.setText(output);
                 textBubbleInput.hide();
+                textBox.setText("Enter text");
                 textBox.selectAll();
                 if (tBub.isEmpty())
                     tBub.setEmpty();
@@ -598,6 +599,7 @@ public class UI {
                 input.setText(textBox.getText());
                 narration.setText(input.getText());
                 inputWindow.hide();
+                textBox.setText("Enter text");
                 textBox.selectAll();
             } else {
                 int count = textBox.getText().length();
@@ -616,17 +618,17 @@ public class UI {
         int smallFont = 13;
         output = prepareString(s, 3, 17);
         if(output != null) {
-            tBub.textSize(largeFont);
+            tBub.setTextSize(largeFont);
             return output;
         }
         output = prepareString(s, 4, 18);
         if(output != null){
-            tBub.textSize(mediumFont);
+            tBub.setTextSize(mediumFont);
             return output;
         }
         output = prepareString(s, 5, 25);
         if(output != null){
-            tBub.textSize(smallFont);
+            tBub.setTextSize(smallFont);
             return output;
         }
 

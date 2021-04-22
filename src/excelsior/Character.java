@@ -200,4 +200,12 @@ public class Character extends ImageView {
         else
             writer.setColor(x, y, newColour);
     }
+
+    public void minimise()
+    {
+        this.setFitHeight(115);
+        this.setFitWidth(135);
+        this.prefWidth(135);
+        this.prefHeight(115);
+    }
 }
