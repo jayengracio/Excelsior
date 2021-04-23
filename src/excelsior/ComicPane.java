@@ -84,13 +84,20 @@ public class ComicPane extends GridPane {
         this.getLeftCharacter().setCurrentPose(panel.getLeftCharacter().getCurrentPose());
         this.getRightCharacter().setCurrentPose(panel.getRightCharacter().getCurrentPose());
 
+        if (!panel.getRightCharacter().isDefaultOrientation()) {
+            this.getRightCharacter().flipDefaultOrientation();
+        }
+
+        if (!panel.getLeftCharacter().isDefaultOrientation()) {
+            this.getLeftCharacter().flipDefaultOrientation();
+        }
+
         clone(panel);
         this.minimise();
     }
 
-    /* used for bringing a saved comic panel into the workspace panel for editing.
-    the difference between this and the setTo function is that this sets the characters to their .png counterparts
-    rather than the updated image as most of the functionalities of Character relies on these .png images.
+    /* functions like the setTo method, but the difference being that the characters are
+       set to their original pose image to allow for editing.
     */
     public void setWorkspaceTo(ComicPane panel) {
         if (panel.getRightCharacter().getCurrentPose() == null) {
@@ -108,8 +115,13 @@ public class ComicPane extends GridPane {
         this.getRightCharacter().setCurrentPose(panel.getRightCharacter().getCurrentPose());
         this.getLeftCharacter().setCurrentPose(panel.getLeftCharacter().getCurrentPose());
 
-        this.getRightCharacter().setDefaultOrientation(panel.getRightCharacter().isDefaultOrientation());
-        this.getLeftCharacter().setDefaultOrientation(panel.getLeftCharacter().isDefaultOrientation());
+        if (panel.getRightCharacter().isDefaultOrientation() != this.getRightCharacter().isDefaultOrientation()) {
+            this.getRightCharacter().flipDefaultOrientation();
+        }
+
+        if (panel.getLeftCharacter().isDefaultOrientation() != this.getLeftCharacter().isDefaultOrientation()) {
+            this.getLeftCharacter().flipDefaultOrientation();
+        }
 
         clone(panel);
     }

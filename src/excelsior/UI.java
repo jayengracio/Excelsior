@@ -28,7 +28,7 @@ import java.util.Optional;
 public class UI {
     private final Stage primaryStage;
     private final HBox comicPanels = new HBox(15);
-    private final ComicPane comic = new ComicPane();
+    private final ComicPane workPanel = new ComicPane();
     private ComicPane selectedPanel;
     private TilePane buttonBox;
     private Character selectedCharacter;
@@ -57,8 +57,7 @@ public class UI {
     }
 
     //create all of the popups at the start of the application instead of creating them each time a popup is used
-    private void createPopups()
-    {
+    private void createPopups() {
         createSelectCharacterWarning();
         createBottomNarrationPopup();
         createTopNarrationPopup();
@@ -117,9 +116,7 @@ public class UI {
             }
         });
 
-        create.setOnAction(actionEvent -> {
-            unselectComicPanel();
-        });
+        create.setOnAction(actionEvent -> unselectComicPanel());
 
         return menu;
     }
@@ -130,7 +127,7 @@ public class UI {
         view.setPadding(new Insets(15));
         view.setHgap(30);
         view.setVgap(15);
-        view.add(comic, 0, 0);
+        view.add(workPanel, 0, 0);
         view.add(createComicsView(), 0, 1, 3, 1);
         view.add(createColourPalette(), 1, 0);
         view.add(createButtons(), 2, 0);
@@ -198,8 +195,8 @@ public class UI {
                 charWarningPopup.show(primaryStage);
             } else {
                 selectedCharacter.setHairColour(cur.getBackground());
-                if (!comic.getLeftCharacter().isEmpty() || !comic.getRightCharacter().isEmpty()) {
-                    comic.setEditMode(true);
+                if (!workPanel.getLeftCharacter().isEmpty() || !workPanel.getRightCharacter().isEmpty()) {
+                    workPanel.setEditMode(true);
                 }
             }
         });
@@ -212,8 +209,8 @@ public class UI {
                 charWarningPopup.show(primaryStage);
             } else {
                 selectedCharacter.setSkinColour(cur.getBackground());
-                if (!comic.getLeftCharacter().isEmpty() || !comic.getRightCharacter().isEmpty()) {
-                    comic.setEditMode(true);
+                if (!workPanel.getLeftCharacter().isEmpty() || !workPanel.getRightCharacter().isEmpty()) {
+                    workPanel.setEditMode(true);
                 }
             }
         });
@@ -264,15 +261,8 @@ public class UI {
         ComicPane newPanel = new ComicPane();
 
         // sets the new panel as the current workspace panel
-        newPanel.setTo(comic);
-        makePanelSelectable(newPanel);
-
-        // checks if the character's orientation is flipped in the current panel
-        if (!comic.getRightCharacter().isDefaultOrientation()) {
-            newPanel.getRightCharacter().flipDefaultOrientation();
-        } else if (!comic.getLeftCharacter().isDefaultOrientation()) {
-            newPanel.getLeftCharacter().flipDefaultOrientation();
-        }
+        newPanel.setTo(workPanel);
+        selectComicPanel(newPanel);
 
         // checks if the selected panel already exists within in comicPanels before saving/overwriting
         if (comicPanels.getChildren().contains(selectedPanel)) {
@@ -282,20 +272,20 @@ public class UI {
             comicPanels.getChildren().add(newPanel);
         }
 
-        comic.clear();
+        workPanel.clear();
     }
 
     private void deleteComicPanel() {
-        comic.clear();
+        workPanel.clear();
         comicPanels.getChildren().remove(selectedPanel);
     }
 
     private void editComicPanel() {
-        comic.setWorkspaceTo(selectedPanel);
+        workPanel.setWorkspaceTo(selectedPanel);
     }
 
     private void unselectComicPanel() {
-        comic.clear();
+        workPanel.clear();
         for (int i = 0; i < comicPanels.getChildren().size(); i++) {
             Node temp = comicPanels.getChildren().get(i);
             temp.setEffect(null);
@@ -303,13 +293,15 @@ public class UI {
         selectedPanel = null;
     }
 
-    private void makePanelSelectable(ComicPane panel) {
+    // gives the panel functions to act as a "button"
+    private void selectComicPanel(ComicPane panel) {
         DropShadow drop = new DropShadow();
         drop.setSpread(0.30);
         drop.setColor(Color.DARKORANGE);
 
         panel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            if (comic.isInEditMode()) {
+            // switching panels while there are active change prompts a warning
+            if (workPanel.isInEditMode()) {
                 Alert alert = changesAlert();
 
                 ButtonType save = new ButtonType("Save");
@@ -319,22 +311,24 @@ public class UI {
                 alert.getButtonTypes().setAll(save, cont, cancel);
 
                 Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == save) {
-                    comic.setEditMode(false);
-                    saveComicPanel();
+                if (result.isPresent()) {
+                    if (result.get() == save) {         // when choosing to save
+                        workPanel.setEditMode(false);
+                        saveComicPanel();
 
-                    selectedPanel = panel;
-                    editComicPanel();
+                        selectedPanel = panel;
+                        editComicPanel();
 
-                    unselectAllPanels();
-                    panel.setEffect(drop);
-                } else if (result.get() == cont) {
-                    comic.setEditMode(false);
-                    selectedPanel = panel;
-                    editComicPanel();
+                        unselectAllPanels();
+                        panel.setEffect(drop);
+                    } else if (result.get() == cont) {  // when choosing to continue anyway
+                        workPanel.setEditMode(false);
+                        selectedPanel = panel;
+                        editComicPanel();
 
-                    unselectAllPanels();
-                    panel.setEffect(drop);
+                        unselectAllPanels();
+                        panel.setEffect(drop);
+                    }
                 }
             } else {
                 selectedPanel = panel;
@@ -369,12 +363,12 @@ public class UI {
         buttonTooltip(button, "Select Character");
 
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (selectedCharacter == comic.getLeftCharacter()) {
+            if (selectedCharacter == workPanel.getLeftCharacter()) {
                 charPosesPopup.show(primaryStage);
             } else {
-                selectedCharacter = comic.getLeftCharacter();
-                comic.getLeftCharacter().setEffect(dropShadow);
-                comic.getRightCharacter().setEffect(null);
+                selectedCharacter = workPanel.getLeftCharacter();
+                workPanel.getLeftCharacter().setEffect(dropShadow);
+                workPanel.getRightCharacter().setEffect(null);
 
                 ImageView graphic = new ImageView(new Image("/Icons/Right.png"));
                 graphic.setStyle("-fx-background-radius: 20px; -fx-border-radius: 20px;");
@@ -395,12 +389,12 @@ public class UI {
         buttonTooltip(button, "Select Character");
 
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (selectedCharacter == comic.getRightCharacter()) {
+            if (selectedCharacter == workPanel.getRightCharacter()) {
                 charPosesPopup.show(primaryStage);
             } else {
-                selectedCharacter = comic.getRightCharacter();
-                comic.getRightCharacter().setEffect(dropShadow);
-                comic.getLeftCharacter().setEffect(null);
+                selectedCharacter = workPanel.getRightCharacter();
+                workPanel.getRightCharacter().setEffect(dropShadow);
+                workPanel.getLeftCharacter().setEffect(null);
 
                 ImageView graphic = new ImageView(new Image("/Icons/Left.png"));
                 graphic.setStyle("-fx-background-radius: 20px; -fx-border-radius: 20px;");
@@ -440,7 +434,7 @@ public class UI {
             } else {
                 selectedCharacter.flipDefaultOrientation();
                 button.setEffect(dropShadow);
-                comic.setEditMode(true);
+                workPanel.setEditMode(true);
             }
         });
     }
@@ -453,7 +447,7 @@ public class UI {
                 charWarningPopup.show(primaryStage);
             } else {
                 selectedCharacter.setFemale(!selectedCharacter.isFemale());
-                comic.setEditMode(true);
+                workPanel.setEditMode(true);
             }
             button.setEffect(dropShadow);
         });
@@ -469,7 +463,7 @@ public class UI {
                 isSpeechBubble = true;
                 textBubbleInput.show(primaryStage);
                 button.setEffect(dropShadow);
-                comic.setEditMode(true);
+                workPanel.setEditMode(true);
             }
         });
     }
@@ -484,7 +478,7 @@ public class UI {
                 isSpeechBubble = false;
                 textBubbleInput.show(primaryStage);
                 button.setEffect(dropShadow);
-                comic.setEditMode(true);
+                workPanel.setEditMode(true);
             }
         });
     }
@@ -495,7 +489,7 @@ public class UI {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             topNarrationInput.show(primaryStage);
             button.setEffect(dropShadow);
-            comic.setEditMode(true);
+            workPanel.setEditMode(true);
         });
     }
 
@@ -505,7 +499,7 @@ public class UI {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             bottomNarrationInput.show(primaryStage);
             button.setEffect(dropShadow);
-            comic.setEditMode(true);
+            workPanel.setEditMode(true);
         });
     }
 
@@ -537,7 +531,7 @@ public class UI {
         EventHandler<ActionEvent> eventHandler = e -> {
             TextBubble tBub = getCurrentSpeechBubble();
             String output = prepareTBub(textBox.getText(), tBub);
-            if(output != null) {
+            if (output != null) {
                 input.setText(textBox.getText());
                 tBub.setText(output);
                 textBubbleInput.hide();
@@ -551,22 +545,21 @@ public class UI {
                     else
                         tBub.setThought();
                 }
-            }
-            else
+            } else
                 warning.setText("Text Too Long");
         };
         textBox.setOnAction(eventHandler);
     }
 
-    private TextBubble getCurrentSpeechBubble()
-    {
-        return selectedCharacter == comic.getRightCharacter() ? comic.getRightSpeechBubble() : comic.getLeftSpeechBubble();
+    private TextBubble getCurrentSpeechBubble() {
+        return selectedCharacter == workPanel.getRightCharacter() ? workPanel.getRightSpeechBubble() : workPanel.getLeftSpeechBubble();
     }
+
     // top narration helper
     private void createTopNarrationPopup() {
         Label narration;
         Label text = new Label();
-        narration = comic.getTopNarration();
+        narration = workPanel.getTopNarration();
         topNarrationInput = createNarrationInput(narration, text);
     }
 
@@ -574,7 +567,7 @@ public class UI {
     private void createBottomNarrationPopup() {
         Label narration;
         Label text = new Label();
-        narration = comic.getBottomNarration();
+        narration = workPanel.getBottomNarration();
         bottomNarrationInput = createNarrationInput(narration, text);
     }
 
@@ -611,23 +604,23 @@ public class UI {
     }
 
     //method to sort through fonts for text bubble
-    public String prepareTBub(String s, TextBubble tBub){
+    public String prepareTBub(String s, TextBubble tBub) {
         String output;
         int largeFont = 20;
         int mediumFont = 16;
         int smallFont = 13;
         output = prepareString(s, 3, 17);
-        if(output != null) {
+        if (output != null) {
             tBub.setTextSize(largeFont);
             return output;
         }
         output = prepareString(s, 4, 18);
-        if(output != null){
+        if (output != null) {
             tBub.setTextSize(mediumFont);
             return output;
         }
         output = prepareString(s, 5, 25);
-        if(output != null){
+        if (output != null) {
             tBub.setTextSize(smallFont);
             return output;
         }
@@ -636,40 +629,37 @@ public class UI {
     }
 
     //prepares String for text bubbles and returns null if exceeds acceptable length
-    public String prepareString(String s, int numLines, int charPerLine){
+    public String prepareString(String s, int numLines, int charPerLine) {
         String output = "";
-        int lastSpace =0;
-        int lineLength=0;
+        int lastSpace = 0;
+        int lineLength = 0;
         char curr;
         int index = 0;
-        for(int i=0; i< s.length(); i++){
+        for (int i = 0; i < s.length(); i++) {
             curr = s.charAt(i);
             lineLength++;
-            if(curr == ' '){
+            if (curr == ' ') {
                 lastSpace = i;
             }
-            if(lineLength == charPerLine){
-                if(i == lastSpace || (i-lastSpace >= charPerLine-1))
-                    output = output + curr +"\n";
+            if (lineLength == charPerLine) {
+                if (i == lastSpace || (i - lastSpace >= charPerLine - 1))
+                    output = output + curr + "\n";
                 else {
-                    output = output.substring(0, lastSpace+index+1) + "\n" + output.substring(lastSpace+index+1) + curr;
+                    output = output.substring(0, lastSpace + index + 1) + "\n" + output.substring(lastSpace + index + 1) + curr;
                 }
                 lineLength = 0;
                 index++;
-            }
-            else
+            } else
                 output = output + curr;
         }
-        if(index +1 > numLines)
+        if (index + 1 > numLines)
             output = null;
         return output;
     }
 
     // adds event handler to close popup input as parameter when clicked
-    private void closePopupButton(Node button,Popup popup) {
-        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            popup.hide();
-        });
+    private void closePopupButton(Node button, Popup popup) {
+        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> popup.hide());
     }
 
     //displays options for character choices in scrollable popup
@@ -689,10 +679,10 @@ public class UI {
         closeButton.setStyle("-fx-border-color: #000000; -fx-border-radius: 10px; -fx-text-fill : #ffffff; -fx-background-color: #1CC415; -fx-background-radius: 10px");
 
         VBox container = new VBox(10);
-        container.setPadding(new Insets(10,1,0,1));
+        container.setPadding(new Insets(10, 1, 0, 1));
         container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
         container.setAlignment(Pos.CENTER);
-        container.getChildren().addAll(closeButton,selection);
+        container.getChildren().addAll(closeButton, selection);
 
         charPosesPopup = new HighlightedPopup(primaryStage);
         charPosesPopup.getContent().add(container);
@@ -726,17 +716,16 @@ public class UI {
         }*/
 
         //Hardcoded version because of jar issues (used for the jar)
-        String[] names = {"#empty.png","angry.png","accusing.png","attacking.png","biting.png","charming.png","confident.png",
-                "confused.png","conquering.png","denouncing.png","disappointed.png","disgusted.png","disgusting.png","embracing.png",
-                "goofy.png","guiding.png","hitting.png","inspired.png","inspiring.png","joy.png","laughing.png","neutral.png",
-                "posing.png","radicalizing.png","rude.png","sad.png","scared.png","sick.png","sneaky.png","surprised.png","toppled.png",
+        String[] names = {"#empty.png", "angry.png", "accusing.png", "attacking.png", "biting.png", "charming.png", "confident.png",
+                "confused.png", "conquering.png", "denouncing.png", "disappointed.png", "disgusted.png", "disgusting.png", "embracing.png",
+                "goofy.png", "guiding.png", "hitting.png", "inspired.png", "inspiring.png", "joy.png", "laughing.png", "neutral.png",
+                "posing.png", "radicalizing.png", "rude.png", "sad.png", "scared.png", "sick.png", "sneaky.png", "surprised.png", "toppled.png",
                 "working.png"};
         int i = 0;
-        for(String name: names)
-        {
-            Poses.getChildren().add(i,new CharacterPoseButton(name));
+        for (String name : names) {
+            Poses.getChildren().add(i, new CharacterPoseButton(name));
             Poses.setTileAlignment(Pos.TOP_LEFT);
-            changePose(Poses.getChildren().get(i) , name);
+            changePose(Poses.getChildren().get(i), name);
             i++;
         }
         return Poses;
@@ -747,12 +736,12 @@ public class UI {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             selectedCharacter.setCharacterPose(pose);
             selectedCharacter.setCurrentPose(pose);
-            comic.setEditMode(true);
+            workPanel.setEditMode(true);
             if (selectedCharacter.isEmpty()) {
-                if (comic.getLeftCharacter() == selectedCharacter)
-                    comic.getLeftSpeechBubble().setEmpty();
+                if (workPanel.getLeftCharacter() == selectedCharacter)
+                    workPanel.getLeftSpeechBubble().setEmpty();
                 else
-                    comic.getRightSpeechBubble().setEmpty();
+                    workPanel.getRightSpeechBubble().setEmpty();
             }
         });
     }
