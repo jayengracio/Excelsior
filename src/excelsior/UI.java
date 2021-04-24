@@ -272,11 +272,11 @@ public class UI {
             comicPanels.getChildren().add(newPanel);
         }
 
-        workPanel.clear();
+        resetAppFace();
     }
 
     private void deleteComicPanel() {
-        workPanel.clear();
+        resetAppFace();
         comicPanels.getChildren().remove(selectedPanel);
     }
 
@@ -285,7 +285,7 @@ public class UI {
     }
 
     private void unselectComicPanel() {
-        workPanel.clear();
+        resetAppFace();
         for (int i = 0; i < comicPanels.getChildren().size(); i++) {
             Node temp = comicPanels.getChildren().get(i);
             temp.setEffect(null);
@@ -410,19 +410,25 @@ public class UI {
 
     // help function to create the tooltips for character button
     private void createCharacterButtonTooltip(Button current, Button next) {
+        if(next == null)
+        {
+            current.getTooltip().setText("Select Character");
+        } else
+            {
+            ImageView graphic = new ImageView(new Image("/Icons/SelectPose.png"));
+            graphic.setStyle("-fx-background-radius: 20px; -fx-border-radius: 20px;");
+            graphic.setFitWidth(90);
+            graphic.setFitHeight(90);
+            current.setGraphic(graphic);
 
-        ImageView graphic = new ImageView(new Image("/Icons/SelectPose.png"));
-        graphic.setStyle("-fx-background-radius: 20px; -fx-border-radius: 20px;");
-        graphic.setFitWidth(90);
-        graphic.setFitHeight(90);
-        current.setGraphic(graphic);
+            current.setTooltip(new Tooltip("Change character pose"));
+            next.setTooltip(new Tooltip("Select Character"));
+            current.getTooltip().setShowDelay(Duration.seconds(0.1));
+            next.getTooltip().setShowDelay(Duration.seconds(0.1));
+            current.getTooltip().setStyle("-fx-font-size: 12;");
+            next.getTooltip().setStyle("-fx-font-size: 12;");
+        }
 
-        current.setTooltip(new Tooltip("Change character pose"));
-        next.setTooltip(new Tooltip("Select Character"));
-        current.getTooltip().setShowDelay(Duration.seconds(0.1));
-        next.getTooltip().setShowDelay(Duration.seconds(0.1));
-        current.getTooltip().setStyle("-fx-font-size: 12;");
-        next.getTooltip().setStyle("-fx-font-size: 12;");
     }
 
     // adds event handler to flip currently selected character on x axis when button input is clicked
@@ -762,5 +768,16 @@ public class UI {
 
         charWarningPopup = new HighlightedPopup(primaryStage);
         charWarningPopup.getContent().add(container);
+    }
+
+    //used to reset the entire appFace to its original startup look
+    private void resetAppFace(){
+        workPanel.clear();
+        selectedCharacter.setEffect(null);
+        Boolean isLeft = (selectedCharacter == workPanel.getLeftCharacter());
+        IconButtons curCharBtn = (IconButtons) buttonBox.getChildren().get(isLeft ? 0 : 1);
+        curCharBtn.setIcon(isLeft ? "Left.png" : "Right.png");
+        createCharacterButtonTooltip(curCharBtn,null);
+        selectedCharacter = null;
     }
 }

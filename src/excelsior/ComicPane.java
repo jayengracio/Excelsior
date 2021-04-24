@@ -68,8 +68,8 @@ public class ComicPane extends GridPane {
         this.setEditMode(false);
         this.getTopNarration().setText(null);
         this.getBottomNarration().setText(null);
-        this.getRightCharacter().setCharacter("/Character_Images/#empty.png");
-        this.getLeftCharacter().setCharacter("/Character_Images/#empty.png");
+        this.getRightCharacter().reset();
+        this.getLeftCharacter().reset();
         this.getRightCharacter().setCurrentPose(null);
         this.getLeftCharacter().setCurrentPose(null);
         this.getRightSpeechBubble().setEmpty();
@@ -168,6 +168,7 @@ public class ComicPane extends GridPane {
         this.add(bottomNarration, 0, 3, 2, 1);
     }
 
+    //used to change sizes for comic panels view
     private void minimise(){
         this.setPrefSize(280, 230);
         this.setHgap(5);

@@ -201,11 +201,22 @@ public class Character extends ImageView {
             writer.setColor(x, y, newColour);
     }
 
+    //used to change sizes for comic panels view
     public void minimise()
     {
         this.setFitHeight(115);
         this.setFitWidth(135);
         this.prefWidth(135);
         this.prefHeight(115);
+    }
+
+    //resets all character options to their default
+    public void reset(){
+        skinColour = defaultSkinColour;
+        hairColour = defaultHairColour;
+        defaultOrientation = true;
+        empty = true;
+        isFemale = true;
+        setCharacter("/Character_Images/#empty.png");
     }
 }

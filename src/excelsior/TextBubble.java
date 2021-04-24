@@ -73,6 +73,7 @@ public class TextBubble extends StackPane {
         return fontSize;
     }
 
+    //used to change sizes for comic panels view
     public void minimise()
     {
         bubble.setFitWidth(135);
