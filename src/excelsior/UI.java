@@ -305,7 +305,7 @@ public class UI {
                 Alert alert = changesAlert();
 
                 ButtonType save = new ButtonType("Save");
-                ButtonType cont = new ButtonType("Continue anyway");
+                ButtonType cont = new ButtonType("Don't Save");
                 ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
                 alert.getButtonTypes().setAll(save, cont, cancel);
