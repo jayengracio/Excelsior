@@ -263,7 +263,7 @@ public class UI {
         ComicPane newPanel = new ComicPane();
 
         // sets the new panel as the current workspace panel
-        newPanel.setTo(workPanel);
+        newPanel.setTo(workPanel,false);
         selectComicPanel(newPanel);
 
         // checks if the selected panel already exists within in comicPanels before saving/overwriting
@@ -283,7 +283,8 @@ public class UI {
     }
 
     private void editComicPanel() {
-        workPanel.setWorkspaceTo(selectedPanel);
+        resetAppFace();
+        workPanel.setTo(selectedPanel,true);
     }
 
     private void createNewComicPanel() {
@@ -314,7 +315,6 @@ public class UI {
     private void clearWorkPanel() {
         unselectAllPanels();
         resetAppFace();
-        selectedPanel = null;
     }
 
     // gives the panel functions to act as a "button"
@@ -759,7 +759,6 @@ public class UI {
     private void changePose(Node button, String pose) {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             selectedCharacter.setCharacterPose(pose);
-            selectedCharacter.setCurrentPose(pose);
             workPanel.setEditMode(true);
             if (selectedCharacter.isEmpty()) {
                 if (workPanel.getLeftCharacter() == selectedCharacter)

@@ -70,64 +70,34 @@ public class ComicPane extends GridPane {
         this.getBottomNarration().setText(null);
         this.getRightCharacter().reset();
         this.getLeftCharacter().reset();
-        this.getRightCharacter().setCurrentPose(null);
-        this.getLeftCharacter().setCurrentPose(null);
         this.getRightSpeechBubble().setEmpty();
         this.getLeftSpeechBubble().setEmpty();
     }
 
     // replace the contents the panel with another
-    public void setTo(ComicPane panel) {
-        this.getLeftCharacter().setCharacter(panel.getLeftCharacter().getUpdatedImage());
-        this.getRightCharacter().setCharacter(panel.getRightCharacter().getUpdatedImage());
-
-        this.getLeftCharacter().setCurrentPose(panel.getLeftCharacter().getCurrentPose());
-        this.getRightCharacter().setCurrentPose(panel.getRightCharacter().getCurrentPose());
-
-        if (!panel.getRightCharacter().isDefaultOrientation()) {
-            this.getRightCharacter().flipDefaultOrientation();
-        }
-
-        if (!panel.getLeftCharacter().isDefaultOrientation()) {
-            this.getLeftCharacter().flipDefaultOrientation();
-        }
-
+    public void setTo(ComicPane panel, boolean isWorkSpace) {
         clone(panel);
-        this.minimise();
+        if(!isWorkSpace)
+        {
+            this.minimise();
+        }
     }
 
-    /* functions like the setTo method, but the difference being that the characters are
-       set to their original pose image to allow for editing.
-    */
-    public void setWorkspaceTo(ComicPane panel) {
-        if (panel.getRightCharacter().getCurrentPose() == null) {
-            this.getRightCharacter().setCharacterPose("#empty.png");
-        } else {
-            this.getRightCharacter().setCharacterPose(panel.getRightCharacter().getCurrentPose());
-        }
-
-        if (panel.getLeftCharacter().getCurrentPose() == null) {
-            this.getLeftCharacter().setCharacterPose("#empty.png");
-        } else {
-            this.getLeftCharacter().setCharacterPose(panel.getLeftCharacter().getCurrentPose());
-        }
-
-        this.getRightCharacter().setCurrentPose(panel.getRightCharacter().getCurrentPose());
-        this.getLeftCharacter().setCurrentPose(panel.getLeftCharacter().getCurrentPose());
-
-        if (panel.getRightCharacter().isDefaultOrientation() != this.getRightCharacter().isDefaultOrientation()) {
-            this.getRightCharacter().flipDefaultOrientation();
-        }
-
-        if (panel.getLeftCharacter().isDefaultOrientation() != this.getLeftCharacter().isDefaultOrientation()) {
-            this.getLeftCharacter().flipDefaultOrientation();
-        }
-
-        clone(panel);
-    }
-
-    // 'clones' the rest of the Comic Panel
+    // 'clones' the Comic Panel
     private void clone(ComicPane panel) {
+        if (!panel.getRightCharacter().isEmpty()) {
+            this.getRightCharacter().setCharacter(panel.getRightCharacter().getCharacter());
+            this.getRightCharacter().setEmpty(false);
+        }
+
+        if (!panel.getLeftCharacter().isEmpty()) {
+            this.getLeftCharacter().setCharacter(panel.getLeftCharacter().getCharacter());
+            this.getLeftCharacter().setEmpty(false);
+        }
+
+        this.getRightCharacter().setDefaultOrientation(panel.getRightCharacter().isDefaultOrientation());
+        this.getLeftCharacter().setDefaultOrientation(panel.getLeftCharacter().isDefaultOrientation());
+
         this.getTopNarration().setText(panel.getTopNarration().getText());
         this.getBottomNarration().setText(panel.getBottomNarration().getText());
 

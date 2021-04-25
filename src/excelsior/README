@@ -36,6 +36,9 @@ Files Edited:
 - Character
 - ComicPane
 - ColourBox
+- Character
+- TextBubble
+
 
 ----------
 ChangeList
@@ -48,9 +51,16 @@ UI:
     - Adding new changes to the working panel is now tracked
 
 ComicPane:
-    - New functions that deals with saving and editing comic panels. (clone, setTo, setToWorkspace...).
+    - New functions that deals with saving and editing comic panels. (clone, setTo).
     - Removed redundant setters (did not work/already exists within the class).
     - Refactored the code a bit.
+    - Minimise function to make scale down comic for comic Panels view
 
 ColourBox:
     - Now has mouse effects to improve user clarity
+
+Character:
+    - Minimise function to make scale down comic for comic Panels view
+
+TextBubble:
+    - Minimise function to make scale down comic for comic Panels view
