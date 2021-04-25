@@ -116,7 +116,9 @@ public class UI {
             }
         });
 
-        create.setOnAction(actionEvent -> unselectComicPanel());
+        create.setOnAction(actionEvent -> {
+            createNewComicPanel();
+        });
 
         return menu;
     }
@@ -284,67 +286,83 @@ public class UI {
         workPanel.setWorkspaceTo(selectedPanel);
     }
 
-    private void unselectComicPanel() {
+    private void createNewComicPanel() {
+        DropShadow drop = new DropShadow();
+        drop.setSpread(0.30);
+        drop.setColor(Color.DARKORANGE);
+
+        if (workPanel.isInEditMode()) {
+            // switching panels while there are active change prompts a warning
+            Alert alert = createChangesAlert();
+            ButtonType save = alert.getButtonTypes().get(0);
+            ButtonType cont = alert.getButtonTypes().get(1);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent()) {
+                if (result.get() == save) {         // when choosing to save
+                    workPanel.setEditMode(false);
+                    saveComicPanel();
+                    clearWorkPanel();
+                } else if (result.get() == cont) {  // when choosing to not save & continue
+                    workPanel.setEditMode(false);
+                    clearWorkPanel();
+                }
+            }
+        } else { clearWorkPanel(); }
+    }
+
+    private void clearWorkPanel() {
+        unselectAllPanels();
         resetAppFace();
-        for (int i = 0; i < comicPanels.getChildren().size(); i++) {
-            Node temp = comicPanels.getChildren().get(i);
-            temp.setEffect(null);
-        }
         selectedPanel = null;
     }
 
     // gives the panel functions to act as a "button"
     private void selectComicPanel(ComicPane panel) {
-        DropShadow drop = new DropShadow();
-        drop.setSpread(0.30);
-        drop.setColor(Color.DARKORANGE);
-
         panel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             // switching panels while there are active change prompts a warning
             if (workPanel.isInEditMode()) {
-                Alert alert = changesAlert();
-
-                ButtonType save = new ButtonType("Save");
-                ButtonType cont = new ButtonType("Continue anyway");
-                ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-
-                alert.getButtonTypes().setAll(save, cont, cancel);
+                Alert alert = createChangesAlert();
+                ButtonType save = alert.getButtonTypes().get(0);
+                ButtonType cont = alert.getButtonTypes().get(1);
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent()) {
                     if (result.get() == save) {         // when choosing to save
                         workPanel.setEditMode(false);
                         saveComicPanel();
-
-                        selectedPanel = panel;
-                        editComicPanel();
-
-                        unselectAllPanels();
-                        panel.setEffect(drop);
-                    } else if (result.get() == cont) {  // when choosing to continue anyway
+                        selectOtherPanel(panel);
+                    } else if (result.get() == cont) {  // when choosing to not save & continue
                         workPanel.setEditMode(false);
-                        selectedPanel = panel;
-                        editComicPanel();
-
-                        unselectAllPanels();
-                        panel.setEffect(drop);
+                        selectOtherPanel(panel);
                     }
                 }
-            } else {
-                selectedPanel = panel;
-                editComicPanel();
-
-                unselectAllPanels();
-                panel.setEffect(drop);
-            }
+            } else { selectOtherPanel(panel); }
         });
     }
 
-    private Alert changesAlert() {
+    private void selectOtherPanel(ComicPane panel) {
+        DropShadow drop = new DropShadow();
+        drop.setSpread(0.30);
+        drop.setColor(Color.RED);
+
+        unselectAllPanels();
+        selectedPanel = panel;
+        editComicPanel();
+        panel.setEffect(drop);
+    }
+
+    private Alert createChangesAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Unsaved Changes");
         alert.setHeaderText(null);
         alert.setContentText("You have unsaved changes in the workspace");
+
+        ButtonType save = new ButtonType("Save");
+        ButtonType cont = new ButtonType("Don't Save");
+        ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(save, cont, cancel);
 
         return alert;
     }
