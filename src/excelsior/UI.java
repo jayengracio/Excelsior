@@ -315,6 +315,7 @@ public class UI {
     private void clearWorkPanel() {
         unselectAllPanels();
         resetAppFace();
+        selectedPanel = null;
     }
 
     // gives the panel functions to act as a "button"
