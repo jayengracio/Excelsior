@@ -276,8 +276,8 @@ public class UI {
     }
 
     private void deleteComicPanel() {
-        resetAppFace();
         comicPanels.getChildren().remove(selectedPanel);
+        resetAppFace();
     }
 
     private void editComicPanel() {
@@ -773,11 +773,14 @@ public class UI {
     //used to reset the entire appFace to its original startup look
     private void resetAppFace(){
         workPanel.clear();
-        selectedCharacter.setEffect(null);
-        Boolean isLeft = (selectedCharacter == workPanel.getLeftCharacter());
-        IconButtons curCharBtn = (IconButtons) buttonBox.getChildren().get(isLeft ? 0 : 1);
-        curCharBtn.setIcon(isLeft ? "Left.png" : "Right.png");
-        createCharacterButtonTooltip(curCharBtn,null);
-        selectedCharacter = null;
+        if(selectedCharacter != null)
+        {
+            selectedCharacter.setEffect(null);
+            Boolean isLeft = (selectedCharacter == workPanel.getLeftCharacter());
+            IconButtons curCharBtn = (IconButtons) buttonBox.getChildren().get(isLeft ? 0 : 1);
+            curCharBtn.setIcon(isLeft ? "Left.png" : "Right.png");
+            createCharacterButtonTooltip(curCharBtn,null);
+            selectedCharacter = null;
+        }
     }
 }

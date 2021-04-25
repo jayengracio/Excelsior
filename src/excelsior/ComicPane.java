@@ -101,15 +101,15 @@ public class ComicPane extends GridPane {
     */
     public void setWorkspaceTo(ComicPane panel) {
         if (panel.getRightCharacter().getCurrentPose() == null) {
-            this.getRightCharacter().setCharacter("/Character_Images/#empty.png");
+            this.getRightCharacter().setCharacterPose("#empty.png");
         } else {
-            this.getRightCharacter().setCharacter("/Character_Images/" + panel.getRightCharacter().getCurrentPose());
+            this.getRightCharacter().setCharacterPose(panel.getRightCharacter().getCurrentPose());
         }
 
         if (panel.getLeftCharacter().getCurrentPose() == null) {
-            this.getLeftCharacter().setCharacter("/Character_Images/#empty.png");
+            this.getLeftCharacter().setCharacterPose("#empty.png");
         } else {
-            this.getLeftCharacter().setCharacter("/Character_Images/" + panel.getLeftCharacter().getCurrentPose());
+            this.getLeftCharacter().setCharacterPose(panel.getLeftCharacter().getCurrentPose());
         }
 
         this.getRightCharacter().setCurrentPose(panel.getRightCharacter().getCurrentPose());

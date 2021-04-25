@@ -215,8 +215,7 @@ public class Character extends ImageView {
         skinColour = defaultSkinColour;
         hairColour = defaultHairColour;
         defaultOrientation = true;
-        empty = true;
         isFemale = true;
-        setCharacter("/Character_Images/#empty.png");
+        setCharacterPose("#empty.png");
     }
 }
