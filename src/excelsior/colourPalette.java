@@ -11,11 +11,11 @@ import javafx.scene.paint.Color;
 
 
 public class colourPalette extends GridPane{
-
     UI ui;
     int option = 0;
     Label buttonPressed = new Label("Hair Colour");
     IconButtons selected;
+    private IconButtons defaultButton;
 
     public colourPalette(UI ui) {
         this.ui = ui;
@@ -41,6 +41,7 @@ public class colourPalette extends GridPane{
         this.add(setButton(0, hairButton), 0, 1, 1, 3);
         this.add(setButton(1, skinButton), 0, 5, 1, 3);
         this.add(setButton(2, lipButton), 0, 9, 1, 3);
+        defaultButton = hairButton;
         selected = hairButton;
         selected.setStyle("-fx-border-color: #000070; -fx-border-radius: 20px;");
     }
@@ -114,5 +115,12 @@ public class colourPalette extends GridPane{
                 }
             }
         });
+    }
+
+    public void reset(){
+        selected.setStyle("-fx-border-color: #000000; -fx-border-radius: 20px;");
+        selected = defaultButton;
+        selected.setStyle("-fx-border-color: #000080; -fx-border-radius: 20px;");
+        buttonPressed.setText("Hair Colour");
     }
 }

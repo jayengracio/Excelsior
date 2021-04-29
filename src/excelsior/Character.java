@@ -210,7 +210,7 @@ public class Character extends ImageView {
 
                     if (curPixelRed >= 240 && curPixelGreen == 255 && curPixelRed <= 255 && !current.equals(defaultHairColour)) { //hair
                         change(writer, x, y, current, Color.rgb(255, 255, 255));
-                    } /*else if (curPixelRed == 255 && curPixelGreen <= 232 && curPixelBlue <= 216) { //lips
+                    } /*else if (curPixelRed == 255 && curPixelGreen < 232 && curPixelBlue < 216) { //lips
                         change(writer, x, y, current, Color.rgb(255, 200, 200));
                     }*/ else if (curPixelRed >= 236 && curPixelGreen >= 180 && !current.equals(defaultHairColour)) { //pigtails
                         change(writer, x, y, current, Color.rgb(255, 255, 255));
@@ -247,6 +247,7 @@ public class Character extends ImageView {
     public void reset(){
         skinColour = defaultSkinColour;
         hairColour = defaultHairColour;
+        lipColour = defaultLipColour;
         defaultOrientation = true;
         isFemale = true;
         setCharacterPose("#empty.png");

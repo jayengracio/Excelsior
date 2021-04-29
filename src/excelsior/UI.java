@@ -47,6 +47,7 @@ public class UI {
     private HighlightedPopup bottomNarrationInput;
     private HighlightedPopup topNarrationInput;
     private HighlightedPopup textBubbleInput;
+    private colourPalette palette;
 
     private final DropShadow dropShadow = new DropShadow();
 
@@ -289,7 +290,7 @@ public class UI {
 
     //colour pallet pane
     public colourPalette createColourPalette() {
-        colourPalette palette = new colourPalette(this);
+         palette = new colourPalette(this);
         return palette;
     }
 
@@ -867,6 +868,7 @@ public class UI {
     //used to reset the entire appFace to its original startup look
     private void resetAppFace(){
         workPanel.clear();
+        palette.reset();
         if(selectedCharacter != null)
         {
             selectedCharacter.setEffect(null);
