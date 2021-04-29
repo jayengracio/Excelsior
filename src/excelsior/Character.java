@@ -83,8 +83,7 @@ public class Character extends ImageView {
     }
 
     public String getFacing() {
-        if (defaultOrientation)
-            return "right";
+        if (defaultOrientation) return "right";
         else return "left";
     }
 
@@ -106,6 +105,22 @@ public class Character extends ImageView {
         updateImage();
     }
 
+    public String getHairColourAsHex() {
+        int r = (int)( hairColour.getRed() * 255 );
+        int g = (int)( hairColour.getGreen() * 255 );
+        int b = (int)( hairColour.getBlue() * 255 );
+
+        return String.format( "#%02X%02X%02X", r, g, b);
+    }
+
+    public String getSkinColourAsHex() {
+        int r = (int)( skinColour.getRed() * 255 );
+        int g = (int)( skinColour.getGreen() * 255 );
+        int b = (int)( skinColour.getBlue() * 255 );
+
+        return String.format( "#%02X%02X%02X", r, g, b);
+    }
+
     public boolean isFemale() {
         return isFemale;
     }
@@ -116,8 +131,7 @@ public class Character extends ImageView {
     }
 
     public String getGender() {
-        if (isFemale)
-            return "female";
+        if (isFemale) return "female";
         else return "male";
     }
 
@@ -250,6 +264,7 @@ public class Character extends ImageView {
         lipColour = defaultLipColour;
         defaultOrientation = true;
         isFemale = true;
+        pose = "#empty.png";
         setCharacterPose("#empty.png");
     }
 }

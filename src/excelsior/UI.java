@@ -132,7 +132,7 @@ public class UI {
             Element panels = doc.createElement("panels");
             comic.appendChild(panels);
 
-            for (int i=0; i<comicPanels.getChildren().size(); i++) {
+            for (int i = 0; i < comicPanels.getChildren().size(); i++) {
                 ComicPane pane = (ComicPane) comicPanels.getChildren().get(i);
 
                 // PANEL START
@@ -155,11 +155,11 @@ public class UI {
                 figure.appendChild(appearance);
 
                 Element skin = doc.createElement("skin");
-                skin.appendChild(doc.createTextNode(pane.getLeftCharacter().getSkinColour().toString()));
+                skin.appendChild(doc.createTextNode(pane.getLeftCharacter().getSkinColourAsHex()));
                 figure.appendChild(skin);
 
                 Element hair = doc.createElement("hair");
-                hair.appendChild(doc.createTextNode(pane.getLeftCharacter().getHairColour().toString()));
+                hair.appendChild(doc.createTextNode(pane.getLeftCharacter().getHairColourAsHex()));
                 figure.appendChild(hair);
 
                 Element pose = doc.createElement("pose");
@@ -171,10 +171,16 @@ public class UI {
                 figure.appendChild(facing);
 
                 Element balloon = doc.createElement("balloon");
+                left.appendChild(balloon);
+
+                Attr status = doc.createAttribute("status");
+                if (pane.getLeftSpeechBubble().getBubbleType().equals("speech")) status.setValue("speech");
+                else if (pane.getLeftSpeechBubble().getBubbleType().equals("thought")) status.setValue("thought");
+                balloon.setAttributeNode(status);
+
                 Element content = doc.createElement("content");
                 content.appendChild(doc.createTextNode(pane.getLeftSpeechBubble().getText().getText()));
                 balloon.appendChild(content);
-                left.appendChild(balloon);
                 // LEFT CHARACTER END
 
                 // RIGHT CHARACTER START
@@ -189,11 +195,11 @@ public class UI {
                 rFigure.appendChild(rAppearance);
 
                 Element rSkin = doc.createElement("skin");
-                rSkin.appendChild(doc.createTextNode(pane.getRightCharacter().getSkinColour().toString()));
+                rSkin.appendChild(doc.createTextNode(pane.getRightCharacter().getSkinColourAsHex()));
                 rFigure.appendChild(rSkin);
 
                 Element rHair = doc.createElement("hair");
-                rHair.appendChild(doc.createTextNode(pane.getRightCharacter().getHairColour().toString()));
+                rHair.appendChild(doc.createTextNode(pane.getRightCharacter().getHairColourAsHex()));
                 rFigure.appendChild(rHair);
 
                 Element rPose = doc.createElement("pose");
@@ -205,10 +211,16 @@ public class UI {
                 rFigure.appendChild(rFacing);
 
                 Element rBalloon = doc.createElement("balloon");
+                right.appendChild(rBalloon);
+
+                Attr rStatus = doc.createAttribute("status");
+                if (pane.getRightSpeechBubble().getBubbleType().equals("speech")) rStatus.setValue("speech");
+                else if (pane.getRightSpeechBubble().getBubbleType().equals("thought")) rStatus.setValue("thought");
+                rBalloon.setAttributeNode(rStatus);
+
                 Element rContent = doc.createElement("content");
                 rContent.appendChild(doc.createTextNode(pane.getRightSpeechBubble().getText().getText()));
                 rBalloon.appendChild(rContent);
-                right.appendChild(rBalloon);
                 // RIGHT CHARACTER END
 
                 Element below = doc.createElement("below");

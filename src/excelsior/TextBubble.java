@@ -9,8 +9,9 @@ import javafx.scene.layout.StackPane;
 
 
 public class TextBubble extends StackPane {
-    ImageView bubble = new ImageView();
-    Label text = new Label();
+    private ImageView bubble = new ImageView();
+    private Label text = new Label();
+    private String bubbleType;
     private int fontSize = 16;
 
     public TextBubble(){
@@ -47,10 +48,21 @@ public class TextBubble extends StackPane {
 
     public void setSpeech(){
         bubble.setImage(new Image("/Icons/speech_bubble.png"));
+        this.bubbleType = "speech";
     }
 
     public void setThought(){
         bubble.setImage(new Image("/Icons/thought_bubble.png"));
+        this.bubbleType = "thought";
+    }
+
+    public void setBubbleType(String type) {
+        this.bubbleType = type;
+    }
+
+    public String getBubbleType() {
+        if (bubbleType == null) return "null";
+        else return bubbleType;
     }
 
     public void setEmpty(){
