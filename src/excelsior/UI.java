@@ -25,6 +25,15 @@ import javafx.util.Duration;
 
 import java.util.Optional;
 
+import org.w3c.dom.*;
+import javax.xml.parsers.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.*;
+
 public class UI {
     private final Stage primaryStage;
     private final HBox comicPanels = new HBox(15);
@@ -100,11 +109,128 @@ public class UI {
 
         file.getItems().addAll(m1, m2, m3);
 
+        m3.setOnAction(actionEvent -> saveToXML());
+
         MenuBar mb = new MenuBar();
         mb.getMenus().add(file);
         mb.getMenus().add(editPanel);
 
         return mb;
+    }
+
+    private void saveToXML() {
+        try {
+            // document
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.newDocument();
+
+            Element comic = doc.createElement("comic");
+            doc.appendChild(comic);
+
+            Element panels = doc.createElement("panels");
+            comic.appendChild(panels);
+
+            for (int i=0; i<comicPanels.getChildren().size(); i++) {
+                ComicPane pane = (ComicPane) comicPanels.getChildren().get(i);
+
+                // PANEL START
+                Element panel = doc.createElement("panel");
+                panels.appendChild(panel);
+
+                Element above = doc.createElement("above");
+                above.appendChild(doc.createTextNode(pane.getTopNarration().getText()));
+                panel.appendChild(above);
+
+                // LEFT CHARACTER START
+                Element left = doc.createElement("left");
+                panel.appendChild(left);
+
+                Element figure = doc.createElement("figure");
+                left.appendChild(figure);
+
+                Element appearance = doc.createElement("appearance");
+                appearance.appendChild(doc.createTextNode(pane.getLeftCharacter().getGender()));
+                figure.appendChild(appearance);
+
+                Element skin = doc.createElement("skin");
+                skin.appendChild(doc.createTextNode(pane.getLeftCharacter().getSkinColour().toString()));
+                figure.appendChild(skin);
+
+                Element hair = doc.createElement("hair");
+                hair.appendChild(doc.createTextNode(pane.getLeftCharacter().getHairColour().toString()));
+                figure.appendChild(hair);
+
+                Element pose = doc.createElement("pose");
+                pose.appendChild(doc.createTextNode(pane.getLeftCharacter().getPose()));
+                figure.appendChild(pose);
+
+                Element facing = doc.createElement("facing");
+                facing.appendChild(doc.createTextNode(pane.getLeftCharacter().getFacing()));
+                figure.appendChild(facing);
+
+                Element balloon = doc.createElement("balloon");
+                Element content = doc.createElement("content");
+                content.appendChild(doc.createTextNode(pane.getLeftSpeechBubble().getText().getText()));
+                balloon.appendChild(content);
+                left.appendChild(balloon);
+                // LEFT CHARACTER END
+
+                // RIGHT CHARACTER START
+                Element right = doc.createElement("right");
+                panel.appendChild(right);
+
+                Element rFigure = doc.createElement("figure");
+                right.appendChild(rFigure);
+
+                Element rAppearance = doc.createElement("appearance");
+                rAppearance.appendChild(doc.createTextNode(pane.getRightCharacter().getGender()));
+                rFigure.appendChild(rAppearance);
+
+                Element rSkin = doc.createElement("skin");
+                rSkin.appendChild(doc.createTextNode(pane.getRightCharacter().getSkinColour().toString()));
+                rFigure.appendChild(rSkin);
+
+                Element rHair = doc.createElement("hair");
+                rHair.appendChild(doc.createTextNode(pane.getRightCharacter().getHairColour().toString()));
+                rFigure.appendChild(rHair);
+
+                Element rPose = doc.createElement("pose");
+                rPose.appendChild(doc.createTextNode(pane.getRightCharacter().getPose()));
+                rFigure.appendChild(rPose);
+
+                Element rFacing = doc.createElement("facing");
+                rFacing.appendChild(doc.createTextNode(pane.getRightCharacter().getFacing()));
+                rFigure.appendChild(rFacing);
+
+                Element rBalloon = doc.createElement("balloon");
+                Element rContent = doc.createElement("content");
+                rContent.appendChild(doc.createTextNode(pane.getRightSpeechBubble().getText().getText()));
+                rBalloon.appendChild(rContent);
+                right.appendChild(rBalloon);
+                // RIGHT CHARACTER END
+
+                Element below = doc.createElement("below");
+                below.appendChild(doc.createTextNode(pane.getBottomNarration().getText()));
+                panel.appendChild(below);
+                // PANEL END
+            }
+
+            // save
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            //transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "comic.dtd");
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File("src/test.xml"));
+            transformer.transform(source, result);
+
+            // debug stuff
+            StreamResult consoleResult = new StreamResult(System.out);
+            transformer.transform(source, consoleResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private Menu comicPanelMenu() {
@@ -709,6 +835,7 @@ public class UI {
     private void changePose(Node button, String pose) {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             selectedCharacter.setCharacterPose(pose);
+            selectedCharacter.setPose(pose);
             workPanel.setEditMode(true);
             if (selectedCharacter.isEmpty()) {
                 if (workPanel.getLeftCharacter() == selectedCharacter)

@@ -14,6 +14,7 @@ public class Character extends ImageView {
     private Color skinColour = Color.web("#FFE8D8");
     private Color hairColour = Color.web("#F9FF00");
     private Color lipColour = Color.web("#FF0000");
+    private String pose;
     private boolean empty = true;
     private boolean isFemale = true;
 
@@ -38,6 +39,15 @@ public class Character extends ImageView {
 
     public Image getCharacter() {
         return character;
+    }
+
+    public String getPose() {
+        if (pose == null) return "#empty.png";
+        else return pose;
+    }
+
+    public void setPose(String pose) {
+        this.pose = pose;
     }
 
     public void setCharacter(Image character) {
@@ -72,6 +82,12 @@ public class Character extends ImageView {
         this.setScaleX(isDefaultOrientation() ? 1 : -1);
     }
 
+    public String getFacing() {
+        if (defaultOrientation)
+            return "right";
+        else return "left";
+    }
+
     public Color getHairColour() {
         return hairColour;
     }
@@ -97,6 +113,12 @@ public class Character extends ImageView {
     public void setFemale(boolean female) {
         isFemale = female;
         updateImage();
+    }
+
+    public String getGender() {
+        if (isFemale)
+            return "female";
+        else return "male";
     }
 
     public boolean isEmpty() {
