@@ -110,8 +110,8 @@ public class Character extends ImageView {
     //called after an update to update displayed image
     private void updateImage() {
         updated = character;
-        updated = makeLipColourChange(updated);
         updated = changeGender(updated);
+        updated = makeLipColourChange(updated);
         updated = makeHairColourChange(updated);
         updated = makeSkinColourChange(updated);
         this.setImage(updated);
@@ -188,9 +188,9 @@ public class Character extends ImageView {
 
                     if (curPixelRed >= 240 && curPixelGreen == 255 && curPixelRed <= 255 && !current.equals(defaultHairColour)) { //hair
                         change(writer, x, y, current, Color.rgb(255, 255, 255));
-                    } else if (curPixelRed == 255 && curPixelGreen <= 232 && curPixelBlue <= 216) { //lips
+                    } /*else if (curPixelRed == 255 && curPixelGreen <= 232 && curPixelBlue <= 216) { //lips
                         change(writer, x, y, current, Color.rgb(255, 200, 200));
-                    } else if (curPixelRed >= 236 && curPixelGreen >= 180 && !current.equals(defaultHairColour)) { //pigtails
+                    }*/ else if (curPixelRed >= 236 && curPixelGreen >= 180 && !current.equals(defaultHairColour)) { //pigtails
                         change(writer, x, y, current, Color.rgb(255, 255, 255));
                     } else {
                         writer.setColor(x, y, current);
