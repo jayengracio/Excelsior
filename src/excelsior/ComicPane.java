@@ -95,6 +95,9 @@ public class ComicPane extends GridPane {
             this.getLeftCharacter().setEmpty(false);
         }
 
+        this.getLeftCharacter().setPose(panel.getLeftCharacter().getPose());
+        this.getRightCharacter().setPose(panel.getRightCharacter().getPose());
+
         this.getRightCharacter().setDefaultOrientation(panel.getRightCharacter().isDefaultOrientation());
         this.getLeftCharacter().setDefaultOrientation(panel.getLeftCharacter().isDefaultOrientation());
 

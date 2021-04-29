@@ -1,0 +1,15 @@
+<!ELEMENT comic (panels)>
+        <!ELEMENT panels (panel)>
+        <!ELEMENT panel (above, left, right, below)>
+        <!ELEMENT above (#PCDATA)>
+        <!ELEMENT left (figure, balloon)>
+        <!ELEMENT right (figure, balloon)>
+        <!ELEMENT figure (appearance, skin, hair, pose, facing)>
+        <!ELEMENT appearance (#PCDATA)>
+        <!ELEMENT skin (#PCDATA)>
+        <!ELEMENT hair (#PCDATA)>
+        <!ELEMENT pose (#PCDATA)>
+        <!ELEMENT facing (#PCDATA)>
+        <!ELEMENT balloon (content)>
+        <!ELEMENT content (#PCDATA)>
+        <!ELEMENT below (#PCDATA)>
