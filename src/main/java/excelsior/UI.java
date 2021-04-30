@@ -23,6 +23,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -36,6 +38,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 public class UI {
@@ -840,34 +843,23 @@ public class UI {
         Poses.setAlignment(Pos.CENTER_RIGHT);
         Poses.setStyle("-fx-background-color: white;-fx-font-size: 18px;");
 
-        /*//dynamic version adds based on files in folder
-        File folder = new File("src/Character_Images");
-        File[] listOfFiles = folder.listFiles();
-        int i = 0;
-        if (listOfFiles != null) {
-            for (File file : listOfFiles) {
-                if (file.isFile()) {
-                    Poses.getChildren().add(i, new CharacterPoseButton(file.getName()));
-                    Poses.setTileAlignment(Pos.TOP_LEFT);
-                    changePose(Poses.getChildren().get(i), file.getName());
-                    i++;
-                }
-            }
-        }*/
+        //dynamic version adds based on files in folder
+        try {
+            PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+            Resource[] charPoseFiles = resolver.getResources("Character_Images/*.png");
 
-        //Hardcoded version because of jar issues (used for the jar)
-        String[] names = {"#empty.png", "angry.png", "accusing.png", "attacking.png", "biting.png", "charming.png", "confident.png",
-                "confused.png", "conquering.png", "denouncing.png", "disappointed.png", "disgusted.png", "disgusting.png", "embracing.png",
-                "goofy.png", "guiding.png", "hitting.png", "inspired.png", "inspiring.png", "joy.png", "laughing.png", "neutral.png",
-                "posing.png", "radicalizing.png", "rude.png", "sad.png", "scared.png", "sick.png", "sneaky.png", "surprised.png", "toppled.png",
-                "working.png"};
-        int i = 0;
-        for (String name : names) {
-            Poses.getChildren().add(i, new CharacterPoseButton(name));
-            Poses.setTileAlignment(Pos.TOP_LEFT);
-            changePose(Poses.getChildren().get(i), name);
-            i++;
+            int i = 0;
+            for (Resource charPose : charPoseFiles)
+            {
+                Poses.getChildren().add(i, new CharacterPoseButton(charPose.getFilename()));
+                Poses.setTileAlignment(Pos.TOP_LEFT);
+                changePose(Poses.getChildren().get(i), charPose.getFilename());
+                i++;
+            }
+        }catch(IOException e) {
+            System.out.println("Error: Failed to retrieve character images");
         }
+
         return Poses;
     }
 
