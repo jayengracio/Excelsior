@@ -4,12 +4,14 @@
         <!ELEMENT above (#PCDATA)>
         <!ELEMENT left (figure, balloon)>
         <!ELEMENT right (figure, balloon)>
-        <!ELEMENT figure (appearance, skin, hair, pose, facing)>
+        <!ELEMENT figure (appearance, skin, hair, lips, pose, facing)>
         <!ELEMENT appearance (#PCDATA)>
         <!ELEMENT skin (#PCDATA)>
         <!ELEMENT hair (#PCDATA)>
+        <!ELEMENT lips (#PCDATA)>
         <!ELEMENT pose (#PCDATA)>
         <!ELEMENT facing (#PCDATA)>
         <!ELEMENT balloon (content)>
+        <!ATTLIST balloon status CDATA "null">
         <!ELEMENT content (#PCDATA)>
         <!ELEMENT below (#PCDATA)>

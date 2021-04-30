@@ -121,6 +121,14 @@ public class Character extends ImageView {
         return String.format( "#%02X%02X%02X", r, g, b);
     }
 
+    public String getLipColourAsHex() {
+        int r = (int)( lipColour.getRed() * 255 );
+        int g = (int)( lipColour.getGreen() * 255 );
+        int b = (int)( lipColour.getBlue() * 255 );
+
+        return String.format( "#%02X%02X%02X", r, g, b);
+    }
+
     public boolean isFemale() {
         return isFemale;
     }
@@ -262,7 +270,7 @@ public class Character extends ImageView {
         skinColour = defaultSkinColour;
         hairColour = defaultHairColour;
         lipColour = defaultLipColour;
-        defaultOrientation = true;
+        //defaultOrientation = true;
         isFemale = true;
         pose = "#empty.png";
         setCharacterPose("#empty.png");

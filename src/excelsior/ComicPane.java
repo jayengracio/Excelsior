@@ -121,7 +121,7 @@ public class ComicPane extends GridPane {
         this.getLeftCharacter().setHairColour(panel.getLeftCharacter().getHairColour());
 
         this.getLeftCharacter().setLipColour(panel.getLeftCharacter().getLipColour());
-        this.getLeftCharacter().setLipColour(panel.getLeftCharacter().getLipColour());
+        this.getRightCharacter().setLipColour(panel.getRightCharacter().getLipColour());
 
         this.getRightCharacter().setFemale(panel.getRightCharacter().isFemale());
         this.getLeftCharacter().setFemale(panel.getLeftCharacter().isFemale());

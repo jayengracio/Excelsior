@@ -19,20 +19,24 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
-import java.util.Optional;
-
-import org.w3c.dom.*;
-import javax.xml.parsers.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.*;
+import java.io.File;
+import java.util.Optional;
 
 public class UI {
     private final Stage primaryStage;
@@ -104,13 +108,16 @@ public class UI {
         Menu file = new Menu("File");
         Menu editPanel = comicPanelMenu();
 
-        MenuItem m1 = new MenuItem("New");
-        MenuItem m2 = new MenuItem("Delete");
-        MenuItem m3 = new MenuItem("Save");
+        MenuItem newStrip = new MenuItem("New");
+        MenuItem delete = new MenuItem("Delete");
+        MenuItem save = new MenuItem("Save");
 
-        file.getItems().addAll(m1, m2, m3);
+        KeyCombination SaveKeyBinding = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+        save.setAccelerator(SaveKeyBinding);
 
-        m3.setOnAction(actionEvent -> saveToXML());
+        file.getItems().addAll(newStrip, delete, save);
+
+        save.setOnAction(actionEvent -> saveToXML());
 
         MenuBar mb = new MenuBar();
         mb.getMenus().add(file);
@@ -162,6 +169,10 @@ public class UI {
                 hair.appendChild(doc.createTextNode(pane.getLeftCharacter().getHairColourAsHex()));
                 figure.appendChild(hair);
 
+                Element lips = doc.createElement("lips");
+                lips.appendChild(doc.createTextNode(pane.getLeftCharacter().getLipColourAsHex()));
+                figure.appendChild(lips);
+
                 Element pose = doc.createElement("pose");
                 pose.appendChild(doc.createTextNode(pane.getLeftCharacter().getPose()));
                 figure.appendChild(pose);
@@ -176,12 +187,12 @@ public class UI {
                 Attr status = doc.createAttribute("status");
                 if (pane.getLeftSpeechBubble().getBubbleType().equals("speech")) status.setValue("speech");
                 else if (pane.getLeftSpeechBubble().getBubbleType().equals("thought")) status.setValue("thought");
+                else status.setValue("none");
                 balloon.setAttributeNode(status);
 
                 Element content = doc.createElement("content");
                 content.appendChild(doc.createTextNode(pane.getLeftSpeechBubble().getText().getText()));
                 balloon.appendChild(content);
-                // LEFT CHARACTER END
 
                 // RIGHT CHARACTER START
                 Element right = doc.createElement("right");
@@ -202,6 +213,10 @@ public class UI {
                 rHair.appendChild(doc.createTextNode(pane.getRightCharacter().getHairColourAsHex()));
                 rFigure.appendChild(rHair);
 
+                Element rLips = doc.createElement("lips");
+                rLips.appendChild(doc.createTextNode(pane.getRightCharacter().getLipColourAsHex()));
+                rFigure.appendChild(rLips);
+
                 Element rPose = doc.createElement("pose");
                 rPose.appendChild(doc.createTextNode(pane.getRightCharacter().getPose()));
                 rFigure.appendChild(rPose);
@@ -216,46 +231,58 @@ public class UI {
                 Attr rStatus = doc.createAttribute("status");
                 if (pane.getRightSpeechBubble().getBubbleType().equals("speech")) rStatus.setValue("speech");
                 else if (pane.getRightSpeechBubble().getBubbleType().equals("thought")) rStatus.setValue("thought");
+                else rStatus.setValue("none");
                 rBalloon.setAttributeNode(rStatus);
 
                 Element rContent = doc.createElement("content");
                 rContent.appendChild(doc.createTextNode(pane.getRightSpeechBubble().getText().getText()));
                 rBalloon.appendChild(rContent);
-                // RIGHT CHARACTER END
 
                 Element below = doc.createElement("below");
                 below.appendChild(doc.createTextNode(pane.getBottomNarration().getText()));
                 panel.appendChild(below);
                 // PANEL END
             }
-
-            // save
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            //transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "comic.dtd");
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("src/test.xml"));
-            transformer.transform(source, result);
-
-            // debug stuff
-            StreamResult consoleResult = new StreamResult(System.out);
-            transformer.transform(source, consoleResult);
+            // SAVE
+            openSaveDialog(doc);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void openSaveDialog(Document doc) throws TransformerException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Comic Strip");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showSaveDialog(primaryStage);
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        //transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "comic.dtd");
+        DOMSource source = new DOMSource(doc);
+
+        if (file != null) {
+            StreamResult result = new StreamResult(file);
+            transformer.transform(source, result);
+
+            // terminal debug
+            StreamResult consoleResult = new StreamResult(System.out);
+            transformer.transform(source, consoleResult);
         }
     }
 
     private Menu comicPanelMenu() {
         Menu menu = new Menu("Panel");
 
-        MenuItem create = new MenuItem("New");
-        MenuItem save = new MenuItem("Save");
-        MenuItem delete = new MenuItem("Delete");
+        MenuItem create = new MenuItem("New Panel");
+        MenuItem save = new MenuItem("Save Panel");
+        MenuItem delete = new MenuItem("Delete Panel");
 
         KeyCombination newPanelKeyBinding = new KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN);
         KeyCombination SaveKeyBinding = new KeyCodeCombination(KeyCode.S, KeyCombination.SHIFT_DOWN);
-        KeyCombination DeleteKeyBinding = new KeyCodeCombination(KeyCode.X, KeyCombination.SHIFT_DOWN);
+        KeyCombination DeleteKeyBinding = new KeyCodeCombination(KeyCode.DELETE);
 
         create.setAccelerator(newPanelKeyBinding);
         save.setAccelerator(SaveKeyBinding);

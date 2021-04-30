@@ -1,0 +1,38 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<!DOCTYPE comic SYSTEM "comic.dtd">
+
+<comic>
+    <panels>
+        <panel>
+            <above></above>
+            <left>
+                <figure>
+                    <appearance></appearance>
+                    <skin></skin>
+                    <hair></hair>
+                    <lips></lips>
+                    <pose></pose>
+                    <facing></facing>
+                </figure>
+                <balloon>
+                    <content></content>
+                </balloon>
+            </left>
+            <right>
+                <figure>
+                    <appearance></appearance>
+                    <skin></skin>
+                    <hair></hair>
+                    <lips></lips>
+                    <pose></pose>
+                    <facing></facing>
+                </figure>
+                <balloon>
+                    <content></content>
+                </balloon>
+            </right>
+            <below></below>
+        </panel>
+    </panels>
+</comic>
