@@ -114,13 +114,16 @@ public class UI {
         MenuItem newStrip = new MenuItem("New");
         MenuItem delete = new MenuItem("Delete");
         MenuItem save = new MenuItem("Save");
+        MenuItem load = new MenuItem("Load");
 
         KeyCombination SaveKeyBinding = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
         save.setAccelerator(SaveKeyBinding);
 
-        file.getItems().addAll(newStrip, delete, save);
+        file.getItems().addAll(newStrip, delete, save, load);
 
         save.setOnAction(actionEvent -> saveToXML());
+
+        load.setOnAction(actionEvent -> LoadFromXML());
 
         MenuBar mb = new MenuBar();
         mb.getMenus().add(file);
@@ -253,6 +256,17 @@ public class UI {
         }
     }
 
+    private void LoadFromXML(){
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(primaryStage);
+
+            File selectedFile = fileChooser.getInitialDirectory();
+        /*
+        add load functionality
+        */
+
+    }
+
     private void openSaveDialog(Document doc) throws TransformerException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Comic Strip");
@@ -275,6 +289,7 @@ public class UI {
             transformer.transform(source, consoleResult);
         }
     }
+
 
     private Menu comicPanelMenu() {
         Menu menu = new Menu("Panel");
