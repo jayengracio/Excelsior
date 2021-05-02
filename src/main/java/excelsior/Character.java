@@ -194,21 +194,24 @@ public class Character extends ImageView {
         int newRed = (int) Math.round(newColour.getRed() * 255);
         int newGreen = (int) Math.round(newColour.getGreen() * 255);
         int newBlue = (int) Math.round(newColour.getBlue() * 255);
+        try {
+            for (int y = 0; y < H; y++) {
+                for (int x = 0; x < W; x++) {
+                    Color current = reader.getColor(x, y);
 
-        for (int y = 0; y < H; y++) {
-            for (int x = 0; x < W; x++) {
-                Color current = reader.getColor(x, y);
+                    int curPixelRed = (int) Math.round(current.getRed() * 255);
+                    int curPixelGreen = (int) Math.round(current.getGreen() * 255);
+                    int curPixelBlue = (int) Math.round(current.getBlue() * 255);
 
-                int curPixelRed = (int) Math.round(current.getRed() * 255);
-                int curPixelGreen = (int) Math.round(current.getGreen() * 255);
-                int curPixelBlue = (int) Math.round(current.getBlue() * 255);
-
-                if (curPixelRed >= skinRed - 9 && curPixelBlue == skinBlue && curPixelGreen == skinGreen && curPixelRed <= skinRed) {
-                    writer.setColor(x, y, Color.rgb(curPixelRed + (newRed - skinRed), curPixelGreen + (newGreen - skinGreen), curPixelBlue + (newBlue - skinBlue)));
-                } else {
-                    writer.setColor(x, y, current);
+                    if (curPixelRed >= skinRed - 9 && curPixelBlue == skinBlue && curPixelGreen == skinGreen && curPixelRed <= skinRed) {
+                        writer.setColor(x, y, Color.rgb(curPixelRed + (newRed - skinRed), curPixelGreen + (newGreen - skinGreen), curPixelBlue + (newBlue - skinBlue)));
+                    } else {
+                        writer.setColor(x, y, current);
+                    }
                 }
             }
+        }catch (Exception e){
+            System.out.println("Colour error");
         }
         return outputImage;
     }

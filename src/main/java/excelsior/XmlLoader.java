@@ -174,6 +174,8 @@ public class XmlLoader {
         if(colourString.startsWith("#")){
             try{
                 colour = Color.web(colourString);
+                if(colour.getRed()<9)
+                    colour = Color.rgb(((int)colour.getRed() +9), (int)colour.getBlue(), (int)colour.getGreen());
             }catch (Exception e){
                 return null;
             }

@@ -35,7 +35,7 @@ public class ColourMap {
 
         COLOR_MAP.put("grey", Color.GRAY);
 
-        COLOR_MAP.put("green", Color.GREEN);
+        COLOR_MAP.put("green", Color.rgb(((int)Color.GREEN.getRed() + 9), (int)Color.GREEN.getBlue(), (int)Color.GREEN.getGreen()));
 
         COLOR_MAP.put("orange", Color.ORANGE);
 
@@ -43,7 +43,7 @@ public class ColourMap {
 
         COLOR_MAP.put("red", Color.RED);
 
-        COLOR_MAP.put("yellow", Color.YELLOW);
+        COLOR_MAP.put("yellow", Color.rgb(((int)Color.YELLOW.getRed() + 9), (int)Color.YELLOW.getBlue(), (int)Color.YELLOW.getGreen()));
 
         COLOR_MAP.put("dark gray", Color.DARKGRAY);
 
