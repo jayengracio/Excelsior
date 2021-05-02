@@ -2,7 +2,6 @@ package excelsior;
 
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -17,16 +16,15 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 
-public class ComicXML {
-    private final HBox comicPanels;
-    private final Stage primaryStage;
+public class XmlSaver {
+    private final UI ui;
 
-    public ComicXML(HBox comicPanels, Stage primaryStage) {
-        this.comicPanels = comicPanels;
-        this.primaryStage = primaryStage;
+    public XmlSaver(UI ui) {
+        this.ui = ui;
     }
 
     public void save() {
+        HBox comicPanels = ui.getComicPanels();
         try {
             // document
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -155,7 +153,7 @@ public class ComicXML {
         fileChooser.setTitle("Save Comic Strip");
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extFilter);
-        File file = fileChooser.showSaveDialog(primaryStage);
+        File file = fileChooser.showSaveDialog(ui.getPrimaryStage());
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
@@ -168,8 +166,8 @@ public class ComicXML {
             transformer.transform(source, result);
 
             // debug
-            // StreamResult consoleResult = new StreamResult(System.out);
-            // transformer.transform(source, consoleResult);
+            StreamResult consoleResult = new StreamResult(System.out);
+            transformer.transform(source, consoleResult);
         }
     }
 }

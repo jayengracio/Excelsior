@@ -34,6 +34,7 @@ public class UI {
     private final Stage primaryStage;
     private final HBox comicPanels = new HBox(15);
     private final ComicPane workPanel = new ComicPane();
+    private final DropShadow dropShadow = new DropShadow();
     private ComicPane selectedPanel;
     private TilePane buttonBox;
     private Character selectedCharacter;
@@ -44,8 +45,6 @@ public class UI {
     private HighlightedPopup topNarrationInput;
     private HighlightedPopup textBubbleInput;
     private colourPalette palette;
-
-    private final DropShadow dropShadow = new DropShadow();
 
     public UI(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -63,12 +62,12 @@ public class UI {
         return selectedCharacter;
     }
 
-    public HBox getComicPanels() {
-        return comicPanels;
-    }
-
     public void setSelectedCharacter(Character selectedCharacter) {
         this.selectedCharacter = selectedCharacter;
+    }
+
+    public HBox getComicPanels() {
+        return comicPanels;
     }
 
     public HighlightedPopup getCharWarningPopup() {
@@ -115,11 +114,16 @@ public class UI {
 
         file.getItems().addAll(newStrip, delete, save, load);
 
+        XmlSaver xmlSaver = new XmlSaver(this);
         save.setOnAction(actionEvent -> {
-            ComicXML comicXml = new ComicXML(comicPanels, primaryStage);
-            comicXml.save();
+            xmlSaver.save();
         });
 
+        newStrip.setOnAction(actionEvent -> {
+            //newComicStrip();
+            clearWorkPanel();
+            comicPanels.getChildren().clear();
+        });
 
         load.setOnAction(actionEvent -> LoadFromXML());
 
@@ -239,6 +243,35 @@ public class UI {
         scroll.setPannable(true);
         return scroll;
     }
+
+/*    private void newComicStrip() {
+        if (workPanel.isInEditMode()) {
+            Alert alert = createChangesAlert();
+            ButtonType save = alert.getButtonTypes().get(0);
+            ButtonType cont = alert.getButtonTypes().get(1);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent()) {
+                if (result.get() == save) {
+                    workPanel.setEditMode(false);
+                    saveComicPanel();
+
+                    XmlSaver saver = new XmlSaver(this);
+                    saver.save();
+
+                    workPanel.clear();
+                    comicPanels.getChildren().clear();
+                } else if (result.get() == cont) {
+                    workPanel.setEditMode(false);
+                    clearWorkPanel();
+                    comicPanels.getChildren().clear();
+                }
+            }
+        } else {
+            clearWorkPanel();
+            comicPanels.getChildren().clear();
+        }
+    }*/
 
     private void saveComicPanel() {
         ComicPane newPanel = new ComicPane();
