@@ -35,9 +35,9 @@ public class colourPalette extends GridPane{
     }
 
     private void addButtons(){
-        IconButtons hairButton = new IconButtons("HairButton.png");
-        IconButtons skinButton = new IconButtons("SkinButton.png");
-        IconButtons lipButton = new IconButtons("LipButton.png");
+        IconButtons hairButton = new IconButtons("Hair.png");
+        IconButtons skinButton = new IconButtons("Skin.png");
+        IconButtons lipButton = new IconButtons("Lips.png");
         this.add(setButton(0, hairButton), 0, 1, 1, 3);
         this.add(setButton(1, skinButton), 0, 5, 1, 3);
         this.add(setButton(2, lipButton), 0, 9, 1, 3);
