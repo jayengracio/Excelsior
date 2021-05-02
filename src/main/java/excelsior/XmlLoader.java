@@ -28,7 +28,7 @@ public class XmlLoader {
 
     public void parsePanels(NodeList nl, HBox comicPanels) {
         nl = nl.item(0).getChildNodes();
-        int counter = 0;
+        int counter = comicPanels.getChildren().size();
         for (int temp = 0; temp < nl.getLength(); temp++) {
             Node nNode = nl.item(temp);
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -174,8 +174,6 @@ public class XmlLoader {
         if(colourString.startsWith("#")){
             try{
                 colour = Color.web(colourString);
-                if(colour.getRed()<9)
-                    colour = Color.rgb(((int)colour.getRed() +9), (int)colour.getBlue(), (int)colour.getGreen());
             }catch (Exception e){
                 return null;
             }
