@@ -129,7 +129,11 @@ public class XmlLoader {
                 if (eElement.getElementsByTagName("pose").getLength() == 0) {
                     c.setCharacterPose("#empty.png");
                 } else {
-                    c.setCharacterPose(eElement.getElementsByTagName("pose").item(0).getTextContent() + ".png");
+                    String character = eElement.getElementsByTagName("pose").item(0).getTextContent();
+                    if(character.contains(".png"))
+                        c.setCharacterPose(character);
+                    else
+                        c.setCharacterPose(character + ".png");
                 }
 
                 if (eElement.getElementsByTagName("facing").getLength() > 0 &&
