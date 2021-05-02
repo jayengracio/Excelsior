@@ -69,6 +69,7 @@ colourPalette:
     - Took functionality of colour choosing from UI and into its own class
     - Implemented functionality for changing lip colour
     - Buttons for choosing between lip, hair and skin colour
+    - Added easily recognisable icons to buttons
 
 XmlLoader:
     - Reads an XML file from a specified location
