@@ -105,14 +105,17 @@ public class UI {
         Menu help = new HelpMenu(primaryStage).create();
 
         MenuItem newStrip = new MenuItem("New");
-        MenuItem delete = new MenuItem("Delete");
-        MenuItem save = new MenuItem("Save");
-        MenuItem load = new MenuItem("Load");
+        MenuItem save = new MenuItem("Save Comic");
+        MenuItem load = new MenuItem("Load Comic");
 
+        KeyCombination NewKeyBinding = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
         KeyCombination SaveKeyBinding = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+        KeyCombination LoadKeyBinding = new KeyCodeCombination(KeyCode.T, KeyCombination.CONTROL_DOWN);
+        newStrip.setAccelerator(NewKeyBinding);
+        load.setAccelerator(LoadKeyBinding);
         save.setAccelerator(SaveKeyBinding);
 
-        file.getItems().addAll(newStrip, delete, save, load);
+        file.getItems().addAll(newStrip, load, save);
 
         XmlSaver xmlSaver = new XmlSaver(this);
         save.setOnAction(actionEvent -> {
@@ -120,9 +123,7 @@ public class UI {
         });
 
         newStrip.setOnAction(actionEvent -> {
-            //newComicStrip();
-            clearWorkPanel();
-            comicPanels.getChildren().clear();
+            newComicStrip();
         });
 
         load.setOnAction(actionEvent -> LoadFromXML());
@@ -137,10 +138,17 @@ public class UI {
 
     private void LoadFromXML(){
         FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showOpenDialog(primaryStage);
-        File selectedFile = fileChooser.getInitialDirectory();
-        XmlLoader xmlLoader = new XmlLoader();
-        xmlLoader.load(file , this);
+
+        if (file != null) {
+            clearWorkPanel();
+            comicPanels.getChildren().clear();
+
+            XmlLoader xmlLoader = new XmlLoader();
+            xmlLoader.load(file , this);
+        }
     }
 
     private Menu comicPanelMenu() {
@@ -244,7 +252,7 @@ public class UI {
         return scroll;
     }
 
-/*    private void newComicStrip() {
+    private void newComicStrip() {
         if (workPanel.isInEditMode()) {
             Alert alert = createChangesAlert();
             ButtonType save = alert.getButtonTypes().get(0);
@@ -255,10 +263,8 @@ public class UI {
                 if (result.get() == save) {
                     workPanel.setEditMode(false);
                     saveComicPanel();
-
                     XmlSaver saver = new XmlSaver(this);
                     saver.save();
-
                     workPanel.clear();
                     comicPanels.getChildren().clear();
                 } else if (result.get() == cont) {
@@ -271,7 +277,7 @@ public class UI {
             clearWorkPanel();
             comicPanels.getChildren().clear();
         }
-    }*/
+    }
 
     private void saveComicPanel() {
         ComicPane newPanel = new ComicPane();
