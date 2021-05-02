@@ -89,7 +89,9 @@ public class XmlSaver {
                 balloon.setAttributeNode(status);
 
                 Element content = doc.createElement("content");
-                content.appendChild(doc.createTextNode(pane.getLeftSpeechBubble().getText().getText()));
+                String s = pane.getLeftSpeechBubble().getText().getText();
+                s = s.replaceAll("\n", "");
+                content.appendChild(doc.createTextNode(s));
                 balloon.appendChild(content);
 
                 // RIGHT CHARACTER START
@@ -133,7 +135,9 @@ public class XmlSaver {
                 rBalloon.setAttributeNode(rStatus);
 
                 Element rContent = doc.createElement("content");
-                rContent.appendChild(doc.createTextNode(pane.getRightSpeechBubble().getText().getText()));
+                s = pane.getRightSpeechBubble().getText().getText();
+                s = s.replaceAll("\n", "");
+                rContent.appendChild(doc.createTextNode(s));
                 rBalloon.appendChild(rContent);
 
                 Element below = doc.createElement("below");
