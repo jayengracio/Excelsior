@@ -130,10 +130,15 @@ public class XmlLoader {
                     c.setCharacterPose("#empty.png");
                 } else {
                     String character = eElement.getElementsByTagName("pose").item(0).getTextContent();
-                    if(character.contains(".png"))
-                        c.setCharacterPose(character);
-                    else
-                        c.setCharacterPose(character + ".png");
+                    try {
+
+                        if (character.contains(".png"))
+                            c.setCharacterPose(character);
+                        else
+                            c.setCharacterPose(character + ".png");
+                    }catch (Exception e){
+                        System.out.println("could not find character image: " + character);
+                    }
                 }
 
                 if (eElement.getElementsByTagName("facing").getLength() > 0 &&
@@ -147,19 +152,16 @@ public class XmlLoader {
                 Color colour = ColourMap.getColorNamed(eElement.getElementsByTagName("lips").item(0).getTextContent());
                 if (eElement.getElementsByTagName("lips").getLength() > 0 && colour!= null) {
                     c.setLipColour(colour);
-                    System.out.println("lips: " + c.getHairColour().toString());
                 }
 
                 colour = ColourMap.getColorNamed(eElement.getElementsByTagName("hair").item(0).getTextContent());
                 if (eElement.getElementsByTagName("hair").getLength() > 0 && colour!= null) {
                     c.setHairColour(colour);
-                    System.out.println("hair: " + c.getHairColour().toString());
                 }
 
                 colour = ColourMap.getColorNamed(eElement.getElementsByTagName("skin").item(0).getTextContent());
                 if (eElement.getElementsByTagName("skin").getLength() > 0 && colour!= null) {
                     c.setSkinColour(colour);
-                    System.out.println("skin: " + c.getHairColour().toString());
                 }
             }
         }
