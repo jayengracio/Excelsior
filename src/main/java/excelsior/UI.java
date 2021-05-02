@@ -99,6 +99,7 @@ public class UI {
     public MenuBar createMenu() {
         Menu file = new Menu("File");
         Menu editPanel = comicPanelMenu();
+        Menu help = new HelpMenu(primaryStage).create();
 
         MenuItem newStrip = new MenuItem("New");
         MenuItem delete = new MenuItem("Delete");
@@ -121,6 +122,7 @@ public class UI {
         MenuBar mb = new MenuBar();
         mb.getMenus().add(file);
         mb.getMenus().add(editPanel);
+        mb.getMenus().add(help);
 
         return mb;
     }
