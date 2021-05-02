@@ -678,8 +678,6 @@ public class UI {
                 input.setText(textBox.getText());
                 tBub.setText(output);
                 textBubbleInput.hide();
-                textBox.setText("Enter text");
-                textBox.selectAll();
                 if (tBub.isEmpty())
                     tBub.setEmpty();
                 else {
@@ -692,6 +690,7 @@ public class UI {
                 warning.setText("Text Too Long");
         };
         textBox.setOnAction(eventHandler);
+        textBubbleInput.setOnHidden(e -> {warning.setText(null);textBox.setText("Enter text");textBox.selectAll();});
     }
 
     private TextBubble getCurrentSpeechBubble() {
@@ -700,7 +699,7 @@ public class UI {
 
     // top narration helper
     private void createTopNarrationPopup() {
-        Label narration;
+        Narration narration;
         Label text = new Label();
         narration = workPanel.getTopNarration();
         topNarrationInput = createNarrationInput(narration, text);
@@ -708,14 +707,14 @@ public class UI {
 
     // bottom narration helper
     private void createBottomNarrationPopup() {
-        Label narration;
+        Narration narration;
         Label text = new Label();
         narration = workPanel.getBottomNarration();
         bottomNarrationInput = createNarrationInput(narration, text);
     }
 
     // input text box for top and bottom narration
-    private HighlightedPopup createNarrationInput(Label narration, Label input) {
+    private HighlightedPopup createNarrationInput(Narration narration, Label input) {
         VBox container = new VBox();
         container.setPadding(new Insets(15));
         container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3; -fx-font-size: 18px;");
@@ -730,19 +729,17 @@ public class UI {
         inputWindow.getContent().add(container);
 
         EventHandler<ActionEvent> eventHandler = e -> {
-            String output = prepareString(textBox.getText(), 1, 54);
+            String output = prepareNarration(textBox.getText(),narration);
             if (output != null) {
                 input.setText(textBox.getText());
-                narration.setText(input.getText());
+                narration.setText(output);
                 inputWindow.hide();
-                textBox.setText("Enter text");
-                textBox.selectAll();
             } else {
-                int count = textBox.getText().length();
-                warning.setText("Text cannot be longer than 53 characters. \nCurrent length: " + count);
+                warning.setText("Text Too Long");
             }
         };
         textBox.setOnAction(eventHandler);
+        inputWindow.setOnHidden(e -> {warning.setText(null);textBox.setText("Enter text");textBox.selectAll();});
         return inputWindow;
     }
 
@@ -771,6 +768,30 @@ public class UI {
         return null;
     }
 
+    //method to dynamically change font size for narration depending on input length
+    public String prepareNarration(String s, Narration narration) {
+        String output;
+
+        output = prepareString(s, 2, 50);
+        if (output != null) {
+            narration.setTextSize(20);
+            return output;
+        }
+        output = prepareString(s, 2,63);
+        if (output != null) {
+            narration.setTextSize(16);
+            return output;
+        }
+
+        output = prepareString(s, 3,77);
+        if (output != null) {
+            narration.setTextSize(13);
+            return output;
+        }
+
+        return null;
+    }
+
     //prepares String for text bubbles and returns null if exceeds acceptable length
     public String prepareString(String s, int numLines, int charPerLine) {
         String output = "";
@@ -784,13 +805,14 @@ public class UI {
             if (curr == ' ') {
                 lastSpace = i;
             }
-            if (lineLength == charPerLine) {
+            if (lineLength == charPerLine && i != (s.length()-1)) {
                 if (i == lastSpace || (i - lastSpace >= charPerLine - 1))
                     output = output + curr + "\n";
                 else {
                     output = output.substring(0, lastSpace + index + 1) + "\n" + output.substring(lastSpace + index + 1) + curr;
                 }
-                lineLength = 0;
+
+                lineLength = (i - lastSpace < charPerLine - 1) ? (i-lastSpace) : 0;
                 index++;
             } else
                 output = output + curr;
@@ -858,6 +880,7 @@ public class UI {
             }
         }catch(IOException e) {
             System.out.println("Error: Failed to retrieve character images");
+            e.printStackTrace();
         }
 
         return Poses;

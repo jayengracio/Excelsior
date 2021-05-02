@@ -14,53 +14,39 @@ HOW TO RUN:
 Using IntelliJ (Or any other IDE):
 -> Run the Main class
 
-(May have to import Java FX 16 library in order to work)
-
 Using the jar file:
 1. In command line: Change the working directory to where the jar file is located.
-2. Type in: java --module-path "PATH_TO_JAVAFX16_LIB" --add-modules javafx.controls,javafx.fxml -jar Tintin-Excelsior.jar
+2. Type in: "java -jar Tintin-Excelsior.jar"
 
-(Command line's java runtime must be using Java 14)
-------------------
-
-Note: We first implemented the dynamic way of getting all the images in the character images folder, but when switching to make it
-runnable from a jar file, our method of dynamically loading the files no longer worked. Since we couldn't find a suitable solution to do this
-within the jar format during this sprint, we hardcoded a temporary solution to show the functionality of the character choosing process.
-The code used in the jar is visible commented out in the code, so we decided to submit both the jar and the code.
+If in IDE:
+1. In terminal:Type command "mvn compile"
+2. In terminal:Type command "mvn exec:java"
 
 Files created:
--
+-Narration
+-MavenMain
 
 Files Edited:
 - UI
-- Character
 - ComicPane
-- ColourBox
 - Character
-- TextBubble
-
 
 ----------
 ChangeList
 ----------
+
+Maven: Switched project to a maven project for ease of use
+       - Jar build and jar command simpler
+       - Project more structured with resources folder etc.
+       - Dependency management and inclusion of Spring framework
+
 UI:
-    - Renamed 'comic' ComicPane variable to workPanel for clarity
-    - Comic panels can now be Saved, Edited and Deleted.
-    - Introduced New Panel Menu in the MenuBar that controls what to do with the working panel.
-    - Panel menu items also have key-binding / keyboard shortcuts.
-    - Adding new changes to the working panel is now tracked
+    - Added functionality for narration dynamic text
+    - Added feature to dynamically take all images from the character images folder rather than hardcoding them
+    - Minor bug fixes
 
 ComicPane:
-    - New functions that deals with saving and editing comic panels. (clone, setTo).
-    - Removed redundant setters (did not work/already exists within the class).
-    - Refactored the code a bit.
-    - Minimise function to make scale down comic for comic Panels view
-
-ColourBox:
-    - Now has mouse effects to improve user clarity
+    - Changed comicPane to facilitate new Narration class
 
 Character:
-    - Minimise function to make scale down comic for comic Panels view
-
-TextBubble:
-    - Minimise function to make scale down comic for comic Panels view
+    - Minor bug fixes

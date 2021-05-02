@@ -8,10 +8,10 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
 public class ComicPane extends GridPane {
-    private final Label topNarration = new Label();
+    private final Narration topNarration = new Narration();
     private final Character leftCharacter = new Character();
     private final Character rightCharacter = new Character();
-    private final Label bottomNarration = new Label();
+    private final Narration bottomNarration = new Narration();
     private final TextBubble leftSpeechBubble = new TextBubble();
     private final TextBubble rightSpeechBubble = new TextBubble();
     private boolean inEditMode = false;
@@ -31,11 +31,11 @@ public class ComicPane extends GridPane {
         fillPane();
     }
 
-    public Label getTopNarration() {
+    public Narration getTopNarration() {
         return topNarration;
     }
 
-    public Label getBottomNarration() {
+    public Narration getBottomNarration() {
         return bottomNarration;
     }
 
@@ -102,7 +102,9 @@ public class ComicPane extends GridPane {
         this.getLeftCharacter().setDefaultOrientation(panel.getLeftCharacter().isDefaultOrientation());
 
         this.getTopNarration().setText(panel.getTopNarration().getText());
+        this.getTopNarration().setTextSize(panel.getTopNarration().getTextSize());
         this.getBottomNarration().setText(panel.getBottomNarration().getText());
+        this.getBottomNarration().setTextSize(panel.getBottomNarration().getTextSize());
 
         this.getLeftSpeechBubble().getBubble().setImage(panel.getLeftSpeechBubble().getBubble().getImage());
         this.getLeftSpeechBubble().getText().setText(panel.getLeftSpeechBubble().getText().getText());
@@ -133,9 +135,7 @@ public class ComicPane extends GridPane {
         leftSpeechBubble.setAlignment(Pos.CENTER);
         rightSpeechBubble.setAlignment(Pos.CENTER);
         topNarration.setPrefSize(this.getPrefWidth(), 50);
-        topNarration.setStyle("-fx-font-size: 19; -fx-font-weight: bold; -fx-font-family: Monospaced");
         bottomNarration.setPrefSize(this.getPrefWidth(), 50);
-        bottomNarration.setStyle("-fx-font-size: 19; -fx-font-weight: bold; -fx-font-family: Monospaced");
         leftSpeechBubble.setPrefSize(300, 160);
         rightSpeechBubble.setPrefSize(300, 160);
         this.add(topNarration, 0, 0, 2, 1);
@@ -150,8 +150,8 @@ public class ComicPane extends GridPane {
     private void minimise(){
         this.setPrefSize(280, 230);
         this.setHgap(5);
-        topNarration.setStyle("-fx-font-size: 9; -fx-font-weight: bold; -fx-font-family: Monospaced");
-        bottomNarration.setStyle("-fx-font-size: 9; -fx-font-weight: bold; -fx-font-family: Monospaced");
+        topNarration.minimise();
+        bottomNarration.minimise();
         this.setPadding(new Insets(5));
         leftSpeechBubble.minimise();
         rightSpeechBubble.minimise();

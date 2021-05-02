@@ -19,11 +19,11 @@ public class Character extends ImageView {
     private boolean isFemale = true;
 
     public Character() {
-        this.setFitHeight(240);
+        this.setFitHeight(220);
         this.setFitWidth(300);
         this.preserveRatioProperty().setValue(true);
         this.prefWidth(300);
-        this.prefHeight(240);
+        this.prefHeight(220);
         setCharacter("/Character_Images/#empty.png");    //setting a character as a default for testing
     }
 
@@ -259,10 +259,10 @@ public class Character extends ImageView {
     //used to change sizes for comic panels view
     public void minimise()
     {
-        this.setFitHeight(115);
+        this.setFitHeight(100);
         this.setFitWidth(135);
         this.prefWidth(135);
-        this.prefHeight(115);
+        this.prefHeight(100);
     }
 
     //resets all character options to their default
@@ -270,7 +270,7 @@ public class Character extends ImageView {
         skinColour = defaultSkinColour;
         hairColour = defaultHairColour;
         lipColour = defaultLipColour;
-        //defaultOrientation = true;
+        this.setDefaultOrientation(true);
         isFemale = true;
         pose = "#empty.png";
         setCharacterPose("#empty.png");
