@@ -25,6 +25,7 @@ If in IDE:
 Files created:
 -Narration
 -MavenMain
+-ComicXML
 
 Files Edited:
 - UI
@@ -50,3 +51,6 @@ ComicPane:
 
 Character:
     - Minor bug fixes
+
+ComicXML:
+    - Allows the comic panels to be saved as an XML file to any directory destination.
