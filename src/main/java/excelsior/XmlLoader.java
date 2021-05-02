@@ -132,8 +132,10 @@ public class XmlLoader {
                     String character = eElement.getElementsByTagName("pose").item(0).getTextContent();
                     try {
 
-                        if (character.contains(".png"))
+                        if (character.contains(".png")) {
                             c.setCharacterPose(character);
+                            c.setPose(character);
+                        }
                         else
                             c.setCharacterPose(character + ".png");
                     }catch (Exception e){

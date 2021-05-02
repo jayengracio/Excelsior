@@ -85,7 +85,7 @@ public class XmlSaver {
                 Attr status = doc.createAttribute("status");
                 if (pane.getLeftSpeechBubble().getBubbleType().equals("speech")) status.setValue("speech");
                 else if (pane.getLeftSpeechBubble().getBubbleType().equals("thought")) status.setValue("thought");
-                else status.setValue("none");
+                else status.setValue("");
                 balloon.setAttributeNode(status);
 
                 Element content = doc.createElement("content");
@@ -131,7 +131,7 @@ public class XmlSaver {
                 Attr rStatus = doc.createAttribute("status");
                 if (pane.getRightSpeechBubble().getBubbleType().equals("speech")) rStatus.setValue("speech");
                 else if (pane.getRightSpeechBubble().getBubbleType().equals("thought")) rStatus.setValue("thought");
-                else rStatus.setValue("none");
+                else rStatus.setValue("");
                 rBalloon.setAttributeNode(rStatus);
 
                 Element rContent = doc.createElement("content");
@@ -170,8 +170,8 @@ public class XmlSaver {
             transformer.transform(source, result);
 
             // debug
-            StreamResult consoleResult = new StreamResult(System.out);
-            transformer.transform(source, consoleResult);
+            //StreamResult consoleResult = new StreamResult(System.out);
+            //transformer.transform(source, consoleResult);
         }
     }
 }

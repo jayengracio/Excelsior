@@ -164,6 +164,9 @@ public class ComicPane extends GridPane {
 
         this.getRightCharacter().setFemale(panel.getRightCharacter().isFemale());
         this.getLeftCharacter().setFemale(panel.getLeftCharacter().isFemale());
+
+        this.getLeftCharacter().setPose(panel.getLeftCharacter().getPose());
+        this.getRightCharacter().setPose(panel.getRightCharacter().getPose());
     }
 
     private void fillPane() {

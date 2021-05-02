@@ -68,7 +68,7 @@ public class TextBubble extends StackPane {
     public void setEmpty(){
         bubble.setImage(null);
         text.setText("");
-        bubbleType = "none";
+        bubbleType = "";
     }
 
     public boolean isEmpty(){
