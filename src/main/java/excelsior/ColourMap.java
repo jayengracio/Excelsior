@@ -21,11 +21,11 @@ public class ColourMap {
 
         COLOR_MAP.put("brown",  Color.web("#964B00"));
 
-        COLOR_MAP.put("blue", Color.rgb(((int)Color.BLUE.getRed() + 9), (int)Color.BLUE.getBlue(), (int)Color.BLUE.getGreen()));
+        COLOR_MAP.put("blue", Color.web("#0900FFFF"));
 
         COLOR_MAP.put("pink", Color.PINK);
 
-        COLOR_MAP.put("black", Color.rgb(((int)Color.BLACK.getRed() + 9), (int)Color.BLACK.getBlue(), (int)Color.BLACK.getGreen()));
+        COLOR_MAP.put("black", Color.web("#090000"));
 
         COLOR_MAP.put("white", Color.web("#F5FFFA"));
 
@@ -35,7 +35,7 @@ public class ColourMap {
 
         COLOR_MAP.put("grey", Color.GRAY);
 
-        COLOR_MAP.put("green", Color.rgb(((int)Color.GREEN.getRed() + 9), (int)Color.GREEN.getBlue(), (int)Color.GREEN.getGreen()));
+        COLOR_MAP.put("green", Color.web("#09FF00"));
 
         COLOR_MAP.put("orange", Color.ORANGE);
 
@@ -43,7 +43,7 @@ public class ColourMap {
 
         COLOR_MAP.put("red", Color.RED);
 
-        COLOR_MAP.put("yellow", Color.rgb(((int)Color.YELLOW.getRed() + 9), (int)Color.YELLOW.getBlue(), (int)Color.YELLOW.getGreen()));
+        COLOR_MAP.put("yellow", Color.YELLOW);
 
         COLOR_MAP.put("dark gray", Color.DARKGRAY);
 
