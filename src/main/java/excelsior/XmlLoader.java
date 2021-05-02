@@ -149,17 +149,17 @@ public class XmlLoader {
                         eElement.getElementsByTagName("appearance").item(0).getTextContent().equals("male"))
                     c.setFemale(false);
 
-                Color colour = ColourMap.getColorNamed(eElement.getElementsByTagName("lips").item(0).getTextContent());
+                Color colour = getColour(eElement.getElementsByTagName("lips").item(0).getTextContent());
                 if (eElement.getElementsByTagName("lips").getLength() > 0 && colour!= null) {
                     c.setLipColour(colour);
                 }
 
-                colour = ColourMap.getColorNamed(eElement.getElementsByTagName("hair").item(0).getTextContent());
+                colour = getColour(eElement.getElementsByTagName("hair").item(0).getTextContent());
                 if (eElement.getElementsByTagName("hair").getLength() > 0 && colour!= null) {
                     c.setHairColour(colour);
                 }
 
-                colour = ColourMap.getColorNamed(eElement.getElementsByTagName("skin").item(0).getTextContent());
+                colour = getColour(eElement.getElementsByTagName("skin").item(0).getTextContent());
                 if (eElement.getElementsByTagName("skin").getLength() > 0 && colour!= null) {
                     c.setSkinColour(colour);
                 }
@@ -167,5 +167,20 @@ public class XmlLoader {
         }
         c.minimise();
         return c;
+    }
+
+    private Color getColour(String colourString){
+        Color colour;
+        if(colourString.startsWith("#")){
+            try{
+                colour = Color.web(colourString);
+            }catch (Exception e){
+                return null;
+            }
+        }
+        else
+            colour = ColourMap.getColorNamed(colourString);
+
+        return colour;
     }
 }

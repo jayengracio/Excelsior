@@ -21,11 +21,11 @@ public class ColourMap {
 
         COLOR_MAP.put("brown",  Color.web("#964B00"));
 
-        COLOR_MAP.put("blue", Color.BLUE);
+        COLOR_MAP.put("blue", Color.rgb(((int)Color.BLUE.getRed() + 9), (int)Color.BLUE.getBlue(), (int)Color.BLUE.getGreen()));
 
         COLOR_MAP.put("pink", Color.PINK);
 
-        COLOR_MAP.put("black", Color.BLACK);
+        COLOR_MAP.put("black", Color.rgb(((int)Color.BLACK.getRed() + 9), (int)Color.BLACK.getBlue(), (int)Color.BLACK.getGreen()));
 
         COLOR_MAP.put("white", Color.web("#F5FFFA"));
 
