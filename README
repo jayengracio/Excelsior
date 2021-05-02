@@ -11,21 +11,23 @@ Project built with IntelliJ using Java 14 and JavaFX 16.
 
 HOW TO RUN:
 ------------------
-Using IntelliJ (Or any other IDE):
+Using IntelliJ (Might require VM options):
 -> Run the Main class
 
 Using the jar file:
 1. In command line: Change the working directory to where the jar file is located.
 2. Type in: "java -jar Tintin-Excelsior.jar"
 
-If in IDE:
-1. In terminal:Type command "mvn compile"
-2. In terminal:Type command "mvn exec:java"
+Using Maven:
+1. In terminal: Type command "mvn compile"
+2. In terminal: Type command "mvn exec:java"
+------------------
 
-Files created:
--Narration
--MavenMain
--ComicXML
+Files Created:
+- Narration
+- MavenMain
+- XmlSaver
+- HelpMenu
 
 Files Edited:
 - UI
@@ -48,9 +50,14 @@ UI:
 
 ComicPane:
     - Changed comicPane to facilitate new Narration class
+    - Bug fixes
 
 Character:
     - Minor bug fixes
 
-ComicXML:
-    - Allows the comic panels to be saved as an XML file to any directory destination.
+XMLSaver:
+    - XML saving functionalities.
+    - Allows the comic panels to be saved as an XML file to any chosen directory.
+
+HelpMenu:
+    - A new menu for users to get more detailed instructions on how to use the application
