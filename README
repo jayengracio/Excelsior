@@ -28,6 +28,9 @@ Files Created:
 - MavenMain
 - XmlSaver
 - HelpMenu
+- XmlLoader
+- ColourMap
+- colourPalette
 
 Files Edited:
 - UI
@@ -61,3 +64,17 @@ XMLSaver:
 
 HelpMenu:
     - A new menu for users to get more detailed instructions on how to use the application
+
+colourPalette:
+    - Took functionality of colour choosing from UI and into its own class
+    - Implemented functionality for changing lip colour
+    - Buttons for choosing between lip, hair and skin colour
+
+XmlLoader:
+    - Reads an XML file from a specified location
+    - Takes information about comic panels creates ComicPanes from said information
+    - Applies colour, direction, gender and poses to characters
+    - Adds panels to scroll pane for viewing and editing
+    - Incorrect XML does not cause errors to appear
+    - If png is does not exist, #empty.png is displayed. User can then edit pane and load a desired character
+    - Colours for character can be in hex form or words of colours e.g brown, grey, blue...
