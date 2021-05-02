@@ -63,6 +63,10 @@ public class UI {
         return selectedCharacter;
     }
 
+    public HBox getComicPanels() {
+        return comicPanels;
+    }
+
     public void setSelectedCharacter(Character selectedCharacter) {
         this.selectedCharacter = selectedCharacter;
     }
@@ -130,12 +134,9 @@ public class UI {
     private void LoadFromXML(){
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(primaryStage);
-
-            File selectedFile = fileChooser.getInitialDirectory();
-        /*
-        add load functionality
-        */
-
+        File selectedFile = fileChooser.getInitialDirectory();
+        XmlLoader xmlLoader = new XmlLoader();
+        xmlLoader.load(file , this);
     }
 
     private Menu comicPanelMenu() {
@@ -299,7 +300,7 @@ public class UI {
     }
 
     // gives the panel functions to act as a "button"
-    private void selectComicPanel(ComicPane panel) {
+    public void selectComicPanel(ComicPane panel) {
         panel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             // switching panels while there are active change prompts a warning
             if (workPanel.isInEditMode()) {

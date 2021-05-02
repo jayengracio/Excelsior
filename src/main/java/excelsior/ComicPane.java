@@ -8,12 +8,12 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
 public class ComicPane extends GridPane {
-    private final Narration topNarration = new Narration();
-    private final Character leftCharacter = new Character();
-    private final Character rightCharacter = new Character();
-    private final Narration bottomNarration = new Narration();
-    private final TextBubble leftSpeechBubble = new TextBubble();
-    private final TextBubble rightSpeechBubble = new TextBubble();
+    private  Narration topNarration = new Narration();
+    private  Character leftCharacter = new Character();
+    private  Character rightCharacter = new Character();
+    private  Narration bottomNarration = new Narration();
+    private  TextBubble leftSpeechBubble = new TextBubble();
+    private  TextBubble rightSpeechBubble = new TextBubble();
     private boolean inEditMode = false;
 
     public ComicPane() {
@@ -53,6 +53,43 @@ public class ComicPane extends GridPane {
 
     public TextBubble getRightSpeechBubble() {
         return rightSpeechBubble;
+    }
+
+    public void setTopNarration(Narration topNarration) {
+        this.getChildren().remove(this.topNarration);
+        this.topNarration = topNarration;
+        this.add(this.topNarration, 0, 0, 2, 1);
+    }
+
+    public void setLeftCharacter(Character leftCharacter) {
+        this.getChildren().remove(this.leftCharacter);
+        this.leftCharacter = leftCharacter;
+        this.add(this.leftCharacter, 0, 2);
+    }
+
+    public void setRightCharacter(Character rightCharacter) {
+        this.getChildren().remove(this.rightCharacter);
+        this.rightCharacter = rightCharacter;
+        this.add(this.rightCharacter, 1, 2);
+    }
+
+    public void setBottomNarrationMin(Narration bottomNarration) {
+        this.getChildren().remove(this.bottomNarration);
+        this.bottomNarration = bottomNarration;
+        this.add(this.bottomNarration, 0, 3, 2, 1);
+        minimise();
+    }
+
+    public void setLeftSpeechBubble(TextBubble leftSpeechBubble) {
+        this.getChildren().remove(this.leftSpeechBubble);
+        this.leftSpeechBubble = leftSpeechBubble;
+        this.add(this.leftSpeechBubble, 0, 1);
+    }
+
+    public void setRightSpeechBubble(TextBubble rightSpeechBubble) {
+        this.getChildren().remove(this.rightSpeechBubble);
+        this.rightSpeechBubble = rightSpeechBubble;
+        this.add(this.rightSpeechBubble, 1, 1);
     }
 
     public void setEditMode(boolean inEditMode) {
@@ -147,7 +184,7 @@ public class ComicPane extends GridPane {
     }
 
     //used to change sizes for comic panels view
-    private void minimise(){
+    public void minimise(){
         this.setPrefSize(280, 230);
         this.setHgap(5);
         topNarration.minimise();
