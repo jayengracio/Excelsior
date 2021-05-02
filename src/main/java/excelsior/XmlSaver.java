@@ -90,7 +90,7 @@ public class XmlSaver {
 
                 Element content = doc.createElement("content");
                 String s = pane.getLeftSpeechBubble().getText().getText();
-                s = s.replaceAll("\n", "");
+                s = s.replaceAll("\n", " ");
                 content.appendChild(doc.createTextNode(s));
                 balloon.appendChild(content);
 
@@ -136,7 +136,7 @@ public class XmlSaver {
 
                 Element rContent = doc.createElement("content");
                 s = pane.getRightSpeechBubble().getText().getText();
-                s = s.replaceAll("\n", "");
+                s = s.replaceAll("\n", " ");
                 rContent.appendChild(doc.createTextNode(s));
                 rBalloon.appendChild(rContent);
 
