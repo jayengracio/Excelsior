@@ -47,7 +47,7 @@ public class XmlLoader {
             parseRight(eElement.getElementsByTagName("right"), comic);
             comic.setBottomNarrationMin(parseBelow(eElement.getElementsByTagName("below")));
             comic.minimise();
-            ui.selectComicPanel(comic);
+            ui.getPanelController().selectComicPanel(comic);
         }
     }
 

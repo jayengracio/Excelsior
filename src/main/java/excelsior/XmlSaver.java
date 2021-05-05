@@ -155,14 +155,13 @@ public class XmlSaver {
     private void openSaveDialog(Document doc) throws TransformerException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Comic Strip");
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showSaveDialog(ui.getPrimaryStage());
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        //transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "comic.dtd");
         DOMSource source = new DOMSource(doc);
 
         if (file != null) {

@@ -7,44 +7,35 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 
 public class UI {
     private final Stage primaryStage;
     private final HBox comicPanels = new HBox(15);
     private final ComicPane workPanel = new ComicPane();
-    private final DropShadow dropShadow = new DropShadow();
-    private ComicPane selectedPanel;
+    private final PanelController panelController = new PanelController(this);
+    private final ButtonController buttonController = new ButtonController(this);
+    private final ComicStripController comicStripController = new ComicStripController(this);
     private TilePane buttonBox;
     private Character selectedCharacter;
-    private Boolean isSpeechBubble = true;
     private HighlightedPopup charWarningPopup;
     private HighlightedPopup charPosesPopup;
     private HighlightedPopup bottomNarrationInput;
     private HighlightedPopup topNarrationInput;
     private HighlightedPopup textBubbleInput;
-    private colourPalette palette;
+    private ColourPalette palette;
 
     public UI(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -74,8 +65,28 @@ public class UI {
         return charWarningPopup;
     }
 
-    public void setCharWarningPopup(HighlightedPopup charWarningPopup) {
-        this.charWarningPopup = charWarningPopup;
+    public PanelController getPanelController() {
+        return panelController;
+    }
+
+    public HighlightedPopup getCharPosesPopup() {
+        return charPosesPopup;
+    }
+
+    public HighlightedPopup getBottomNarrationInput() {
+        return bottomNarrationInput;
+    }
+
+    public HighlightedPopup getTopNarrationInput() {
+        return topNarrationInput;
+    }
+
+    public HighlightedPopup getTextBubbleInput() {
+        return textBubbleInput;
+    }
+
+    public TilePane getButtonBox() {
+        return buttonBox;
     }
 
     //sets up the stage
@@ -100,95 +111,30 @@ public class UI {
 
     //top menu pane for file dropdown
     public MenuBar createMenu() {
-        Menu file = new Menu("File");
-        Menu editPanel = comicPanelMenu();
+        Menu file = comicStripController.FileMenu();
+        Menu panel = panelController.PanelMenu();
         Menu help = new HelpMenu(primaryStage).create();
-
-        MenuItem newStrip = new MenuItem("New");
-        MenuItem save = new MenuItem("Save Comic");
-        MenuItem load = new MenuItem("Load Comic");
-
-        KeyCombination NewKeyBinding = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
-        KeyCombination SaveKeyBinding = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
-        KeyCombination LoadKeyBinding = new KeyCodeCombination(KeyCode.T, KeyCombination.CONTROL_DOWN);
-        newStrip.setAccelerator(NewKeyBinding);
-        load.setAccelerator(LoadKeyBinding);
-        save.setAccelerator(SaveKeyBinding);
-
-        file.getItems().addAll(newStrip, load, save);
-
-        XmlSaver xmlSaver = new XmlSaver(this);
-        save.setOnAction(actionEvent -> {
-            xmlSaver.save();
-        });
-
-        newStrip.setOnAction(actionEvent -> {
-            newComicStrip();
-        });
-
-        load.setOnAction(actionEvent -> LoadFromXML());
 
         MenuBar mb = new MenuBar();
         mb.getMenus().add(file);
-        mb.getMenus().add(editPanel);
+        mb.getMenus().add(panel);
         mb.getMenus().add(help);
-
         return mb;
     }
 
-    private void LoadFromXML(){
+    public void LoadFromXML() {
         FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showOpenDialog(primaryStage);
 
         if (file != null) {
-            clearWorkPanel();
+            panelController.clearWorkPanel();
             comicPanels.getChildren().clear();
 
             XmlLoader xmlLoader = new XmlLoader();
-            xmlLoader.load(file , this);
+            xmlLoader.load(file, this);
         }
-    }
-
-    private Menu comicPanelMenu() {
-        Menu menu = new Menu("Panel");
-
-        MenuItem create = new MenuItem("New Panel");
-        MenuItem save = new MenuItem("Save Panel");
-        MenuItem delete = new MenuItem("Delete Panel");
-
-        KeyCombination newPanelKeyBinding = new KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN);
-        KeyCombination SaveKeyBinding = new KeyCodeCombination(KeyCode.S, KeyCombination.SHIFT_DOWN);
-        KeyCombination DeleteKeyBinding = new KeyCodeCombination(KeyCode.DELETE);
-
-        create.setAccelerator(newPanelKeyBinding);
-        save.setAccelerator(SaveKeyBinding);
-        delete.setAccelerator(DeleteKeyBinding);
-
-        menu.getItems().addAll(create, delete, save);
-
-        delete.setDisable(true);
-
-        save.setOnAction(actionEvent -> {
-            saveComicPanel();
-            if (!comicPanels.getChildren().isEmpty()) {
-                delete.setDisable(false);
-            }
-        });
-
-        delete.setOnAction(actionEvent -> {
-            deleteComicPanel();
-            if (comicPanels.getChildren().isEmpty()) {
-                delete.setDisable(true);
-            }
-        });
-
-        create.setOnAction(actionEvent -> {
-            createNewComicPanel();
-        });
-
-        return menu;
     }
 
     //view for everything below the top menu
@@ -206,8 +152,8 @@ public class UI {
     }
 
     //colour pallet pane
-    public colourPalette createColourPalette() {
-         palette = new colourPalette(this);
+    public ColourPalette createColourPalette() {
+        palette = new ColourPalette(this);
         return palette;
     }
 
@@ -220,22 +166,7 @@ public class UI {
         buttonBox.setHgap(14);
         buttonBox.setAlignment(Pos.TOP_RIGHT);
         buttonBox.setPrefRows(4);
-        buttonBox.getChildren().add(0, new IconButtons("Left.png"));
-        buttonBox.getChildren().add(1, new IconButtons("Right.png"));
-        buttonBox.getChildren().add(2, new IconButtons("Flip.png"));
-        buttonBox.getChildren().add(3, new IconButtons("Gender.png"));
-        buttonBox.getChildren().add(4, new IconButtons("Speech Bubble.png"));
-        buttonBox.getChildren().add(5, new IconButtons("Top Narration.png"));
-        buttonBox.getChildren().add(6, new IconButtons("Thought Bubble.png"));
-        buttonBox.getChildren().add(7, new IconButtons("Bot Narration.png"));
-        leftCharacterButton(buttonBox.getChildren().get(0));
-        rightCharacterButton(buttonBox.getChildren().get(1));
-        switchOrientationButton(buttonBox.getChildren().get(2));
-        changeGenderButton(buttonBox.getChildren().get(3));
-        speechBubbleButton(buttonBox.getChildren().get(4));
-        topNarrationButton(buttonBox.getChildren().get(5));
-        thoughtBubbleButton(buttonBox.getChildren().get(6));
-        botNarrationButton(buttonBox.getChildren().get(7));
+        buttonController.start();
         return buttonBox;
     }
 
@@ -250,310 +181,6 @@ public class UI {
         scroll.setContent(comicPanels);
         scroll.setPannable(true);
         return scroll;
-    }
-
-    private void newComicStrip() {
-        if (workPanel.isInEditMode()) {
-            Alert alert = createChangesAlert();
-            ButtonType save = alert.getButtonTypes().get(0);
-            ButtonType cont = alert.getButtonTypes().get(1);
-
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent()) {
-                if (result.get() == save) {
-                    workPanel.setEditMode(false);
-                    saveComicPanel();
-                    XmlSaver saver = new XmlSaver(this);
-                    saver.save();
-                    workPanel.clear();
-                    comicPanels.getChildren().clear();
-                } else if (result.get() == cont) {
-                    workPanel.setEditMode(false);
-                    clearWorkPanel();
-                    comicPanels.getChildren().clear();
-                }
-            }
-        } else {
-            clearWorkPanel();
-            comicPanels.getChildren().clear();
-        }
-    }
-
-    private void saveComicPanel() {
-        ComicPane newPanel = new ComicPane();
-
-        // sets the new panel as the current workspace panel
-        newPanel.setTo(workPanel,false);
-        selectComicPanel(newPanel);
-
-        // checks if the selected panel already exists within in comicPanels before saving/overwriting
-        if (comicPanels.getChildren().contains(selectedPanel)) {
-            int index = comicPanels.getChildren().indexOf(selectedPanel);
-            comicPanels.getChildren().set(index, newPanel);
-        } else {
-            comicPanels.getChildren().add(newPanel);
-        }
-
-        resetAppFace();
-    }
-
-    private void deleteComicPanel() {
-        comicPanels.getChildren().remove(selectedPanel);
-        resetAppFace();
-    }
-
-    private void editComicPanel() {
-        resetAppFace();
-        workPanel.setTo(selectedPanel,true);
-    }
-
-    private void createNewComicPanel() {
-        DropShadow drop = new DropShadow();
-        drop.setSpread(0.30);
-        drop.setColor(Color.DARKORANGE);
-
-        if (workPanel.isInEditMode()) {
-            // switching panels while there are active change prompts a warning
-            Alert alert = createChangesAlert();
-            ButtonType save = alert.getButtonTypes().get(0);
-            ButtonType cont = alert.getButtonTypes().get(1);
-
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent()) {
-                if (result.get() == save) {         // when choosing to save
-                    workPanel.setEditMode(false);
-                    saveComicPanel();
-                    clearWorkPanel();
-                } else if (result.get() == cont) {  // when choosing to not save & continue
-                    workPanel.setEditMode(false);
-                    clearWorkPanel();
-                }
-            }
-        } else { clearWorkPanel(); }
-    }
-
-    private void clearWorkPanel() {
-        unselectAllPanels();
-        resetAppFace();
-        selectedPanel = null;
-    }
-
-    // gives the panel functions to act as a "button"
-    public void selectComicPanel(ComicPane panel) {
-        panel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            // switching panels while there are active change prompts a warning
-            if (workPanel.isInEditMode()) {
-                Alert alert = createChangesAlert();
-                ButtonType save = alert.getButtonTypes().get(0);
-                ButtonType cont = alert.getButtonTypes().get(1);
-
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.isPresent()) {
-                    if (result.get() == save) {         // when choosing to save
-                        workPanel.setEditMode(false);
-                        saveComicPanel();
-                        selectOtherPanel(panel);
-                    } else if (result.get() == cont) {  // when choosing to not save & continue
-                        workPanel.setEditMode(false);
-                        selectOtherPanel(panel);
-                    }
-                }
-            } else { selectOtherPanel(panel); }
-        });
-    }
-
-    private void selectOtherPanel(ComicPane panel) {
-        DropShadow drop = new DropShadow();
-        drop.setSpread(0.30);
-        drop.setColor(Color.RED);
-
-        unselectAllPanels();
-        selectedPanel = panel;
-        editComicPanel();
-        panel.setEffect(drop);
-    }
-
-    private Alert createChangesAlert() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Unsaved Changes");
-        alert.setHeaderText(null);
-        alert.setContentText("You have unsaved changes in the workspace");
-
-        ButtonType save = new ButtonType("Save");
-        ButtonType cont = new ButtonType("Don't Save");
-        ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-
-        alert.getButtonTypes().setAll(save, cont, cancel);
-
-        return alert;
-    }
-
-    private void unselectAllPanels() {
-        for (int i = 0; i < comicPanels.getChildren().size(); i++) {
-            Node temp = comicPanels.getChildren().get(i);
-            temp.setEffect(null);
-        }
-    }
-
-    // button function to select left character and/or select pose
-    private void leftCharacterButton(Node button) {
-        Button cur = (Button) button;
-        Button right = (Button) buttonBox.getChildren().get(1);
-        buttonTooltip(button, "Select Character");
-
-        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (selectedCharacter == workPanel.getLeftCharacter()) {
-                charPosesPopup.show(primaryStage);
-            } else {
-                selectedCharacter = workPanel.getLeftCharacter();
-                workPanel.getLeftCharacter().setEffect(dropShadow);
-                workPanel.getRightCharacter().setEffect(null);
-
-                ImageView graphic = new ImageView(new Image("/Icons/Right.png"));
-                graphic.setStyle("-fx-background-radius: 20px; -fx-border-radius: 20px;");
-                graphic.setFitWidth(90);
-                graphic.setFitHeight(90);
-                right.setGraphic(graphic);
-
-                createCharacterButtonTooltip(cur, right);
-            }
-            button.setEffect(dropShadow);
-        });
-    }
-
-    // button function to select right character and/or select pose
-    private void rightCharacterButton(Node button) {
-        Button cur = (Button) button;
-        Button left = (Button) buttonBox.getChildren().get(0);
-        buttonTooltip(button, "Select Character");
-
-        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (selectedCharacter == workPanel.getRightCharacter()) {
-                charPosesPopup.show(primaryStage);
-            } else {
-                selectedCharacter = workPanel.getRightCharacter();
-                workPanel.getRightCharacter().setEffect(dropShadow);
-                workPanel.getLeftCharacter().setEffect(null);
-
-                ImageView graphic = new ImageView(new Image("/Icons/Left.png"));
-                graphic.setStyle("-fx-background-radius: 20px; -fx-border-radius: 20px;");
-                graphic.setFitWidth(90);
-                graphic.setFitHeight(90);
-                left.setGraphic(graphic);
-
-                createCharacterButtonTooltip(cur, left);
-            }
-            button.setEffect(dropShadow);
-        });
-    }
-
-    // help function to create the tooltips for character button
-    private void createCharacterButtonTooltip(Button current, Button next) {
-        if(next == null)
-        {
-            current.getTooltip().setText("Select Character");
-        } else
-            {
-            ImageView graphic = new ImageView(new Image("/Icons/SelectPose.png"));
-            graphic.setStyle("-fx-background-radius: 20px; -fx-border-radius: 20px;");
-            graphic.setFitWidth(90);
-            graphic.setFitHeight(90);
-            current.setGraphic(graphic);
-
-            current.setTooltip(new Tooltip("Change character pose"));
-            next.setTooltip(new Tooltip("Select Character"));
-            current.getTooltip().setShowDelay(Duration.seconds(0.1));
-            next.getTooltip().setShowDelay(Duration.seconds(0.1));
-            current.getTooltip().setStyle("-fx-font-size: 12;");
-            next.getTooltip().setStyle("-fx-font-size: 12;");
-        }
-
-    }
-
-    // adds event handler to flip currently selected character on x axis when button input is clicked
-    private void switchOrientationButton(Node button) {
-        buttonTooltip(button, "Flip where the character is facing");
-        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (selectedCharacter == null || selectedCharacter.isEmpty()) {
-                charWarningPopup.show(primaryStage);
-            } else {
-                selectedCharacter.flipDefaultOrientation();
-                button.setEffect(dropShadow);
-                workPanel.setEditMode(true);
-            }
-        });
-    }
-
-    // button function to change character's gender
-    private void changeGenderButton(Node button) {
-        buttonTooltip(button, "Change the gender of the character");
-        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (selectedCharacter == null || selectedCharacter.isEmpty()) {
-                charWarningPopup.show(primaryStage);
-            } else {
-                selectedCharacter.setFemale(!selectedCharacter.isFemale());
-                workPanel.setEditMode(true);
-            }
-            button.setEffect(dropShadow);
-        });
-    }
-
-    // button function to insert a speech bubble
-    private void speechBubbleButton(Node button) {
-        buttonTooltip(button, "Add a speech bubble for the selected character");
-        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (selectedCharacter == null || selectedCharacter.isEmpty()) {
-                charWarningPopup.show(primaryStage);
-            } else {
-                isSpeechBubble = true;
-                textBubbleInput.show(primaryStage);
-                button.setEffect(dropShadow);
-                workPanel.setEditMode(true);
-            }
-        });
-    }
-
-    // button function to insert a thought bubble
-    private void thoughtBubbleButton(Node button) {
-        buttonTooltip(button, "Add a thought bubble for the selected character");
-        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (selectedCharacter == null || selectedCharacter.isEmpty()) {
-                charWarningPopup.show(primaryStage);
-            } else {
-                isSpeechBubble = false;
-                textBubbleInput.show(primaryStage);
-                button.setEffect(dropShadow);
-                workPanel.setEditMode(true);
-            }
-        });
-    }
-
-    // button function to insert the top narration text
-    private void topNarrationButton(Node button) {
-        buttonTooltip(button, "Add the top narration of the panel");
-        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            topNarrationInput.show(primaryStage);
-            button.setEffect(dropShadow);
-            workPanel.setEditMode(true);
-        });
-    }
-
-    // button function to insert the bottom narration text
-    private void botNarrationButton(Node button) {
-        buttonTooltip(button, "Add the bottom narration of the panel");
-        button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            bottomNarrationInput.show(primaryStage);
-            button.setEffect(dropShadow);
-            workPanel.setEditMode(true);
-        });
-    }
-
-    // help function to help create tooltips for buttons
-    private void buttonTooltip(Node button, String text) {
-        Button castedButton = (Button) button;
-        castedButton.setTooltip(new Tooltip(text));
-        castedButton.getTooltip().setShowDelay(Duration.seconds(0.1));
-        castedButton.getTooltip().setStyle("-fx-font-size: 12;");
     }
 
     // speech bubble helper
@@ -583,7 +210,7 @@ public class UI {
                 if (tBub.isEmpty())
                     tBub.setEmpty();
                 else {
-                    if (isSpeechBubble)
+                    if (buttonController.isSpeechBubble())
                         tBub.setSpeech();
                     else
                         tBub.setThought();
@@ -592,7 +219,11 @@ public class UI {
                 warning.setText("Text Too Long");
         };
         textBox.setOnAction(eventHandler);
-        textBubbleInput.setOnHidden(e -> {warning.setText(null);textBox.setText("Enter text");textBox.selectAll();});
+        textBubbleInput.setOnHidden(e -> {
+            warning.setText(null);
+            textBox.setText("Enter text");
+            textBox.selectAll();
+        });
     }
 
     private TextBubble getCurrentSpeechBubble() {
@@ -631,7 +262,7 @@ public class UI {
         inputWindow.getContent().add(container);
 
         EventHandler<ActionEvent> eventHandler = e -> {
-            String output = prepareNarration(textBox.getText(),narration);
+            String output = prepareNarration(textBox.getText(), narration);
             if (output != null) {
                 input.setText(textBox.getText());
                 narration.setText(output);
@@ -641,7 +272,11 @@ public class UI {
             }
         };
         textBox.setOnAction(eventHandler);
-        inputWindow.setOnHidden(e -> {warning.setText(null);textBox.setText("Enter text");textBox.selectAll();});
+        inputWindow.setOnHidden(e -> {
+            warning.setText(null);
+            textBox.setText("Enter text");
+            textBox.selectAll();
+        });
         return inputWindow;
     }
 
@@ -679,13 +314,13 @@ public class UI {
             narration.setTextSize(20);
             return output;
         }
-        output = prepareString(s, 2,63);
+        output = prepareString(s, 2, 63);
         if (output != null) {
             narration.setTextSize(16);
             return output;
         }
 
-        output = prepareString(s, 3,77);
+        output = prepareString(s, 3, 77);
         if (output != null) {
             narration.setTextSize(13);
             return output;
@@ -707,14 +342,14 @@ public class UI {
             if (curr == ' ') {
                 lastSpace = i;
             }
-            if (lineLength == charPerLine && i != (s.length()-1)) {
+            if (lineLength == charPerLine && i != (s.length() - 1)) {
                 if (i == lastSpace || (i - lastSpace >= charPerLine - 1))
                     output = output + curr + "\n";
                 else {
                     output = output.substring(0, lastSpace + index + 1) + "\n" + output.substring(lastSpace + index + 1) + curr;
                 }
 
-                lineLength = (i - lastSpace < charPerLine - 1) ? (i-lastSpace) : 0;
+                lineLength = (i - lastSpace < charPerLine - 1) ? (i - lastSpace) : 0;
                 index++;
             } else
                 output = output + curr;
@@ -773,14 +408,13 @@ public class UI {
             Resource[] charPoseFiles = resolver.getResources("Character_Images/*.png");
 
             int i = 0;
-            for (Resource charPose : charPoseFiles)
-            {
+            for (Resource charPose : charPoseFiles) {
                 Poses.getChildren().add(i, new CharacterPoseButton(charPose.getFilename()));
                 Poses.setTileAlignment(Pos.TOP_LEFT);
                 changePose(Poses.getChildren().get(i), charPose.getFilename());
                 i++;
             }
-        }catch(IOException e) {
+        } catch (IOException e) {
             System.out.println("Error: Failed to retrieve character images");
             e.printStackTrace();
         }
@@ -822,16 +456,15 @@ public class UI {
     }
 
     //used to reset the entire appFace to its original startup look
-    private void resetAppFace(){
+    public void resetAppFace() {
         workPanel.clear();
         palette.reset();
-        if(selectedCharacter != null)
-        {
+        if (selectedCharacter != null) {
             selectedCharacter.setEffect(null);
-            Boolean isLeft = (selectedCharacter == workPanel.getLeftCharacter());
+            boolean isLeft = (selectedCharacter == workPanel.getLeftCharacter());
             IconButtons curCharBtn = (IconButtons) buttonBox.getChildren().get(isLeft ? 0 : 1);
             curCharBtn.setIcon(isLeft ? "Left.png" : "Right.png");
-            createCharacterButtonTooltip(curCharBtn,null);
+            buttonController.createCharacterButtonTooltip(curCharBtn, null);
             selectedCharacter = null;
         }
     }
