@@ -19,32 +19,39 @@ public class ComicStripController {
 
     public Menu FileMenu() {
         XmlSaver xmlSaver = new XmlSaver(ui);
+        HtmlSaver htmlSaver = new HtmlSaver(ui);
         Menu menu = new Menu("File");
 
         MenuItem newStrip = new MenuItem("New");
-        MenuItem save = new MenuItem("Save Comic");
-        MenuItem load = new MenuItem("Load Comic");
+        MenuItem saveXML = new MenuItem("Save as XML");
+        MenuItem loadXML = new MenuItem("Load XML");
+        MenuItem saveHTML = new MenuItem("Save as HTML");
 
         KeyCombination NewKeyBinding = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
-        KeyCombination SaveKeyBinding = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
-        KeyCombination LoadKeyBinding = new KeyCodeCombination(KeyCode.T, KeyCombination.CONTROL_DOWN);
+        KeyCombination SaveXmlKeyBinding = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+        KeyCombination LoadXmlKeyBinding = new KeyCodeCombination(KeyCode.T, KeyCombination.CONTROL_DOWN);
+        KeyCombination SaveHtmlKeyBinding = new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_DOWN);
+
         newStrip.setAccelerator(NewKeyBinding);
-        load.setAccelerator(LoadKeyBinding);
-        save.setAccelerator(SaveKeyBinding);
+        loadXML.setAccelerator(LoadXmlKeyBinding);
+        saveXML.setAccelerator(SaveXmlKeyBinding);
+        saveHTML.setAccelerator(SaveHtmlKeyBinding);
 
-        menu.getItems().addAll(newStrip, load, save);
+        menu.getItems().addAll(newStrip, loadXML, saveXML,saveHTML);
 
-        save.setOnAction(actionEvent -> xmlSaver.save());
+        saveXML.setOnAction(actionEvent -> xmlSaver.save());
 
         newStrip.setOnAction(actionEvent -> {
             createNewComicStrip();
             ui.getPanelController().deleteAvailability();
         });
 
-        load.setOnAction(actionEvent -> {
+        loadXML.setOnAction(actionEvent -> {
             ui.LoadFromXML();
             ui.getPanelController().deleteAvailability();
         });
+
+        saveHTML.setOnAction(actionEvent -> htmlSaver.save());
 
         return menu;
     }
