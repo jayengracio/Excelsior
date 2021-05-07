@@ -18,8 +18,14 @@ public class ComicStripController {
         this.ui = ui;
     }
 
+    /**
+     * Creates a menu that saves and load comic strips in XML and publishing a comic strip in HTML.
+     *
+     * @return the panel menu with items that have key bindings
+     */
     public Menu FileMenu() {
         XmlSaver xmlSaver = new XmlSaver(ui);
+        XmlLoader xmlLoader = new XmlLoader(ui);
         htmlSaver = new HtmlSaver(ui);
         Menu menu = new Menu("File");
 
@@ -44,12 +50,12 @@ public class ComicStripController {
 
         newStrip.setOnAction(actionEvent -> {
             createNewComicStrip();
-            ui.getPanelController().deleteAvailability();
+            ui.getPanelController().disableDelete();
         });
 
         loadXML.setOnAction(actionEvent -> {
-            ui.LoadFromXML();
-            ui.getPanelController().deleteAvailability();
+            xmlLoader.load();
+            ui.getPanelController().disableDelete();
         });
 
         saveHTML.setOnAction(actionEvent -> htmlSaver.save());
@@ -57,6 +63,9 @@ public class ComicStripController {
         return menu;
     }
 
+    /**
+     * An alert to ask user for confirmation when they prompt to create a new comic strip
+     */
     private void createNewComicStrip() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm");

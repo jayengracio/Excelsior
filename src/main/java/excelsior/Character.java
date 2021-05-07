@@ -4,17 +4,16 @@ import javafx.scene.image.*;
 import javafx.scene.paint.Color;
 
 public class Character extends ImageView {
-    private Image character = null;
-    private Image updated;
-    private boolean defaultOrientation = true;
-
     private final Color defaultHairColour = Color.web("#F9FF00");
     private final Color defaultSkinColour = Color.web("#FFE8D8");
     private final Color defaultLipColour = Color.web("#FF0000");
+    private Image character = null;
+    private Image updated;
+    private boolean defaultOrientation = true;
     private Color skinColour = Color.web("#FFE8D8");
     private Color hairColour = Color.web("#F9FF00");
     private Color lipColour = Color.web("#FF0000");
-    private String pose;
+    private String poseString;
     private boolean empty = true;
     private boolean isFemale = true;
 
@@ -41,15 +40,6 @@ public class Character extends ImageView {
         return character;
     }
 
-    public String getPose() {
-        if (pose == null) return "#empty.png";
-        else return pose;
-    }
-
-    public void setPose(String pose) {
-        this.pose = pose;
-    }
-
     public void setCharacter(Image character) {
         this.character = character;
         updateImage();
@@ -58,6 +48,15 @@ public class Character extends ImageView {
     public void setCharacter(String url) {
         this.character = new Image(url);
         updateImage();
+    }
+
+    public String getPoseString() {
+        if (poseString == null) return "#empty.png";
+        else return poseString;
+    }
+
+    public void setPoseString(String poseString) {
+        this.poseString = poseString;
     }
 
     public Color getLipColour() {
@@ -106,27 +105,27 @@ public class Character extends ImageView {
     }
 
     public String getHairColourAsHex() {
-        int r = (int)( hairColour.getRed() * 255 );
-        int g = (int)( hairColour.getGreen() * 255 );
-        int b = (int)( hairColour.getBlue() * 255 );
+        int r = (int) (hairColour.getRed() * 255);
+        int g = (int) (hairColour.getGreen() * 255);
+        int b = (int) (hairColour.getBlue() * 255);
 
-        return String.format( "#%02X%02X%02X", r, g, b);
+        return String.format("#%02X%02X%02X", r, g, b);
     }
 
     public String getSkinColourAsHex() {
-        int r = (int)( skinColour.getRed() * 255 );
-        int g = (int)( skinColour.getGreen() * 255 );
-        int b = (int)( skinColour.getBlue() * 255 );
+        int r = (int) (skinColour.getRed() * 255);
+        int g = (int) (skinColour.getGreen() * 255);
+        int b = (int) (skinColour.getBlue() * 255);
 
-        return String.format( "#%02X%02X%02X", r, g, b);
+        return String.format("#%02X%02X%02X", r, g, b);
     }
 
     public String getLipColourAsHex() {
-        int r = (int)( lipColour.getRed() * 255 );
-        int g = (int)( lipColour.getGreen() * 255 );
-        int b = (int)( lipColour.getBlue() * 255 );
+        int r = (int) (lipColour.getRed() * 255);
+        int g = (int) (lipColour.getGreen() * 255);
+        int b = (int) (lipColour.getBlue() * 255);
 
-        return String.format( "#%02X%02X%02X", r, g, b);
+        return String.format("#%02X%02X%02X", r, g, b);
     }
 
     public boolean isFemale() {
@@ -151,7 +150,9 @@ public class Character extends ImageView {
         this.empty = empty;
     }
 
-    //called after an update to update displayed image
+    /**
+     * Called after an update to update displayed image
+     */
     private void updateImage() {
         updated = character;
         updated = changeGender(updated);
@@ -165,21 +166,40 @@ public class Character extends ImageView {
         return updated;
     }
 
-    // changes the hair colour
+    /**
+     * Changes the hair colour
+     * @param inputImage Character image to modify
+     * @return the updated image
+     */
     private Image makeHairColourChange(Image inputImage) {
         return updateColour(inputImage, defaultHairColour, hairColour);
     }
 
-    // changes the skin colour
+    /**
+     * Changes the skin colour
+     * @param inputImage Character image to modify
+     * @return the updated image
+     */
     private Image makeSkinColourChange(Image inputImage) {
         return updateColour(inputImage, defaultSkinColour, skinColour);
     }
 
+    /**
+     * Changes the lip colour
+     * @param inputImage Character image to modify
+     * @return the updated image
+     */
     private Image makeLipColourChange(Image inputImage) {
         return updateColour(inputImage, defaultLipColour, lipColour);
     }
 
-    // helper function to change skin or hair colour
+    /**
+     * Actual function to update the colour of a character's feature
+     * @param inputImage Character image to modify
+     * @param defaultColour The default colour of the character's feature
+     * @param newColour The new colour
+     * @return the updated image with a new colour of a character's feature
+     */
     private Image updateColour(Image inputImage, Color defaultColour, Color newColour) {
         int W = (int) inputImage.getWidth();
         int H = (int) inputImage.getHeight();
@@ -210,13 +230,17 @@ public class Character extends ImageView {
                     }
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Colour error");
         }
         return outputImage;
     }
 
-    //removes female hair, lips and pigtails to change gender
+    /**
+     * Function to change the character's gender.
+     * @param inputImage Character image to modify
+     * @return the updated image with no long hair and pigtails
+     */
     private Image changeGender(Image inputImage) {
         if (!this.isFemale) {
             int W = (int) inputImage.getWidth();
@@ -260,8 +284,7 @@ public class Character extends ImageView {
     }
 
     //used to change sizes for comic panels view
-    public void minimise()
-    {
+    public void minimise() {
         this.setFitHeight(100);
         this.setFitWidth(135);
         this.prefWidth(135);
@@ -269,13 +292,13 @@ public class Character extends ImageView {
     }
 
     //resets all character options to their default
-    public void reset(){
+    public void reset() {
         skinColour = defaultSkinColour;
         hairColour = defaultHairColour;
         lipColour = defaultLipColour;
         this.setDefaultOrientation(true);
         isFemale = true;
-        pose = "#empty.png";
+        poseString = "#empty.png";
         setCharacterPose("#empty.png");
     }
 }

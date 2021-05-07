@@ -12,13 +12,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
-import java.io.File;
 import java.io.IOException;
 
 public class UI {
@@ -94,7 +92,9 @@ public class UI {
         return buttonBox;
     }
 
-    //sets up the stage
+    /**
+     * Sets up the stage.
+     */
     public void setStage() {
         VBox root = new VBox();
         root.getChildren().add(createMenu());
@@ -105,7 +105,9 @@ public class UI {
         primaryStage.show();
     }
 
-    //create all of the popups at the start of the application instead of creating them each time a popup is used
+    /**
+     * Creates all of the popups at the start of the application rather than creating them each time a popup is used.
+     */
     private void createPopups() {
         createSelectCharacterWarning();
         createBottomNarrationPopup();
@@ -115,7 +117,11 @@ public class UI {
         createHtmlTitlePopup();
     }
 
-    //top menu pane for file dropdown
+    /**
+     * Creates a menu bar at the top of the application.
+     *
+     * @return a menu bar with its menus
+     */
     public MenuBar createMenu() {
         Menu file = comicStripController.FileMenu();
         Menu panel = panelController.PanelMenu();
@@ -128,22 +134,11 @@ public class UI {
         return mb;
     }
 
-    public void LoadFromXML() {
-        FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml");
-        fileChooser.getExtensionFilters().add(extFilter);
-        File file = fileChooser.showOpenDialog(primaryStage);
-
-        if (file != null) {
-            panelController.clearWorkPanel();
-            comicPanels.getChildren().clear();
-
-            XmlLoader xmlLoader = new XmlLoader();
-            xmlLoader.load(file, this);
-        }
-    }
-
-    //view for everything below the top menu
+    /**
+     * Creates the structure of the application.
+     *
+     * @return a grid pane that contains all the UI elements
+     */
     public GridPane createView() {
         GridPane view = new GridPane();
         view.setPadding(new Insets(15));
@@ -157,13 +152,21 @@ public class UI {
         return view;
     }
 
-    //colour pallet pane
+    /**
+     * Creates colour groups for changing a character's features.
+     *
+     * @return a colour palette for this UI
+     */
     public ColourPalette createColourPalette() {
         palette = new ColourPalette(this);
         return palette;
     }
 
-    //pane for the buttons
+    /**
+     * Creates the buttons that is used to modify content on the working panel.
+     *
+     * @return a tile pane with all the buttons
+     */
     public TilePane createButtons() {
         buttonBox = new TilePane();
         buttonBox.setPrefSize(375, 500);
@@ -176,7 +179,11 @@ public class UI {
         return buttonBox;
     }
 
-    //pane to view past created comic panels
+    /**
+     * Creates the scrollable pane that contains every saved comic panels.
+     *
+     * @return a scroll pane with comic panels as its content
+     */
     public ScrollPane createComicsView() {
         ScrollPane scroll = new ScrollPane();
         scroll.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 5;");
@@ -234,7 +241,9 @@ public class UI {
         EventHandler<ActionEvent> eventHandler = e -> {
             TextBubble tBub = getCurrentSpeechBubble();
             String output = prepareTBub(textBox.getText(), tBub);
-            if (output != null) {
+            if (output == null) {
+                warning.setText("Text Too Long");
+            } else {
                 input.setText(textBox.getText());
                 tBub.setText(output);
                 textBubbleInput.hide();
@@ -246,8 +255,7 @@ public class UI {
                     else
                         tBub.setThought();
                 }
-            } else
-                warning.setText("Text Too Long");
+            }
         };
         textBox.setOnAction(eventHandler);
         textBubbleInput.setOnHidden(e -> {
@@ -294,12 +302,12 @@ public class UI {
 
         EventHandler<ActionEvent> eventHandler = e -> {
             String output = prepareNarration(textBox.getText(), narration);
-            if (output != null) {
+            if (output == null) {
+                warning.setText("Text Too Long");
+            } else {
                 input.setText(textBox.getText());
                 narration.setText(output);
                 inputWindow.hide();
-            } else {
-                warning.setText("Text Too Long");
             }
         };
         textBox.setOnAction(eventHandler);
@@ -362,11 +370,12 @@ public class UI {
 
     //prepares String for text bubbles and returns null if exceeds acceptable length
     public String prepareString(String s, int numLines, int charPerLine) {
-        String output = "";
+        String output;
         int lastSpace = 0;
         int lineLength = 0;
         char curr;
         int index = 0;
+        StringBuilder outputBuilder = new StringBuilder();
         for (int i = 0; i < s.length(); i++) {
             curr = s.charAt(i);
             lineLength++;
@@ -375,16 +384,17 @@ public class UI {
             }
             if (lineLength == charPerLine && i != (s.length() - 1)) {
                 if (i == lastSpace || (i - lastSpace >= charPerLine - 1))
-                    output = output + curr + "\n";
+                    outputBuilder.append(curr).append("\n");
                 else {
-                    output = output.substring(0, lastSpace + index + 1) + "\n" + output.substring(lastSpace + index + 1) + curr;
+                    outputBuilder = new StringBuilder(outputBuilder.substring(0, lastSpace + index + 1) + "\n" + outputBuilder.substring(lastSpace + index + 1) + curr);
                 }
 
                 lineLength = (i - lastSpace < charPerLine - 1) ? (i - lastSpace) : 0;
                 index++;
             } else
-                output = output + curr;
+                outputBuilder.append(curr);
         }
+        output = outputBuilder.toString();
         if (index + 1 > numLines)
             output = null;
         return output;
@@ -423,7 +433,7 @@ public class UI {
     }
 
     //creates and gets character image options in Tilepane
-    public TilePane createPoses() {
+    private TilePane createPoses() {
         TilePane Poses = new TilePane();
         Poses.setMaxSize(500, 10);
         Poses.setPrefColumns(2);
@@ -457,7 +467,7 @@ public class UI {
     private void changePose(Node button, String pose) {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             selectedCharacter.setCharacterPose(pose);
-            selectedCharacter.setPose(pose);
+            selectedCharacter.setPoseString(pose);
             workPanel.setEditMode(true);
             if (selectedCharacter.isEmpty()) {
                 if (workPanel.getLeftCharacter() == selectedCharacter)

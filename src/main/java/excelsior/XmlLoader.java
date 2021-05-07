@@ -2,6 +2,7 @@ package excelsior;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -13,8 +14,28 @@ import java.io.File;
 public class XmlLoader {
     UI ui;
 
-    public void load(File inputFile, UI ui) {
+    public XmlLoader(UI ui) {
         this.ui = ui;
+    }
+
+    public void load() {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showOpenDialog(ui.getPrimaryStage());
+
+        if (file != null) {
+            long start = System.nanoTime();
+            ui.getPanelController().clearWorkPanel();
+            ui.getComicPanels().getChildren().clear();
+
+            loadFile(file);
+            double elapsedTimeInSec = (System.nanoTime() - start) * 1.0e-9;
+            System.out.println("Loaded In: " + elapsedTimeInSec);
+        }
+    }
+
+    private void loadFile(File inputFile) {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -26,7 +47,7 @@ public class XmlLoader {
         }
     }
 
-    public void parsePanels(NodeList nl, HBox comicPanels) {
+    private void parsePanels(NodeList nl, HBox comicPanels) {
         nl = nl.item(0).getChildNodes();
         int counter = comicPanels.getChildren().size();
         for (int temp = 0; temp < nl.getLength(); temp++) {
@@ -39,7 +60,7 @@ public class XmlLoader {
 
     }
 
-    public void parse(Node n, ComicPane comic) {
+    private void parse(Node n, ComicPane comic) {
         if (n.getNodeType() == Node.ELEMENT_NODE) {
             Element eElement = (Element) n;
             comic.setTopNarration(parseAbove(eElement.getElementsByTagName("above")));
@@ -51,7 +72,7 @@ public class XmlLoader {
         }
     }
 
-    public void parseLeft(NodeList left, ComicPane comic) {
+    private void parseLeft(NodeList left, ComicPane comic) {
         if (left.getLength() > 0) {
             Node nNode = left.item(0);
 
@@ -63,7 +84,7 @@ public class XmlLoader {
         }
     }
 
-    public void parseRight(NodeList right, ComicPane comic) {
+    private void parseRight(NodeList right, ComicPane comic) {
         if (right.getLength() > 0) {
             Node nNode = right.item(0);
 
@@ -76,7 +97,7 @@ public class XmlLoader {
         }
     }
 
-    public TextBubble parseBalloon(NodeList balloon) {
+    private TextBubble parseBalloon(NodeList balloon) {
         TextBubble tBub = new TextBubble();
         if (balloon.getLength() > 0) {
             Node nNode = balloon.item(0);
@@ -95,7 +116,7 @@ public class XmlLoader {
         return tBub;
     }
 
-    public Narration parseAbove(NodeList above) {
+    private Narration parseAbove(NodeList above) {
         Narration label = new Narration();
         if (above.getLength() > 0) {
             Node nNode = above.item(0);
@@ -107,7 +128,7 @@ public class XmlLoader {
         return label;
     }
 
-    public Narration parseBelow(NodeList below) {
+    private Narration parseBelow(NodeList below) {
         Narration label = new Narration();
         if (below.getLength() > 0) {
             Node nNode = below.item(0);
@@ -119,7 +140,7 @@ public class XmlLoader {
         return label;
     }
 
-    public Character parseCharacter(NodeList figure) {
+    private Character parseCharacter(NodeList figure) {
         Character c = new Character();
         for (int count = 0; count < figure.getLength(); count++) {
             Node nNode = figure.item(count);
@@ -131,13 +152,12 @@ public class XmlLoader {
                 } else {
                     String character = eElement.getElementsByTagName("pose").item(0).getTextContent();
                     try {
-
-                        if (character.contains(".png")) {
-                            c.setCharacterPose(character);
-                            c.setPose(character);
-                        }
-                        else
+                        if (!character.contains(".png")) {
                             c.setCharacterPose(character + ".png");
+                        } else {
+                            c.setCharacterPose(character);
+                            c.setPoseString(character);
+                        }
                     }catch (Exception e){
                         System.out.println("could not find character image: " + character);
                     }
@@ -173,7 +193,9 @@ public class XmlLoader {
 
     private Color getColour(String colourString){
         Color colour;
-        if(colourString.startsWith("#")){
+        if (!colourString.startsWith("#")) {
+            colour = ColourMap.getColorNamed(colourString);
+        } else {
             try{
                 colour = Color.web(colourString);
                 if(colour.getRed()*255 <9)
@@ -182,8 +204,6 @@ public class XmlLoader {
                 return null;
             }
         }
-        else
-            colour = ColourMap.getColorNamed(colourString);
 
         return colour;
     }

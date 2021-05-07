@@ -3,7 +3,6 @@ package excelsior;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
@@ -132,8 +131,8 @@ public class ComicPane extends GridPane {
             this.getLeftCharacter().setEmpty(false);
         }
 
-        this.getLeftCharacter().setPose(panel.getLeftCharacter().getPose());
-        this.getRightCharacter().setPose(panel.getRightCharacter().getPose());
+        this.getLeftCharacter().setPoseString(panel.getLeftCharacter().getPoseString());
+        this.getRightCharacter().setPoseString(panel.getRightCharacter().getPoseString());
 
         this.getRightCharacter().setDefaultOrientation(panel.getRightCharacter().isDefaultOrientation());
         this.getLeftCharacter().setDefaultOrientation(panel.getLeftCharacter().isDefaultOrientation());
@@ -165,8 +164,8 @@ public class ComicPane extends GridPane {
         this.getRightCharacter().setFemale(panel.getRightCharacter().isFemale());
         this.getLeftCharacter().setFemale(panel.getLeftCharacter().isFemale());
 
-        this.getLeftCharacter().setPose(panel.getLeftCharacter().getPose());
-        this.getRightCharacter().setPose(panel.getRightCharacter().getPose());
+        this.getLeftCharacter().setPoseString(panel.getLeftCharacter().getPoseString());
+        this.getRightCharacter().setPoseString(panel.getRightCharacter().getPoseString());
     }
 
     private void fillPane() {

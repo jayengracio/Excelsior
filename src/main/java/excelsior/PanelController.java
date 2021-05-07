@@ -25,110 +25,67 @@ public class PanelController {
         this.comicPanels = ui.getComicPanels();
     }
 
-    // disables delete button if there are no panels in the comic strip
-    public void deleteAvailability() {
+    /**
+     * Enables the delete button
+     */
+    public void disableDelete() {
+        this.delete.setDisable(true);
+    }
+
+    /**
+     * Disables the delete button if there are no saved panels in the comic strip
+     */
+    public void checkDeleteAvailability() {
         if (!ui.getComicPanels().getChildren().isEmpty()) {
             this.delete.setDisable(false);
         }
     }
 
-    public void saveComicPanel() {
-        ComicPane newPanel = new ComicPane();
-
-        // sets the new panel as the current workspace panel
-        newPanel.setTo(workPanel, false);
-        selectComicPanel(newPanel);
-
-        // checks if the selected panel already exists within in comicPanels before saving/overwriting
-        if (comicPanels.getChildren().contains(selectedPanel)) {
-            int index = comicPanels.getChildren().indexOf(selectedPanel);
-            comicPanels.getChildren().set(index, newPanel);
-        } else {
-            comicPanels.getChildren().add(newPanel);
-        }
-
-        ui.resetAppFace();
-    }
-
-    public void deleteComicPanel() {
-        // confirmation alert
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm Deletion");
-        alert.setHeaderText(null);
-        alert.setContentText("Do you wish to delete this panel?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            comicPanels.getChildren().remove(selectedPanel);
-            ui.resetAppFace();
-        }
-    }
-
-    public void editComicPanel() {
-        ui.resetAppFace();
-        workPanel.setTo(selectedPanel, true);
-    }
-
-    public void newComicPanel() {
-        DropShadow drop = new DropShadow();
-        drop.setSpread(0.30);
-        drop.setColor(Color.DARKORANGE);
-
-        if (workPanel.isInEditMode()) {
-            // switching panels while there are active change prompts a warning
-            Alert alert = changesAlert();
-            ButtonType save = alert.getButtonTypes().get(0);
-            ButtonType cont = alert.getButtonTypes().get(1);
-
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent()) {
-                if (result.get() == save) {         // when choosing to save
-                    workPanel.setEditMode(false);
-                    saveComicPanel();
-                    clearWorkPanel();
-                } else if (result.get() == cont) {  // when choosing to not save & continue
-                    workPanel.setEditMode(false);
-                    clearWorkPanel();
-                }
-            }
-        } else {
-            clearWorkPanel();
-        }
-    }
-
-    // clears the working panel
+    /**
+     * Clears the working panel
+     */
     public void clearWorkPanel() {
         unselectAllPanels();
         ui.resetAppFace();
         selectedPanel = null;
     }
 
-    // gives the panel functions to act as a "button"
+    /**
+     * This gives saved panels functionalities in the form of event handlers. Clicking a saved panel will select it.
+     * Selecting a different panel while there are active unsaved changes will prompt an alert warning.
+     *
+     * @param panel in the comic strip
+     */
     public void selectComicPanel(ComicPane panel) {
         panel.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            // switching panels while there are active change prompts a warning
-            if (workPanel.isInEditMode()) {
+            delete.setDisable(false);
+            if (!workPanel.isInEditMode()) {
+                selectOtherPanel(panel);
+            } else {
                 Alert alert = changesAlert();
                 ButtonType save = alert.getButtonTypes().get(0);
                 ButtonType cont = alert.getButtonTypes().get(1);
 
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent()) {
-                    if (result.get() == save) {         // when choosing to save
+                    if (result.get() == save) {
                         workPanel.setEditMode(false);
                         saveComicPanel();
                         selectOtherPanel(panel);
-                    } else if (result.get() == cont) {  // when choosing to not save & continue
+                    } else if (result.get() == cont) {
                         workPanel.setEditMode(false);
                         selectOtherPanel(panel);
                     }
                 }
-            } else {
-                selectOtherPanel(panel);
             }
         });
     }
 
+    /**
+     * Creates the menu that controls saving, creating and deleting panels
+     *
+     * @return the panel menu with items that have key bindings
+     */
     public Menu PanelMenu() {
         Menu menu = new Menu("Panel");
 
@@ -149,21 +106,102 @@ public class PanelController {
 
         save.setOnAction(actionEvent -> {
             this.saveComicPanel();
-            deleteAvailability();
+            checkDeleteAvailability();
         });
 
         delete.setOnAction(actionEvent -> {
             this.deleteComicPanel();
-            if (comicPanels.getChildren().isEmpty()) {
-                delete.setDisable(true);
-            }
+            if (comicPanels.getChildren().isEmpty()) delete.setDisable(true);
+            if (ui.getSelectedCharacter() == null) delete.setDisable(true);
         });
 
-        create.setOnAction(actionEvent -> this.newComicPanel());
+        create.setOnAction(actionEvent -> {
+            this.newComicPanel();
+            if (ui.getSelectedCharacter() == null) delete.setDisable(true);
+        });
 
         return menu;
     }
 
+    /**
+     * Function to save a panel. It clones the work panel into a new ComicPane and adds it to the comic panels.
+     * Saving a selected panel will overwrite that panel.
+     */
+    private void saveComicPanel() {
+        ComicPane newPanel = new ComicPane();
+
+        newPanel.setTo(workPanel, false);
+        selectComicPanel(newPanel);
+
+        if (!comicPanels.getChildren().contains(selectedPanel)) {
+            comicPanels.getChildren().add(newPanel);
+        } else {
+            int index = comicPanels.getChildren().indexOf(selectedPanel);
+            comicPanels.getChildren().set(index, newPanel);
+        }
+
+        ui.resetAppFace();
+    }
+
+    /**
+     * Function to delete a panel. Will prompt a warning alert asking users to confirm deletion.
+     */
+    private void deleteComicPanel() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Deletion");
+        alert.setHeaderText(null);
+        alert.setContentText("Do you wish to delete this panel?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            comicPanels.getChildren().remove(selectedPanel);
+            ui.resetAppFace();
+        }
+    }
+
+    /**
+     * Function to bring a saved panel to the working panel for editing
+     */
+    private void editComicPanel() {
+        ui.resetAppFace();
+        workPanel.setTo(selectedPanel, true);
+    }
+
+    /**
+     * Function to create a new comic panel. This doubles as the "unselect" panel.
+     * Switching panels while there are active changes prompts a warning.
+     */
+    private void newComicPanel() {
+        DropShadow drop = new DropShadow();
+        drop.setSpread(0.30);
+        drop.setColor(Color.DARKORANGE);
+
+        if (!workPanel.isInEditMode()) {
+            clearWorkPanel();
+        } else {
+            Alert alert = changesAlert();
+            ButtonType save = alert.getButtonTypes().get(0);
+            ButtonType cont = alert.getButtonTypes().get(1);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent()) {
+                if (result.get() == save) {
+                    workPanel.setEditMode(false);
+                    saveComicPanel();
+                    clearWorkPanel();
+                } else if (result.get() == cont) {
+                    workPanel.setEditMode(false);
+                    clearWorkPanel();
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates an alert for when unsaved changes are detected
+     *
+     * @return an alert
+     */
     private Alert changesAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Unsaved Changes");
@@ -179,6 +217,11 @@ public class PanelController {
         return alert;
     }
 
+    /**
+     * Function to select another panel. Selecting another panel will bring it the the working panel for instant editing.
+     *
+     * @param panel to select
+     */
     private void selectOtherPanel(ComicPane panel) {
         DropShadow drop = new DropShadow();
         drop.setSpread(0.30);
@@ -190,8 +233,12 @@ public class PanelController {
         panel.setEffect(drop);
     }
 
+    /**
+     * Unselects all the panel (visually)
+     */
     private void unselectAllPanels() {
-        for (int i = 0; i < comicPanels.getChildren().size(); i++) {
+        int size = comicPanels.getChildren().size();
+        for (int i = size - 1; i >= 0; i--) {
             Node temp = comicPanels.getChildren().get(i);
             temp.setEffect(null);
         }

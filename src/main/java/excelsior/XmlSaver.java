@@ -26,7 +26,6 @@ public class XmlSaver {
     public void save() {
         HBox comicPanels = ui.getComicPanels();
         try {
-            // document
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.newDocument();
@@ -40,7 +39,7 @@ public class XmlSaver {
             for (int i = 0; i < comicPanels.getChildren().size(); i++) {
                 ComicPane pane = (ComicPane) comicPanels.getChildren().get(i);
 
-                // PANEL START
+                // PANEL
                 Element panel = doc.createElement("panel");
                 panels.appendChild(panel);
 
@@ -48,7 +47,7 @@ public class XmlSaver {
                 above.appendChild(doc.createTextNode(pane.getTopNarration().getText()));
                 panel.appendChild(above);
 
-                // LEFT CHARACTER START
+                // LEFT CHARACTER
                 Element left = doc.createElement("left");
                 panel.appendChild(left);
 
@@ -72,7 +71,7 @@ public class XmlSaver {
                 figure.appendChild(lips);
 
                 Element pose = doc.createElement("pose");
-                pose.appendChild(doc.createTextNode(pane.getLeftCharacter().getPose()));
+                pose.appendChild(doc.createTextNode(pane.getLeftCharacter().getPoseString()));
                 figure.appendChild(pose);
 
                 Element facing = doc.createElement("facing");
@@ -94,7 +93,7 @@ public class XmlSaver {
                 content.appendChild(doc.createTextNode(s));
                 balloon.appendChild(content);
 
-                // RIGHT CHARACTER START
+                // RIGHT CHARACTER
                 Element right = doc.createElement("right");
                 panel.appendChild(right);
 
@@ -118,7 +117,7 @@ public class XmlSaver {
                 rFigure.appendChild(rLips);
 
                 Element rPose = doc.createElement("pose");
-                rPose.appendChild(doc.createTextNode(pane.getRightCharacter().getPose()));
+                rPose.appendChild(doc.createTextNode(pane.getRightCharacter().getPoseString()));
                 rFigure.appendChild(rPose);
 
                 Element rFacing = doc.createElement("facing");
@@ -143,9 +142,7 @@ public class XmlSaver {
                 Element below = doc.createElement("below");
                 below.appendChild(doc.createTextNode(pane.getBottomNarration().getText()));
                 panel.appendChild(below);
-                // PANEL END
             }
-            // SAVE
             openSaveDialog(doc);
         } catch (Exception e) {
             e.printStackTrace();
@@ -165,12 +162,15 @@ public class XmlSaver {
         DOMSource source = new DOMSource(doc);
 
         if (file != null) {
+            long start = System.nanoTime();
             StreamResult result = new StreamResult(file);
             transformer.transform(source, result);
 
-            // debug
-            //StreamResult consoleResult = new StreamResult(System.out);
-            //transformer.transform(source, consoleResult);
+            /*// debug
+            StreamResult consoleResult = new StreamResult(System.out);
+            transformer.transform(source, consoleResult);*/
+            double elapsedTimeInSec = (System.nanoTime() - start) * 1.0e-9;
+            System.out.println("Saved In: " + elapsedTimeInSec);
         }
     }
 }

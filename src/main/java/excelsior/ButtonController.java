@@ -21,8 +21,36 @@ public class ButtonController {
         return isSpeechBubble;
     }
 
-    // button function to select left character and/or select pose
-    public void leftCharacterButton(Node button) {
+    /**
+     * Gives all the buttons in the button box of UI its functionalities
+     */
+    public void start() {
+        ui.getButtonBox().getChildren().add(0, new IconButtons("Left.png"));
+        ui.getButtonBox().getChildren().add(1, new IconButtons("Right.png"));
+        ui.getButtonBox().getChildren().add(2, new IconButtons("Flip.png"));
+        ui.getButtonBox().getChildren().add(3, new IconButtons("Gender.png"));
+        ui.getButtonBox().getChildren().add(4, new IconButtons("Speech Bubble.png"));
+        ui.getButtonBox().getChildren().add(5, new IconButtons("Top Narration.png"));
+        ui.getButtonBox().getChildren().add(6, new IconButtons("Thought Bubble.png"));
+        ui.getButtonBox().getChildren().add(7, new IconButtons("Bot Narration.png"));
+
+        this.leftCharacterButton(ui.getButtonBox().getChildren().get(0));
+        this.rightCharacterButton(ui.getButtonBox().getChildren().get(1));
+        this.switchOrientationButton(ui.getButtonBox().getChildren().get(2));
+        this.changeGenderButton(ui.getButtonBox().getChildren().get(3));
+        this.speechBubbleButton(ui.getButtonBox().getChildren().get(4));
+        this.topNarrationButton(ui.getButtonBox().getChildren().get(5));
+        this.thoughtBubbleButton(ui.getButtonBox().getChildren().get(6));
+        this.botNarrationButton(ui.getButtonBox().getChildren().get(7));
+    }
+
+    /**
+     * Adds button event handler for selecting the left character in the work panel when clicked.
+     * Its functionality to changing the character's pose when this button is already active.
+     *
+     * @param button node of the left character in the button box
+     */
+    private void leftCharacterButton(Node button) {
         Button cur = (Button) button;
         Button right = (Button) ui.getButtonBox().getChildren().get(1);
         buttonTooltip(button, "Select Character");
@@ -47,8 +75,13 @@ public class ButtonController {
         });
     }
 
-    // button function to select right character and/or select pose
-    public void rightCharacterButton(Node button) {
+    /**
+     * Adds button event handler for selecting the right character in the work panel when clicked.
+     * Its functionality to changing the character's pose when this button is already active.
+     *
+     * @param button node of the right character in the button box
+     */
+    private void rightCharacterButton(Node button) {
         Button cur = (Button) button;
         Button left = (Button) ui.getButtonBox().getChildren().get(0);
         buttonTooltip(button, "Select Character");
@@ -73,8 +106,12 @@ public class ButtonController {
         });
     }
 
-    // adds event handler to flip currently selected character on x axis when button input is clicked
-    public void switchOrientationButton(Node button) {
+    /**
+     * Adds button event handler for flipping the selected character on its x axis when clicked
+     *
+     * @param button node for flip orientation in the button box
+     */
+    private void switchOrientationButton(Node button) {
         buttonTooltip(button, "Flip where the character is facing");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (ui.getSelectedCharacter() == null || ui.getSelectedCharacter().isEmpty()) {
@@ -87,8 +124,12 @@ public class ButtonController {
         });
     }
 
-    // button function to change character's gender
-    public void changeGenderButton(Node button) {
+    /**
+     * Adds button event handler for changing a character's gender.
+     *
+     * @param button node for gender in the button box
+     */
+    private void changeGenderButton(Node button) {
         buttonTooltip(button, "Change the gender of the character");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (ui.getSelectedCharacter() == null || ui.getSelectedCharacter().isEmpty()) {
@@ -101,8 +142,12 @@ public class ButtonController {
         });
     }
 
-    // button function to insert a speech bubble
-    public void speechBubbleButton(Node button) {
+    /**
+     * Adds button event handler for inserting a speech bubble for the selected character
+     *
+     * @param button node for the speech bubble in the button box
+     */
+    private void speechBubbleButton(Node button) {
         buttonTooltip(button, "Add a speech bubble for the selected character");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (ui.getSelectedCharacter() == null || ui.getSelectedCharacter().isEmpty()) {
@@ -116,8 +161,12 @@ public class ButtonController {
         });
     }
 
-    // button function to insert a thought bubble
-    public void thoughtBubbleButton(Node button) {
+    /**
+     * Adds button event handler for inserting a thought bubble for the selected character
+     *
+     * @param button node for the thought bubble in the button box
+     */
+    private void thoughtBubbleButton(Node button) {
         buttonTooltip(button, "Add a thought bubble for the selected character");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (ui.getSelectedCharacter() == null || ui.getSelectedCharacter().isEmpty()) {
@@ -131,8 +180,12 @@ public class ButtonController {
         });
     }
 
-    // button function to insert the top narration text
-    public void topNarrationButton(Node button) {
+    /**
+     * Adds button event handler to insert the top narration text of the comic panel
+     *
+     * @param button node for the top narration in the button box
+     */
+    private void topNarrationButton(Node button) {
         buttonTooltip(button, "Add the top narration of the panel");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             ui.getTopNarrationInput().show(ui.getPrimaryStage());
@@ -141,8 +194,12 @@ public class ButtonController {
         });
     }
 
-    // button function to insert the bottom narration text
-    public void botNarrationButton(Node button) {
+    /**
+     * Adds button event handler to insert the bottom narration text of the comic panel
+     *
+     * @param button node for the bottom narration in the button box
+     */
+    private void botNarrationButton(Node button) {
         buttonTooltip(button, "Add the bottom narration of the panel");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             ui.getBottomNarrationInput().show(ui.getPrimaryStage());
@@ -151,28 +208,12 @@ public class ButtonController {
         });
     }
 
-    // insert button functionalities
-    public void start() {
-        ui.getButtonBox().getChildren().add(0, new IconButtons("Left.png"));
-        ui.getButtonBox().getChildren().add(1, new IconButtons("Right.png"));
-        ui.getButtonBox().getChildren().add(2, new IconButtons("Flip.png"));
-        ui.getButtonBox().getChildren().add(3, new IconButtons("Gender.png"));
-        ui.getButtonBox().getChildren().add(4, new IconButtons("Speech Bubble.png"));
-        ui.getButtonBox().getChildren().add(5, new IconButtons("Top Narration.png"));
-        ui.getButtonBox().getChildren().add(6, new IconButtons("Thought Bubble.png"));
-        ui.getButtonBox().getChildren().add(7, new IconButtons("Bot Narration.png"));
-
-        this.leftCharacterButton(ui.getButtonBox().getChildren().get(0));
-        this.rightCharacterButton(ui.getButtonBox().getChildren().get(1));
-        this.switchOrientationButton(ui.getButtonBox().getChildren().get(2));
-        this.changeGenderButton(ui.getButtonBox().getChildren().get(3));
-        this.speechBubbleButton(ui.getButtonBox().getChildren().get(4));
-        this.topNarrationButton(ui.getButtonBox().getChildren().get(5));
-        this.thoughtBubbleButton(ui.getButtonBox().getChildren().get(6));
-        this.botNarrationButton(ui.getButtonBox().getChildren().get(7));
-    }
-
-    // help function to help create tooltips for buttons
+    /**
+     * Help function to create tooltips for buttons
+     *
+     * @param button of which to add the tooltip for
+     * @param text   for tooltip information
+     */
     private void buttonTooltip(Node button, String text) {
         Button castedButton = (Button) button;
         castedButton.setTooltip(new Tooltip(text));
@@ -180,7 +221,12 @@ public class ButtonController {
         castedButton.getTooltip().setStyle("-fx-font-size: 12;");
     }
 
-    // help function to create the tooltips for character button
+    /**
+     * Help function to create character button as well as the change character pose button tooltips
+     *
+     * @param current button
+     * @param next    button
+     */
     public void createCharacterButtonTooltip(Button current, Button next) {
         if (next == null) {
             current.getTooltip().setText("Select Character");
