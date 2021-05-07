@@ -12,6 +12,7 @@ import java.util.Optional;
 
 public class ComicStripController {
     private final UI ui;
+    private HtmlSaver htmlSaver;
 
     public ComicStripController(UI ui) {
         this.ui = ui;
@@ -19,7 +20,7 @@ public class ComicStripController {
 
     public Menu FileMenu() {
         XmlSaver xmlSaver = new XmlSaver(ui);
-        HtmlSaver htmlSaver = new HtmlSaver(ui);
+        htmlSaver = new HtmlSaver(ui);
         Menu menu = new Menu("File");
 
         MenuItem newStrip = new MenuItem("New");
@@ -67,5 +68,10 @@ public class ComicStripController {
             ui.getPanelController().clearWorkPanel();
             ui.getComicPanels().getChildren().clear();
         }
+    }
+
+    public HtmlSaver getHtmlSaver()
+    {
+        return htmlSaver;
     }
 }

@@ -35,6 +35,7 @@ public class UI {
     private HighlightedPopup bottomNarrationInput;
     private HighlightedPopup topNarrationInput;
     private HighlightedPopup textBubbleInput;
+    private HighlightedPopup htmlTitleInput;
     private ColourPalette palette;
 
     public UI(Stage primaryStage) {
@@ -85,6 +86,10 @@ public class UI {
         return textBubbleInput;
     }
 
+    public HighlightedPopup getHtmlTitleInput() {
+        return htmlTitleInput;
+    }
+
     public TilePane getButtonBox() {
         return buttonBox;
     }
@@ -107,6 +112,7 @@ public class UI {
         createTopNarrationPopup();
         createCharacterPoses();
         createTextBubbleInput();
+        createHtmlTitlePopup();
     }
 
     //top menu pane for file dropdown
@@ -181,6 +187,31 @@ public class UI {
         scroll.setContent(comicPanels);
         scroll.setPannable(true);
         return scroll;
+    }
+
+    private void createHtmlTitlePopup() {
+        VBox container = new VBox();
+        container.setPadding(new Insets(15));
+        container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3; -fx-font-size: 18px;");
+        container.setAlignment(Pos.CENTER);
+
+        TextField textBox = new TextField("Enter Comic Title");
+        container.getChildren().add(textBox);
+
+
+        htmlTitleInput = new HighlightedPopup(primaryStage);
+        htmlTitleInput.getContent().add(container);
+
+        EventHandler<ActionEvent> eventHandler = e -> {
+            comicStripController.getHtmlSaver().setComicTitle(textBox.getText());
+            comicStripController.getHtmlSaver().htmlFormer();
+            htmlTitleInput.hide();
+        };
+        textBox.setOnAction(eventHandler);
+        htmlTitleInput.setOnHidden(e -> {
+            textBox.setText("Enter Comic Title");
+            textBox.selectAll();
+        });
     }
 
     // speech bubble helper
