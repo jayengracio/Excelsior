@@ -144,7 +144,6 @@ public class HtmlSaver {
     public void createImages(String fileLocation){
         for (int i = 0; i < ui.getComicPanels().getChildren().size(); i++) {
             ComicPane pane = (ComicPane) ui.getComicPanels().getChildren().get(i);
-            ui.resetAppFace();
             ui.getWorkPanel().setTo(pane, true);
             ui.getWorkPanel().saveAsPng(i + ".png", fileLocation);
             ui.resetAppFace();

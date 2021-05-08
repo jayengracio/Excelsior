@@ -58,7 +58,10 @@ public class ComicStripController {
             ui.getPanelController().disableDelete();
         });
 
-        saveHTML.setOnAction(actionEvent -> htmlSaver.save());
+        saveHTML.setOnAction(actionEvent -> {
+            ui.getPanelController().newComicPanel();
+            htmlSaver.save();
+        });
 
         return menu;
     }

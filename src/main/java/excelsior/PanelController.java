@@ -171,7 +171,7 @@ public class PanelController {
      * Function to create a new comic panel. This doubles as the "unselect" panel.
      * Switching panels while there are active changes prompts a warning.
      */
-    private void newComicPanel() {
+    public void newComicPanel() {
         DropShadow drop = new DropShadow();
         drop.setSpread(0.30);
         drop.setColor(Color.DARKORANGE);
