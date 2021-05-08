@@ -1,10 +1,16 @@
 package excelsior;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 
 public class ComicPane extends GridPane {
     private  Narration topNarration = new Narration();
@@ -196,5 +202,17 @@ public class ComicPane extends GridPane {
         rightSpeechBubble.minimise();
         leftCharacter.minimise();
         rightCharacter.minimise();
+    }
+
+    public void saveAsPng(String name, String fileLocation) {
+        ComicPane clone = new ComicPane();
+        clone.clone(this);
+        WritableImage image = this.snapshot(new SnapshotParameters(), null);
+        try {
+            File file = new File(fileLocation + "\\" + name);
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+        } catch (IOException e) {
+            System.out.println("Image not found");
+        }
     }
 }

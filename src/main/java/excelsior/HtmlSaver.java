@@ -40,7 +40,7 @@ public class HtmlSaver {
                         folderCreated = true;
                         currentComicFolderIndex = i;
                         ui.getHtmlTitleInput().show(ui.getPrimaryStage());
-                        //getComicImages(String comicDir.getAbsolutePath()) which will place comic panes png images in the newly created folder
+                        createImages(comicDir.getAbsolutePath()); //which will place comic panes png images in the newly created folder
                     }
                     i++;
                 }
@@ -139,5 +139,15 @@ public class HtmlSaver {
 
     public void setComicTitle(String comicTitle) {
         this.comicTitle = comicTitle;
+    }
+
+    public void createImages(String fileLocation){
+        for (int i = 0; i < ui.getComicPanels().getChildren().size(); i++) {
+            ComicPane pane = (ComicPane) ui.getComicPanels().getChildren().get(i);
+            ui.resetAppFace();
+            ui.getWorkPanel().setTo(pane, true);
+            ui.getWorkPanel().saveAsPng(i + ".png", fileLocation);
+            ui.resetAppFace();
+        }
     }
 }
