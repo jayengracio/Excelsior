@@ -32,6 +32,7 @@ Files Created:
 Files Edited:
 - UI
 - XMLLoader
+- ComicPane
 
 ----------
 ChangeList
@@ -63,3 +64,7 @@ XMLLoader:
 
 HtmlSaver:
     - class used to save the comic as a html comic
+    - Loops through all comic panels and converts them into pngs using the ComicPane method
+
+ComicPane:
+    - Method which converts pane to a png
