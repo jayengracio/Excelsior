@@ -1,6 +1,5 @@
 package excelsior;
 
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
@@ -45,7 +44,7 @@ public class PanelController {
      * Clears the working panel
      */
     public void clearWorkPanel() {
-        unselectAllPanels();
+        unselectCurrentPanel();
         ui.resetAppFace();
         selectedPanel = null;
     }
@@ -172,10 +171,6 @@ public class PanelController {
      * Switching panels while there are active changes prompts a warning.
      */
     public void newComicPanel() {
-        DropShadow drop = new DropShadow();
-        drop.setSpread(0.30);
-        drop.setColor(Color.DARKORANGE);
-
         if (!workPanel.isInEditMode()) {
             clearWorkPanel();
         } else {
@@ -227,7 +222,7 @@ public class PanelController {
         drop.setSpread(0.30);
         drop.setColor(Color.RED);
 
-        unselectAllPanels();
+        unselectCurrentPanel();
         selectedPanel = panel;
         editComicPanel();
         panel.setEffect(drop);
@@ -236,11 +231,10 @@ public class PanelController {
     /**
      * Unselects all the panel (visually)
      */
-    private void unselectAllPanels() {
-        int size = comicPanels.getChildren().size();
-        for (int i = size - 1; i >= 0; i--) {
-            Node temp = comicPanels.getChildren().get(i);
-            temp.setEffect(null);
+    private void unselectCurrentPanel() {
+        if (comicPanels.getChildren().contains(selectedPanel)) {
+            int index = comicPanels.getChildren().indexOf(selectedPanel);
+            comicPanels.getChildren().get(index).setEffect(null);
         }
     }
 }
