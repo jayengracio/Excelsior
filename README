@@ -27,6 +27,7 @@ Files Created:
 - ComicStripController
 - ButtonController
 - PanelController
+- HtmlSaver
 
 Files Edited:
 - UI
@@ -43,6 +44,7 @@ UI:
     - Attempts in cleaning up the god class.
     - Moved lots of functions to their own specified classes.
     - Moved XML file loading method to XMLLoader
+    - New Highlighted Popup to change html title of comic
 
 ComicStripController:
     - New class that contains all functionalities of saving/loading the comic strip.
@@ -58,3 +60,6 @@ ButtonController:
 XMLLoader:
     - Changed access modifiers for most functions.
     - Refactored public functions to make it similar to XMLSaver when called.
+
+HtmlSaver:
+    - class used to save the comic as a html comic

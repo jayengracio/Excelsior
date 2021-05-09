@@ -39,8 +39,8 @@ public class HtmlSaver {
                     {
                         folderCreated = true;
                         currentComicFolderIndex = i;
-                        ui.getHtmlTitleInput().show(ui.getPrimaryStage());
                         createImages(comicDir.getAbsolutePath()); //which will place comic panes png images in the newly created folder
+                        ui.getHtmlTitleInput().show(ui.getPrimaryStage());
                     }
                     i++;
                 }
