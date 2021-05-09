@@ -2,8 +2,16 @@ package excelsior;
 
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
+
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class HtmlSaver {
     private final UI ui;
@@ -141,12 +149,15 @@ public class HtmlSaver {
         this.comicTitle = comicTitle;
     }
 
-    public void createImages(String fileLocation){
+    public void createImages(String fileLocation) throws IOException, URISyntaxException {
         for (int i = 0; i < ui.getComicPanels().getChildren().size(); i++) {
             ComicPane pane = (ComicPane) ui.getComicPanels().getChildren().get(i);
             ui.getWorkPanel().setTo(pane, true);
             ui.getWorkPanel().saveAsPng(i + ".png", fileLocation);
             ui.resetAppFace();
         }
+        Path source = Paths.get(getClass().getResource("/Icons/end_screen.png").toURI());
+        Path target = Paths.get(fileLocation + "\\" + ui.getComicPanels().getChildren().size() + ".png");
+        Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
     }
 }
