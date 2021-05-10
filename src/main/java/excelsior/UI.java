@@ -219,12 +219,12 @@ public class UI {
         htmlTitleInput.getContent().add(container);
 
         EventHandler<ActionEvent> eventHandler = e -> {
-            comicStripController.getHtmlSaver().setComicTitle(textBox.getText());
-            comicStripController.getHtmlSaver().htmlFormer();
             htmlTitleInput.hide();
         };
         textBox.setOnAction(eventHandler);
         htmlTitleInput.setOnHidden(e -> {
+            comicStripController.getHtmlSaver().setComicTitle(textBox.getText());
+            comicStripController.getHtmlSaver().htmlFormer();
             textBox.setText("Enter Comic Title");
             textBox.selectAll();
         });
