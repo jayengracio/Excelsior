@@ -1,8 +1,11 @@
 package excelsior;
 
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 
+import javafx.embed.swing.SwingFXUtils;
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -18,10 +21,12 @@ public class HtmlSaver {
     private String comicTitle;
     private File comicDir;
     private int currentComicFolderIndex;
+    private Image endScreen;
 
     public HtmlSaver(UI ui) {
         this.ui = ui;
         this.comicTitle="Title";
+        endScreen = new Image("/Icons/end_screen.png");
     }
 
     public void save() {
@@ -156,8 +161,12 @@ public class HtmlSaver {
             ui.getWorkPanel().saveAsPng(i + ".png", fileLocation);
             ui.resetAppFace();
         }
-        Path source = Paths.get(getClass().getResource("/Icons/end_screen.png").toURI());
-        Path target = Paths.get(fileLocation + "\\" + ui.getComicPanels().getChildren().size() + ".png");
-        Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
+
+
+        File file = new File(fileLocation + "\\" + ui.getComicPanels().getChildren().size() + ".png");
+        ImageIO.write(SwingFXUtils.fromFXImage(endScreen, null), "png", file);
+        //Path source = Paths.get(getClass().getResource("/Icons/end_screen.png").toURI());
+        //Path target = Paths.get(fileLocation + "\\" + ui.getComicPanels().getChildren().size() + ".png");
+        //Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
     }
 }
