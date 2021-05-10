@@ -221,10 +221,10 @@ public class XmlLoader {
 
         final Label warning = new Label("Warning!");
         warning.setStyle("-fx-font-size: 30px; -fx-text-fill: red; -fx-font-weight: bold;");
-        Label selectCharacterWarning = new Label(s);
+        Label loaderWarning = new Label(s);
         Label closePrompt = new Label("\nClick anywhere to close.");
 
-        container.getChildren().addAll(warning, selectCharacterWarning, closePrompt);
+        container.getChildren().addAll(warning, loaderWarning, closePrompt);
 
         ui.setXmlLoaderWarning(new HighlightedPopup(ui.getPrimaryStage()));
         ui.getXmlLoaderWarning().getContent().add(container);
