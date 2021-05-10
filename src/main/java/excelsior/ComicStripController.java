@@ -51,6 +51,7 @@ public class ComicStripController {
         newStrip.setOnAction(actionEvent -> {
             createNewComicStrip();
             ui.getPanelController().disableDelete();
+            ui.getPanelController().disableMove();
         });
 
         loadXML.setOnAction(actionEvent -> {
