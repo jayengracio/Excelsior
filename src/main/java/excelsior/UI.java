@@ -34,6 +34,7 @@ public class UI {
     private HighlightedPopup topNarrationInput;
     private HighlightedPopup textBubbleInput;
     private HighlightedPopup htmlTitleInput;
+    private HighlightedPopup xmlLoaderWarning;
     private ColourPalette palette;
 
     public UI(Stage primaryStage) {
@@ -90,6 +91,14 @@ public class UI {
 
     public TilePane getButtonBox() {
         return buttonBox;
+    }
+
+    public HighlightedPopup getXmlLoaderWarning() {
+        return xmlLoaderWarning;
+    }
+
+    public void setXmlLoaderWarning(HighlightedPopup xmlLoaderWarning) {
+        this.xmlLoaderWarning = xmlLoaderWarning;
     }
 
     /**

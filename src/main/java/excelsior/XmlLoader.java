@@ -1,6 +1,10 @@
 package excelsior;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import org.w3c.dom.Document;
@@ -39,11 +43,12 @@ public class XmlLoader {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            dBuilder.setErrorHandler(null);
             Document doc = dBuilder.parse(inputFile);
             doc.getDocumentElement().normalize();
             parsePanels(doc.getElementsByTagName("panels"), ui.getComicPanels());
         } catch (Exception e) {
-            e.printStackTrace();
+            createWarning("The XML file you wanted to load is not well formed.\nPlease fix the XML before loading again");
         }
     }
 
@@ -206,5 +211,23 @@ public class XmlLoader {
         }
 
         return colour;
+    }
+
+    private void createWarning(String s){
+        VBox container = new VBox();
+        container.setPadding(new Insets(15));
+        container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
+        container.setAlignment(Pos.CENTER);
+
+        final Label warning = new Label("Warning!");
+        warning.setStyle("-fx-font-size: 30px; -fx-text-fill: red; -fx-font-weight: bold;");
+        Label loaderWarning = new Label(s);
+        Label closePrompt = new Label("\nClick anywhere to close.");
+
+        container.getChildren().addAll(warning, loaderWarning, closePrompt);
+
+        ui.setXmlLoaderWarning(new HighlightedPopup(ui.getPrimaryStage()));
+        ui.getXmlLoaderWarning().getContent().add(container);
+        ui.getXmlLoaderWarning().show(ui.getPrimaryStage());
     }
 }

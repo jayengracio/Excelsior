@@ -1,5 +1,6 @@
 package excelsior;
 
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
@@ -16,12 +17,16 @@ public class PanelController {
     private final ComicPane workPanel;
     private final HBox comicPanels;
     private final MenuItem delete = new MenuItem("Delete Panel");
+    private final MenuItem moveRight = new MenuItem("Move Panel Right");
+    private final MenuItem moveLeft = new MenuItem("Move Panel Left");
     private ComicPane selectedPanel;
 
     public PanelController(UI ui) {
         this.ui = ui;
         this.workPanel = ui.getWorkPanel();
         this.comicPanels = ui.getComicPanels();
+        moveLeft.setDisable(true);
+        moveRight.setDisable(true);
     }
 
     /**
@@ -29,6 +34,11 @@ public class PanelController {
      */
     public void disableDelete() {
         this.delete.setDisable(true);
+    }
+
+    public void disableMove() {
+        this.moveLeft.setDisable(true);
+        this.moveRight.setDisable(true);
     }
 
     /**
@@ -94,12 +104,16 @@ public class PanelController {
         KeyCombination newPanelKeyBinding = new KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN);
         KeyCombination SaveKeyBinding = new KeyCodeCombination(KeyCode.S, KeyCombination.SHIFT_DOWN);
         KeyCombination DeleteKeyBinding = new KeyCodeCombination(KeyCode.DELETE);
+        KeyCombination MoveRightKey = new KeyCodeCombination(KeyCode.D);
+        KeyCombination MoveLeftKey = new KeyCodeCombination(KeyCode.A);
 
         create.setAccelerator(newPanelKeyBinding);
         save.setAccelerator(SaveKeyBinding);
         delete.setAccelerator(DeleteKeyBinding);
+        moveRight.setAccelerator(MoveRightKey);
+        moveLeft.setAccelerator(MoveLeftKey);
 
-        menu.getItems().addAll(create, delete, save);
+        menu.getItems().addAll(create, delete, moveRight, moveLeft, save);
 
         delete.setDisable(true);
 
@@ -116,7 +130,16 @@ public class PanelController {
 
         create.setOnAction(actionEvent -> {
             this.newComicPanel();
+            this.disableMove();
             if (ui.getSelectedCharacter() == null) delete.setDisable(true);
+        });
+
+        moveRight.setOnAction(actionEvent -> {
+            movePanelRight();
+        });
+
+        moveLeft.setOnAction(actionEvent -> {
+            movePanelLeft();
         });
 
         return menu;
@@ -224,6 +247,17 @@ public class PanelController {
 
         unselectCurrentPanel();
         selectedPanel = panel;
+        moveRight.setDisable(false);
+        moveLeft.setDisable(false);
+
+        if (comicPanels.getChildren().indexOf(selectedPanel) == 0) {
+            moveLeft.setDisable(true);
+        }
+
+        if (comicPanels.getChildren().indexOf(selectedPanel) + 1 == comicPanels.getChildren().size()) {
+            moveRight.setDisable(true);
+        }
+
         editComicPanel();
         panel.setEffect(drop);
     }
@@ -236,5 +270,42 @@ public class PanelController {
             int index = comicPanels.getChildren().indexOf(selectedPanel);
             comicPanels.getChildren().get(index).setEffect(null);
         }
+    }
+
+    /**
+     * Swap panel order of the selected panel and the panel to its right in the comic strip
+     */
+    private void movePanelRight() {
+        moveLeft.setDisable(false);
+        int size = comicPanels.getChildren().size();
+        int current = comicPanels.getChildren().indexOf(selectedPanel);
+
+        Node next = comicPanels.getChildren().get(current + 1);
+        int nextIndex = comicPanels.getChildren().indexOf(next);
+
+        comicPanels.getChildren().set(nextIndex, new ComicPane());
+        comicPanels.getChildren().set(current, next);
+        comicPanels.getChildren().set(nextIndex, selectedPanel);
+
+        int temp = comicPanels.getChildren().indexOf(selectedPanel);
+        if (temp + 1 == size) moveRight.setDisable(true);
+    }
+
+    /**
+     * Swap panel order of the selected panel and the panel to its left in the comic strip
+     */
+    private void movePanelLeft() {
+        moveRight.setDisable(false);
+        int current = comicPanels.getChildren().indexOf(selectedPanel);
+
+        Node next = comicPanels.getChildren().get(current - 1);
+        int nextIndex = comicPanels.getChildren().indexOf(next);
+
+        comicPanels.getChildren().set(nextIndex, new ComicPane());
+        comicPanels.getChildren().set(current, next);
+        comicPanels.getChildren().set(nextIndex, selectedPanel);
+
+        int temp = comicPanels.getChildren().indexOf(selectedPanel);
+        if (temp - 1 == -1) moveLeft.setDisable(true);
     }
 }
