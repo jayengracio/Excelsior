@@ -81,10 +81,6 @@ public class HelpMenu {
         helpWindow.initOwner(primaryStage);
         helpWindow.setResizable(false);
 
-        // Set position of second window, related to primary window.
-        helpWindow.setX(primaryStage.getX() * 2);
-        helpWindow.setY(primaryStage.getY() * 2);
-
         return helpWindow;
     }
 
@@ -173,6 +169,8 @@ public class HelpMenu {
         }
     }
 
+    //changes help screen image/corresponding label
+    //also manages button visibility
     private void prepareHelp(int helpScreenIndex)
     {
         if(helpScreenIndex == 0)
