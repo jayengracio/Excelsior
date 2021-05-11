@@ -146,12 +146,13 @@ public class HelpMenu {
                 "\nby using the colour palette shown." +
                 "\nChoose to change skin,hair or lip colour" +
                 "\nusing their respective buttons and then click on the" +
-                "\ncolour you want to change it to from our selection";
+                "\ncolour you want to change it to, from our selection";
 
-        helpMessages[10]= "Save your currently edited panel using Shift+S" +
-                "\nYou can re-edit a saved panel by selecting it."+
-                "\nSelect a panel from the selection by clicking it" +
-                "\nDelete the selected panel by pressing Delete on keyboard"+
+        helpMessages[10]= "Save your currently edited panel using 'Shift+S'" +
+                "\nCreate a new panel using 'Shift+N'"+
+                "\nSelect a panel by clicking it, you can now re-edit that panel" +
+                "\nDelete the selected panel using 'Delete' on keyboard" +
+                "\nShift the selected panel position left using 'A' or right using 'S'"+
                 "\nYou can also just use the buttons in the Panel dropdown shown";
 
         helpMessages[11]="Save your comic as a Html file with Ctrl+H" +
