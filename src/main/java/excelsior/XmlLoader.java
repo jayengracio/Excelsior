@@ -17,6 +17,7 @@ import java.io.File;
 
 public class XmlLoader {
     UI ui;
+    StringPreparer stringPreparer = new StringPreparer();
 
     public XmlLoader(UI ui) {
         this.ui = ui;
@@ -114,7 +115,7 @@ public class XmlLoader {
                 else if (eElement.getAttribute("status").equals("thought"))
                     tBub.setThought();
 
-                tBub.setText(ui.prepareTBub(eElement.getElementsByTagName("content").item(0).getTextContent(), tBub));
+                tBub.setText(stringPreparer.prepareTBub(eElement.getElementsByTagName("content").item(0).getTextContent(), tBub));
             }
         }
 
@@ -127,7 +128,7 @@ public class XmlLoader {
             Node nNode = above.item(0);
             if (nNode.getNodeType() == nNode.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
-                label.setText(ui.prepareNarration(eElement.getTextContent(), label));
+                label.setText(stringPreparer.prepareNarration(eElement.getTextContent(), label));
             }
         }
         return label;
@@ -139,7 +140,7 @@ public class XmlLoader {
             Node nNode = below.item(0);
             if (nNode.getNodeType() == nNode.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
-                label.setText(ui.prepareNarration(eElement.getTextContent(), label));
+                label.setText(stringPreparer.prepareNarration(eElement.getTextContent(), label));
             }
         }
         return label;

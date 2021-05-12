@@ -26,6 +26,7 @@ public class UI {
     private final PanelController panelController = new PanelController(this);
     private final ButtonController buttonController = new ButtonController(this);
     private final ComicStripController comicStripController = new ComicStripController(this);
+    private final StringPreparer stringPreparer = new StringPreparer();
     private TilePane buttonBox;
     private Character selectedCharacter;
     private HighlightedPopup charWarningPopup;
@@ -135,7 +136,6 @@ public class UI {
         Menu file = comicStripController.FileMenu();
         Menu panel = panelController.PanelMenu();
         Menu help = new HelpMenu(primaryStage).create();
-
         MenuBar mb = new MenuBar();
         mb.getMenus().add(file);
         mb.getMenus().add(panel);
@@ -157,7 +157,6 @@ public class UI {
         view.add(createComicsView(), 0, 1, 3, 1);
         view.add(createColourPalette(), 1, 0);
         view.add(createButtons(), 2, 0);
-
         return view;
     }
 
@@ -214,7 +213,6 @@ public class UI {
         TextField textBox = new TextField("Enter Comic Title");
         container.getChildren().add(textBox);
 
-
         htmlTitleInput = new HighlightedPopup(primaryStage);
         htmlTitleInput.getContent().add(container);
 
@@ -230,7 +228,9 @@ public class UI {
         });
     }
 
-    // speech bubble helper
+    /**
+     * Input box to set text of speech/thought bubbles
+     */
     private void createTextBubbleInput() {
         Label input = new Label();
         VBox container = new VBox();
@@ -249,7 +249,7 @@ public class UI {
 
         EventHandler<ActionEvent> eventHandler = e -> {
             TextBubble tBub = getCurrentSpeechBubble();
-            String output = prepareTBub(textBox.getText(), tBub);
+            String output = stringPreparer.prepareTBub(textBox.getText(), tBub);
             if (output == null) {
                 warning.setText("Text Too Long");
             } else {
@@ -278,7 +278,9 @@ public class UI {
         return selectedCharacter == workPanel.getRightCharacter() ? workPanel.getRightSpeechBubble() : workPanel.getLeftSpeechBubble();
     }
 
-    // top narration helper
+    /**
+     * Creates Top Narration Popup
+     */
     private void createTopNarrationPopup() {
         Narration narration;
         Label text = new Label();
@@ -286,7 +288,9 @@ public class UI {
         topNarrationInput = createNarrationInput(narration, text);
     }
 
-    // bottom narration helper
+    /**
+     * Creates Bottom Narration Popup
+     */
     private void createBottomNarrationPopup() {
         Narration narration;
         Label text = new Label();
@@ -294,7 +298,13 @@ public class UI {
         bottomNarrationInput = createNarrationInput(narration, text);
     }
 
-    // input text box for top and bottom narration
+    /**
+     * Creates an input box to set text for top/bottom narration
+     *
+     * @param narration top or bottom narration of the panel
+     * @param input     text
+     * @return a HighlightedPopup window
+     */
     private HighlightedPopup createNarrationInput(Narration narration, Label input) {
         VBox container = new VBox();
         container.setPadding(new Insets(15));
@@ -310,7 +320,7 @@ public class UI {
         inputWindow.getContent().add(container);
 
         EventHandler<ActionEvent> eventHandler = e -> {
-            String output = prepareNarration(textBox.getText(), narration);
+            String output = stringPreparer.prepareNarration(textBox.getText(), narration);
             if (output == null) {
                 warning.setText("Text Too Long");
             } else {
@@ -328,100 +338,25 @@ public class UI {
         return inputWindow;
     }
 
-    //method to sort through fonts for text bubble
-    public String prepareTBub(String s, TextBubble tBub) {
-        String output;
-        int largeFont = 20;
-        int mediumFont = 16;
-        int smallFont = 13;
-        output = prepareString(s, 3, 17);
-        if (output != null) {
-            tBub.setTextSize(largeFont);
-            return output;
-        }
-        output = prepareString(s, 4, 18);
-        if (output != null) {
-            tBub.setTextSize(mediumFont);
-            return output;
-        }
-        output = prepareString(s, 5, 25);
-        if (output != null) {
-            tBub.setTextSize(smallFont);
-            return output;
-        }
-
-        return null;
-    }
-
-    //method to dynamically change font size for narration depending on input length
-    public String prepareNarration(String s, Narration narration) {
-        String output;
-
-        output = prepareString(s, 2, 50);
-        if (output != null) {
-            narration.setTextSize(20);
-            return output;
-        }
-        output = prepareString(s, 2, 63);
-        if (output != null) {
-            narration.setTextSize(16);
-            return output;
-        }
-
-        output = prepareString(s, 3, 77);
-        if (output != null) {
-            narration.setTextSize(13);
-            return output;
-        }
-
-        return null;
-    }
-
-    //prepares String for text bubbles and returns null if exceeds acceptable length
-    public String prepareString(String s, int numLines, int charPerLine) {
-        String output;
-        int lastSpace = 0;
-        int lineLength = 0;
-        char curr;
-        int index = 0;
-        StringBuilder outputBuilder = new StringBuilder();
-        for (int i = 0; i < s.length(); i++) {
-            curr = s.charAt(i);
-            lineLength++;
-            if (curr == ' ') {
-                lastSpace = i;
-            }
-            if (lineLength == charPerLine && i != (s.length() - 1)) {
-                if (i == lastSpace || (i - lastSpace >= charPerLine - 1))
-                    outputBuilder.append(curr).append("\n");
-                else {
-                    outputBuilder = new StringBuilder(outputBuilder.substring(0, lastSpace + index + 1) + "\n" + outputBuilder.substring(lastSpace + index + 1) + curr);
-                }
-
-                lineLength = (i - lastSpace < charPerLine - 1) ? (i - lastSpace) : 0;
-                index++;
-            } else
-                outputBuilder.append(curr);
-        }
-        output = outputBuilder.toString();
-        if (index + 1 > numLines)
-            output = null;
-        return output;
-    }
-
-    // adds event handler to close popup input as parameter when clicked
+    /**
+     * Adds event handler to close popup input as parameter when clicked
+     *
+     * @param button to click
+     * @param popup  to hide
+     */
     private void closePopupButton(Node button, Popup popup) {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> popup.hide());
     }
 
-    //displays options for character choices in scrollable popup
+    /**
+     * Displays options for character choices in scrollable popup
+     */
     private void createCharacterPoses() {
         ScrollPane selection = new ScrollPane();
         selection.setPrefSize(261, 360);
 
         selection.setContent(createPoses());
         selection.setPannable(true);
-
 
         selection.setPadding(new Insets(5));
         selection.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
@@ -441,7 +376,11 @@ public class UI {
         closePopupButton(closeButton, charPosesPopup);
     }
 
-    //creates and gets character image options in Tilepane
+    /**
+     * Creates and gets character image options in TilePane
+     *
+     * @return TilePane of poses
+     */
     private TilePane createPoses() {
         TilePane Poses = new TilePane();
         Poses.setMaxSize(500, 10);
@@ -452,7 +391,6 @@ public class UI {
         Poses.setAlignment(Pos.CENTER_RIGHT);
         Poses.setStyle("-fx-background-color: white;-fx-font-size: 18px;");
 
-        //dynamic version adds based on files in folder
         try {
             PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
             Resource[] charPoseFiles = resolver.getResources("Character_Images/*.png");
@@ -472,7 +410,12 @@ public class UI {
         return Poses;
     }
 
-    //  waits for update for button being pressed and then changes the pose to the selected
+    /**
+     * Waits for update for button being pressed and then changes the pose to the selected
+     *
+     * @param button node
+     * @param pose   to change to
+     */
     private void changePose(Node button, String pose) {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             selectedCharacter.setCharacterPose(pose);
@@ -487,7 +430,9 @@ public class UI {
         });
     }
 
-    //creates a popup telling the user to select a character
+    /**
+     * Creates a popup telling the user to select a character
+     */
     private void createSelectCharacterWarning() {
         VBox container = new VBox();
         container.setPadding(new Insets(15));
@@ -505,7 +450,9 @@ public class UI {
         charWarningPopup.getContent().add(container);
     }
 
-    //used to reset the entire appFace to its original startup look
+    /**
+     * Reset the entire application interface to its original startup look
+     */
     public void resetAppFace() {
         workPanel.clear();
         palette.reset();

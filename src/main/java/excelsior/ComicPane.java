@@ -21,6 +21,9 @@ public class ComicPane extends GridPane {
     private  TextBubble rightSpeechBubble = new TextBubble();
     private boolean inEditMode = false;
 
+    /**
+     * Sets up the structure of the ComicPane
+     */
     public ComicPane() {
         this.setPrefSize(615, 500);
         this.setStyle("-fx-background-color: white;-fx-border-color: #000000; -fx-border-width: 2; -fx-border-radius: 2;");
@@ -105,7 +108,9 @@ public class ComicPane extends GridPane {
         return inEditMode;
     }
 
-    // empties the class
+    /**
+     * Empty the object
+     */
     public void clear() {
         this.setEditMode(false);
         this.getTopNarration().setText(null);
@@ -116,7 +121,11 @@ public class ComicPane extends GridPane {
         this.getLeftSpeechBubble().setEmpty();
     }
 
-    // replace the contents the panel with another
+    /**
+     * Clone the contents of a panel to another
+     * @param panel the cloned panel
+     * @param isWorkSpace if the panel is the workspace
+     */
     public void setTo(ComicPane panel, boolean isWorkSpace) {
         clone(panel);
         if(!isWorkSpace)
@@ -125,7 +134,10 @@ public class ComicPane extends GridPane {
         }
     }
 
-    // 'clones' the Comic Panel
+    /**
+     * Actual functionality in cloning the comic panel
+     * @param panel the cloned panel
+     */
     private void clone(ComicPane panel) {
         if (!panel.getRightCharacter().isEmpty()) {
             this.getRightCharacter().setCharacter(panel.getRightCharacter().getCharacter());
@@ -191,7 +203,9 @@ public class ComicPane extends GridPane {
         this.add(bottomNarration, 0, 3, 2, 1);
     }
 
-    //used to change sizes for comic panels view
+    /**
+     * Change the size of the comic panels
+     */
     public void minimise(){
         this.setPrefSize(280, 230);
         this.setHgap(5);
@@ -204,6 +218,11 @@ public class ComicPane extends GridPane {
         rightCharacter.minimise();
     }
 
+    /**
+     * Save the panel as a PNG file
+     * @param name file name
+     * @param fileLocation directory
+     */
     public void saveAsPng(String name, String fileLocation) {
         ComicPane clone = new ComicPane();
         clone.clone(this);

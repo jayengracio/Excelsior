@@ -8,7 +8,6 @@ public class Character extends ImageView {
     private final Color defaultSkinColour = Color.web("#FFE8D8");
     private final Color defaultLipColour = Color.web("#FF0000");
     private Image character = null;
-    private Image updated;
     private boolean defaultOrientation = true;
     private Color skinColour = Color.web("#FFE8D8");
     private Color hairColour = Color.web("#F9FF00");
@@ -154,16 +153,12 @@ public class Character extends ImageView {
      * Called after an update to update displayed image
      */
     private void updateImage() {
-        updated = character;
+        Image updated = character;
         updated = changeGender(updated);
         updated = makeLipColourChange(updated);
         updated = makeHairColourChange(updated);
         updated = makeSkinColourChange(updated);
         this.setImage(updated);
-    }
-
-    public Image getUpdatedImage() {
-        return updated;
     }
 
     /**
@@ -283,7 +278,9 @@ public class Character extends ImageView {
             writer.setColor(x, y, newColour);
     }
 
-    //used to change sizes for comic panels view
+    /**
+     * Used to change sizes for comic panels view
+     */
     public void minimise() {
         this.setFitHeight(100);
         this.setFitWidth(135);
@@ -291,7 +288,9 @@ public class Character extends ImageView {
         this.prefHeight(100);
     }
 
-    //resets all character options to their default
+    /**
+     * Resets all character options to their default
+     */
     public void reset() {
         skinColour = defaultSkinColour;
         hairColour = defaultHairColour;
