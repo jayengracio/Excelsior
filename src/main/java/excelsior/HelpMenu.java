@@ -19,7 +19,7 @@ public class HelpMenu {
     private Stage helpWindow;
     private Image[] helpScreens;
     private String[] helpMessages;
-    private ImageView helpScreenlocation;
+    private ImageView helpScreenLocation;
     private Label helpMessage;
     private Button prev;
     private Button next;
@@ -40,13 +40,13 @@ public class HelpMenu {
         container.setStyle("-fx-background-color: white;");
         container.setPadding(new Insets(15));
         container.setVgap(10);
-        helpScreenlocation = new ImageView();
-        helpScreenlocation.setFitHeight(380);
-        helpScreenlocation.setFitWidth(570);
-        helpScreenlocation.preserveRatioProperty().setValue(true);
-        helpScreenlocation.prefWidth(380);
-        helpScreenlocation.prefHeight(570);
-        helpScreenlocation.setEffect(new DropShadow());
+        helpScreenLocation = new ImageView();
+        helpScreenLocation.setFitHeight(380);
+        helpScreenLocation.setFitWidth(570);
+        helpScreenLocation.preserveRatioProperty().setValue(true);
+        helpScreenLocation.prefWidth(380);
+        helpScreenLocation.prefHeight(570);
+        helpScreenLocation.setEffect(new DropShadow());
 
         helpMessage = new Label();
         helpMessage.setStyle("-fx-font-size: 16px;-fx-font-weight: bold;-fx-font-family: 'Calibri';");
@@ -63,7 +63,7 @@ public class HelpMenu {
         next.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> prepareHelp(currentInd+1));
         prev.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> prepareHelp(currentInd-1));
 
-        container.add(helpScreenlocation,0,0,3,2);
+        container.add(helpScreenLocation,0,0,3,2);
         container.add(helpMessage,0,3,3,1);
         container.add(prev,0,4);
         container.add(next,3,4);
@@ -155,10 +155,10 @@ public class HelpMenu {
                 "\nShift the selected panel position left using 'A' or right using 'S'"+
                 "\nYou can also just use the buttons in the Panel dropdown shown";
 
-        helpMessages[11]="Save your comic as a Html file with Ctrl+H" +
-                "\nSave your comic as XML with Ctrl+S" +
-                "\nImport xml comics using Ctrl+T" +
-                "\nCreate a new comic with Ctrl+N" +
+        helpMessages[11]="Save your comic as a Html file using 'Ctrl+H'" +
+                "\nSave your comic as XML using 'Ctrl+S'" +
+                "\nImport xml comics using 'Ctrl+T'" +
+                "\nCreate a new comic using 'Ctrl+N'" +
                 "\nYou can also just use the buttons in the File dropdown shown";
     }
 
@@ -190,7 +190,7 @@ public class HelpMenu {
             next.setVisible(true);
 
         currentInd = helpScreenIndex;
-        helpScreenlocation.setImage(helpScreens[helpScreenIndex]);
+        helpScreenLocation.setImage(helpScreens[helpScreenIndex]);
         helpMessage.setText(helpMessages[helpScreenIndex]);
     }
 }

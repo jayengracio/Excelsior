@@ -218,7 +218,11 @@ public class Character extends ImageView {
                     int curPixelGreen = (int) Math.round(current.getGreen() * 255);
                     int curPixelBlue = (int) Math.round(current.getBlue() * 255);
 
-                    if (curPixelRed >= skinRed - 9 && curPixelBlue == skinBlue && curPixelGreen == skinGreen && curPixelRed <= skinRed) {
+                    //removes lip Anti Aliasing to improve look of brighter coloured lips
+                    if(defaultColour == defaultLipColour && curPixelRed == 255 && curPixelGreen < 232 && curPixelBlue< 216 && !current.equals(defaultLipColour)) {
+                        change(writer, x, y, current, defaultSkinColour);
+                    }
+                    else if (curPixelRed >= skinRed - 9 && curPixelBlue == skinBlue && curPixelGreen == skinGreen && curPixelRed <= skinRed) {
                         writer.setColor(x, y, Color.rgb(curPixelRed + (newRed - skinRed), curPixelGreen + (newGreen - skinGreen), curPixelBlue + (newBlue - skinBlue)));
                     } else {
                         writer.setColor(x, y, current);
@@ -254,9 +258,9 @@ public class Character extends ImageView {
 
                     if (curPixelRed >= 240 && curPixelGreen == 255 && curPixelRed <= 255 && !current.equals(defaultHairColour)) { //hair
                         change(writer, x, y, current, Color.rgb(255, 255, 255));
-                    } /*else if (curPixelRed == 255 && curPixelGreen < 232 && curPixelBlue < 216) { //lips
-                        change(writer, x, y, current, Color.rgb(255, 200, 200));
-                    }*/ else if (curPixelRed >= 236 && curPixelGreen >= 180 && !current.equals(defaultHairColour)) { //pigtails
+                    }else if(curPixelRed == 255 && curPixelGreen < 232 && curPixelBlue< 216 && !current.equals(defaultLipColour)) { //lip aa for male
+                        change(writer, x, y, current, defaultSkinColour);
+                    }else if (curPixelRed >= 236 && curPixelGreen >= 180 && !current.equals(defaultHairColour)) { //pigtails
                         change(writer, x, y, current, Color.rgb(255, 255, 255));
                     } else {
                         writer.setColor(x, y, current);
