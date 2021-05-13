@@ -131,23 +131,24 @@ public class HtmlSaver {
                             }
                         }
                         writer.print("</tr>\n");
-                    } else if (selectedType == 0) {
+                    }
+                    else if (selectedType == 0) {
                         for (File comicPanel : comicImagePanels) {
                             if (comicPanel.getName().endsWith(".png")) {
                                 writer.print("\t\t\t<tr><td><img src=\"" + comicPanel.getName() + "\" ></td></tr>\n");
                             }
                         }
-                    } else if (selectedType == 1) {
-                        comicImagePanels = clean(comicImagePanels);
                     }
-                        for (int i=0; i<comicImagePanels.length; i++) {
-                            if (i%2 == 0)
+                    else if (selectedType == 1) {
+                        comicImagePanels = clean(comicImagePanels);
+
+                        for (int i = 0; i < comicImagePanels.length; i++) {
+                            if (i % 2 == 0)
                                 writer.print("\t\t\t<tr><td><img src=\"" + comicImagePanels[i].getName() + "\" ></td>\n");
                             else
                                 writer.print("\t\t\t<td><img src=\"" + comicImagePanels[i].getName() + "\" ></td></tr>\n");
                         }
-
-
+                    }
 
                     writer.print("\t\t</table>\n" +
                             "\t</div>\n" +
@@ -155,7 +156,6 @@ public class HtmlSaver {
                             "</html>");
                     writer.close();
                 }
-                //System.out.println("done");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -213,7 +213,7 @@ public class HtmlSaver {
         comicImagePanels = clean(comicImagePanels);
         AnimatedGifEncoder e = new AnimatedGifEncoder();
         e.start(comicDir.getAbsolutePath() + "/GIF" + ".gif");
-        e.setDelay(2000);   // number of seconds between frames
+        e.setDelay(4000);   // number of milliseconds between frames
 
         for (File comicImagePanel : comicImagePanels) {
             BufferedImage nextImage = ImageIO.read(comicImagePanel);
