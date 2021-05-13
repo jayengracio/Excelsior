@@ -110,7 +110,7 @@ public class HtmlSaver {
                             "\t\t}\n" +
                             "\n" +
                             "\t\timg{\n" +
-                            "\t\t\twidth: " + (selectedType == 0 || selectedType == 2 ? 45 : 30) + "vw;\n" +
+                            "\t\t\twidth: " + (selectedType == 0 || selectedType == 2 ? 45 : 35) + "vw;\n" +
                             "\t\t\theight: " + (selectedType == 0 || selectedType == 2 ? 80 : 60) + "vh;\n" +
                             "\t\t\tborder-radius: 10px;\n" +
                             "\t\t}\n" +
@@ -206,51 +206,20 @@ public class HtmlSaver {
             case "Horizontal" -> selectedType = 2;
             case "GIF" -> selectedType = 3;
         }
-        /*VBox container = new VBox();
-        container.setPadding(new Insets(15));
-        container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
-        container.setAlignment(Pos.CENTER);
-
-        final Label warning = new Label("Select HTML layout");
-        warning.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-        IconButtons type1 = new IconButtons("end_screen.png");
-        type1.setOnMouseClicked(mouseEvent -> {selectedType=0;});
-        IconButtons type2 = new IconButtons("end_screen.png");
-        type2.setOnMouseClicked(mouseEvent -> {selectedType=1;});
-        IconButtons type3 = new IconButtons("end_screen.png");
-        type3.setOnMouseClicked(mouseEvent -> {selectedType=2;});
-
-        HBox buttons = new HBox(5);
-        buttons.getChildren().addAll(type1, type2);
-        container.getChildren().addAll(warning, buttons, type3);
-
-        ui.setHtmlTypeInput(new HighlightedPopup(ui.getPrimaryStage()));
-        ui.getHtmlTypeInput().getContent().add(container);
-        ui.getHtmlTypeInput().show(ui.getPrimaryStage());
-        //ui.getHtmlTypeInput().hide(ui.getPrimaryStage());*/
     }
 
     public void createGif() throws IOException {
         File[] comicImagePanels = comicDir.listFiles();
         comicImagePanels = clean(comicImagePanels);
+        AnimatedGifEncoder e = new AnimatedGifEncoder();
+        e.start(comicDir.getAbsolutePath() + "/GIF" + ".gif");
+        e.setDelay(2000);   // number of seconds between frames
 
-        BufferedImage firstImage = ImageIO.read(comicImagePanels[0]);
-
-        // create a new BufferedOutputStream with the last argument
-        ImageOutputStream output = new FileImageOutputStream(comicImagePanels[comicImagePanels.length - 1]);
-
-        // create a gif sequence with the type of the first image, 1 second
-        // between frames, which loops continuously
-        GifSequenceWriter writer = new GifSequenceWriter(output, firstImage.getType(), 1, false);
-
-        // write out the first image to our sequence...
-        writer.writeToSequence(firstImage);
-        for(int i=1; i<comicImagePanels.length-1; i++) {
-            BufferedImage nextImage = ImageIO.read(comicImagePanels[i]);
-            writer.writeToSequence(nextImage);
+        for (File comicImagePanel : comicImagePanels) {
+            BufferedImage nextImage = ImageIO.read(comicImagePanel);
+            e.addFrame(nextImage);
         }
-        writer.close();
-        output.close();
+        e.finish();
     }
 
     private File[] clean(File[] images){
@@ -264,7 +233,7 @@ public class HtmlSaver {
         for(int i=0, j=0; i< images.length; i++){
             if(images[i].getName().endsWith(".png")){
                 array[j++] = images[i];
-                System.out.println("count = " + i + "\n");
+                System.out.println("count = " + i + ", name: " + images[i].getName() + "\n");
             }
         }
         return array;
