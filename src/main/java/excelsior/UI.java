@@ -231,7 +231,11 @@ public class UI {
         textBox.setOnAction(eventHandler);
         htmlTitleInput.setOnHidden(e -> {
             comicStripController.getHtmlSaver().setComicTitle(textBox.getText());
-            comicStripController.getHtmlSaver().htmlFormer();
+            try {
+                comicStripController.getHtmlSaver().htmlFormer();
+            } catch (IOException ioException) {
+                System.out.println("something went wrong in HTMLsaver");
+            }
             textBox.setText("Enter Comic Title");
             textBox.selectAll();
         });
