@@ -65,101 +65,122 @@ public class HtmlSaver {
     }
 
     public void htmlFormer() throws IOException {
-        if(selectedType == 3){
-            createGif();
-        }
-        else {
-            try {
-                File comic = new File(comicDir.getAbsolutePath() + "\\comic" + currentComicFolderIndex + ".html");
-                PrintWriter writer = new PrintWriter(comic);
-                if (selectedType != 3) {
-                    writer.print("<html>\n" +
-                            "<head>\n" +
-                            "\t<style>\n" +
-                            "\t\tbody{\n" +
-                            "\t\t\tbackground-color: #23272a;\n" +
-                            "\t\t\tmargin: 0px 0px 0px 0px;\n" +
-                            "\t\t\t\n" +
-                            "\t\t}\n" +
-                            "\n" +
-                            "\t\th2{\n" +
-                            "\t\t\ttext-align: center;\n" +
-                            "\t\t\tcolor: #ffffff;\n" +
-                            "\t\t\tfont-style: italic;\n" +
-                            "\t\t\tfont-weight: bold;\n" +
-                            "\t\t\tfont-family: Copperplate;\n" +
-                            "\t\t\tpadding: 25px 10px 25px 10px;\n" +
-                            "\t\t\tbackground-color: #B22222;\n" +
-                            "\t\t\tborder-radius: 10px;\n" +
-                            "\t\t\tmargin: 10px 140px 15px 140px;\n" +
-                            "\t\t\ttext-shadow: 2px 2px 3px #2c2f33;\n" +
-                            "\t\t}\t\n" +
-                            "\t\t\t\n" +
-                            "\t\t#mainSlider{\n" +
-                            "\t\t\tmargin: 0px 15vw 0px 15vw;\n" +
-                            "\t\t\tbackground-color: #2c2f33;\n" +
-                            "\t\t\tpadding: 10px 30px 10px 30px;\n" +
-                            "\t\t}\n" +
-                            "\n" +
-                            "\t\ttable{\n" +
-                            "\t\t\tborder: 3px solid #B22222;\n" +
-                            "\t\t\tborder-radius: 15px;\n" +
-                            "\t\t\tpadding: 10px;\n" +
-                            "\t\t\tmargin-left: auto;\n" +
-                            "\t\t\tmargin-right: auto;\n" +
-                            "\t\t}\n" +
-                            "\n" +
-                            "\t\timg{\n" +
-                            "\t\t\twidth: " + (selectedType == 0 || selectedType == 2 ? 45 : 35) + "vw;\n" +
-                            "\t\t\theight: " + (selectedType == 0 || selectedType == 2 ? 80 : 60) + "vh;\n" +
-                            "\t\t\tborder-radius: 10px;\n" +
-                            "\t\t}\n" +
-                            "\t</style>\n" +
-                            "</head>\n" +
-                            "<body>\n" +
-                            "\t<div id=\"mainSlider\">\n" +
-                            "\t\t<h2>" + comicTitle + "</h2>\n" +
-                            "\t\t<table>\n");
+        try {
+            File comic = new File(comicDir.getAbsolutePath() + "\\comic" + currentComicFolderIndex + ".html");
+            PrintWriter writer = new PrintWriter(comic);
+            writer.print("<html>\n" +
+                    "<head>\n" +
+                    "\t<style>\n" +
+                    "\t\tbody{\n" +
+                    "\t\t\tbackground-color: #23272a;\n" +
+                    "\t\t\tmargin: 0px 0px 0px 0px;\n" +
+                    "\t\t\t\n" +
+                    "\t\t}\n" +
+                    "\n" +
+                    "\t\th2{\n" +
+                    "\t\t\ttext-align: center;\n" +
+                    "\t\t\tcolor: #ffffff;\n" +
+                    "\t\t\tfont-style: italic;\n" +
+                    "\t\t\tfont-weight: bold;\n" +
+                    "\t\t\tfont-family: Copperplate;\n" +
+                    "\t\t\tpadding: 25px 10px 25px 10px;\n" +
+                    "\t\t\tbackground-color: #B22222;\n" +
+                    "\t\t\tborder-radius: 10px;\n" +
+                    "\t\t\tmargin: 10px 140px 15px 140px;\n" +
+                    "\t\t\ttext-shadow: 2px 2px 3px #2c2f33;\n" +
+                    "\t\t}\t\n" +
+                    "\t\t\t\n" +
+                    "\t\t#mainSlider{\n");
 
-                    //get all of the comic Panes loaded into the folder and add them to the html comic
-                    File[] comicImagePanels = comicDir.listFiles();
-                    if (selectedType == 2) {
-                        writer.print("\t\t\t<tr>");
-                        for (File comicPanel : comicImagePanels) {
-                            if (comicPanel.getName().endsWith(".png")) {
-                                writer.print("<td><img src=\"" + comicPanel.getName() + "\" ></td>");
-                            }
-                        }
-                        writer.print("</tr>\n");
-                    }
-                    else if (selectedType == 0) {
-                        for (File comicPanel : comicImagePanels) {
-                            if (comicPanel.getName().endsWith(".png")) {
-                                writer.print("\t\t\t<tr><td><img src=\"" + comicPanel.getName() + "\" ></td></tr>\n");
-                            }
-                        }
-                    }
-                    else if (selectedType == 1) {
-                        comicImagePanels = clean(comicImagePanels);
-
-                        for (int i = 0; i < comicImagePanels.length; i++) {
-                            if (i % 2 == 0)
-                                writer.print("\t\t\t<tr><td><img src=\"" + comicImagePanels[i].getName() + "\" ></td>\n");
-                            else
-                                writer.print("\t\t\t<td><img src=\"" + comicImagePanels[i].getName() + "\" ></td></tr>\n");
-                        }
-                    }
-
-                    writer.print("\t\t</table>\n" +
-                            "\t</div>\n" +
-                            "</body>\n" +
-                            "</html>");
-                    writer.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (selectedType == 2) {
+                writer.print("\t\t\tmargin: 55px 0vw 55px 0vw;\n" +
+                        "\t\t\toverflow: auto;\n");
+            } else {
+                writer.print("\t\t\tmargin: 0px 15vw 0px 15vw;\n");
             }
+
+            writer.print("\t\t\tbackground-color: #2c2f33;\n" +
+                    "\t\t\tpadding: 10px 30px 10px 30px;\n" +
+                    "\t\t}\n" +
+                    "\n" +
+                    "\t\ttable{\n" +
+                    "\t\t\tborder: 3px solid #B22222;\n" +
+                    "\t\t\tborder-radius: 15px;\n" +
+                    "\t\t\tpadding: 10px;\n" +
+                    "\t\t\tmargin-left: auto;\n" +
+                    "\t\t\tmargin-right: auto;\n" +
+                    "\t\t}\n" +
+                    "\n" +
+                    "\t\timg{\n");
+
+            if(selectedType == 0 || selectedType == 3){
+                writer.print("\t\t\twidth: 45vw;\n" +
+                        "\t\t\theight: 80vh;\n");
+            }
+
+            if(selectedType == 1){
+                writer.print("\t\t\twidth: 40vw;\n" +
+                        "\t\t\theight: 70vh;\n");
+            }
+
+            if(selectedType == 2){
+                writer.print("\t\t\twidth: 35vw;\n" +
+                        "\t\t\theight: 62vh;\n");
+            }
+
+            writer.print("\t\t\tborder-radius: 10px;\n" +
+                    "\t\t}\n" +
+                    "\t</style>\n" +
+                    "</head>\n" +
+                    "<body>\n" +
+                    "\t<div id=\"mainSlider\">\n" +
+                    "\t\t<h2>" + comicTitle + "</h2>\n" +
+                    "\t\t<table>\n");
+
+            //get all of the comic Panes loaded into the folder and add them to the html comic
+            File[] comicImagePanels = comicDir.listFiles();
+            if (selectedType == 0) {
+                for (File comicPanel : comicImagePanels) {
+                    if (comicPanel.getName().endsWith(".png")) {
+                        writer.print("\t\t\t<tr><td><img src=\"" + comicPanel.getName() + "\" ></td></tr>\n");
+                    }
+                }
+            }
+
+            else if (selectedType == 1) {
+                comicImagePanels = clean(comicImagePanels);
+
+                for (int i = 0; i < comicImagePanels.length; i++) {
+                    if (i % 2 == 0)
+                        writer.print("\t\t\t<tr><td><img src=\"" + comicImagePanels[i].getName() + "\" ></td>\n");
+                    else
+                        writer.print("\t\t\t<td><img src=\"" + comicImagePanels[i].getName() + "\" ></td></tr>\n");
+                }
+            }
+
+            else if (selectedType == 2) {
+                writer.print("\t\t\t<tr>");
+                for (File comicPanel : comicImagePanels) {
+                    if (comicPanel.getName().endsWith(".png")) {
+                        writer.print("<td><img src=\"" + comicPanel.getName() + "\" ></td>");
+                    }
+                }
+                writer.print("</tr>\n");
+            }
+            else if(selectedType == 3){
+                createGif();
+                writer.print("<td><img src=\"" + "GIF.gif" + "\" ></td>");
+            }
+
+            writer.print("\t\t</table>\n" +
+                    "\t</div>\n" +
+                    "</body>\n" +
+                    "</html>");
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
     private String chooseDirectory(){
         DirectoryChooser dirToSaveHtmlFolder = new DirectoryChooser();
