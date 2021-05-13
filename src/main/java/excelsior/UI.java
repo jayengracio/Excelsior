@@ -36,6 +36,7 @@ public class UI {
     private HighlightedPopup textBubbleInput;
     private HighlightedPopup htmlTitleInput;
     private HighlightedPopup xmlLoaderWarning;
+    private HighlightedPopup htmlTypeInput;
     private ColourPalette palette;
 
     public UI(Stage primaryStage) {
@@ -100,6 +101,14 @@ public class UI {
 
     public void setXmlLoaderWarning(HighlightedPopup xmlLoaderWarning) {
         this.xmlLoaderWarning = xmlLoaderWarning;
+    }
+
+    public HighlightedPopup getHtmlTypeInput() {
+        return htmlTypeInput;
+    }
+
+    public void setHtmlTypeInput(HighlightedPopup htmlTypeInput) {
+        this.htmlTypeInput = htmlTypeInput;
     }
 
     /**
