@@ -1,5 +1,7 @@
-package excelsior;
+package excelsior.menu;
 
+import excelsior.gui.ComicPane;
+import excelsior.UI;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
@@ -12,7 +14,7 @@ import javafx.scene.paint.Color;
 
 import java.util.Optional;
 
-public class PanelController {
+public class PanelMenu {
     private final UI ui;
     private final ComicPane workPanel;
     private final HBox comicPanels;
@@ -21,12 +23,67 @@ public class PanelController {
     private final MenuItem moveLeft = new MenuItem("Move Panel Left");
     private ComicPane selectedPanel;
 
-    public PanelController(UI ui) {
+    public PanelMenu(UI ui) {
         this.ui = ui;
         this.workPanel = ui.getWorkPanel();
         this.comicPanels = ui.getComicPanels();
         moveLeft.setDisable(true);
         moveRight.setDisable(true);
+    }
+
+    /**
+     * Creates the menu that controls saving, creating and deleting panels
+     *
+     * @return the panel menu with items that have key bindings
+     */
+    public Menu getMenu() {
+        Menu menu = new Menu("Panel");
+
+        MenuItem create = new MenuItem("New Panel");
+        MenuItem save = new MenuItem("Save Panel");
+
+        KeyCombination newPanelKeyBinding = new KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN);
+        KeyCombination SaveKeyBinding = new KeyCodeCombination(KeyCode.S, KeyCombination.SHIFT_DOWN);
+        KeyCombination DeleteKeyBinding = new KeyCodeCombination(KeyCode.DELETE);
+        KeyCombination MoveRightKey = new KeyCodeCombination(KeyCode.D);
+        KeyCombination MoveLeftKey = new KeyCodeCombination(KeyCode.A);
+
+        create.setAccelerator(newPanelKeyBinding);
+        save.setAccelerator(SaveKeyBinding);
+        delete.setAccelerator(DeleteKeyBinding);
+        moveRight.setAccelerator(MoveRightKey);
+        moveLeft.setAccelerator(MoveLeftKey);
+
+        menu.getItems().addAll(create, delete, moveRight, moveLeft, save);
+
+        delete.setDisable(true);
+
+        save.setOnAction(actionEvent -> {
+            this.saveComicPanel();
+            checkDeleteAvailability();
+        });
+
+        delete.setOnAction(actionEvent -> {
+            this.deleteComicPanel();
+            if (comicPanels.getChildren().isEmpty()) delete.setDisable(true);
+            if (ui.getSelectedCharacter() == null) delete.setDisable(true);
+        });
+
+        create.setOnAction(actionEvent -> {
+            this.newComicPanel();
+            this.disableMove();
+            if (ui.getSelectedCharacter() == null) delete.setDisable(true);
+        });
+
+        moveRight.setOnAction(actionEvent -> {
+            movePanelRight();
+        });
+
+        moveLeft.setOnAction(actionEvent -> {
+            movePanelLeft();
+        });
+
+        return menu;
     }
 
     /**
@@ -88,61 +145,6 @@ public class PanelController {
                 }
             }
         });
-    }
-
-    /**
-     * Creates the menu that controls saving, creating and deleting panels
-     *
-     * @return the panel menu with items that have key bindings
-     */
-    public Menu PanelMenu() {
-        Menu menu = new Menu("Panel");
-
-        MenuItem create = new MenuItem("New Panel");
-        MenuItem save = new MenuItem("Save Panel");
-
-        KeyCombination newPanelKeyBinding = new KeyCodeCombination(KeyCode.N, KeyCombination.SHIFT_DOWN);
-        KeyCombination SaveKeyBinding = new KeyCodeCombination(KeyCode.S, KeyCombination.SHIFT_DOWN);
-        KeyCombination DeleteKeyBinding = new KeyCodeCombination(KeyCode.DELETE);
-        KeyCombination MoveRightKey = new KeyCodeCombination(KeyCode.D);
-        KeyCombination MoveLeftKey = new KeyCodeCombination(KeyCode.A);
-
-        create.setAccelerator(newPanelKeyBinding);
-        save.setAccelerator(SaveKeyBinding);
-        delete.setAccelerator(DeleteKeyBinding);
-        moveRight.setAccelerator(MoveRightKey);
-        moveLeft.setAccelerator(MoveLeftKey);
-
-        menu.getItems().addAll(create, delete, moveRight, moveLeft, save);
-
-        delete.setDisable(true);
-
-        save.setOnAction(actionEvent -> {
-            this.saveComicPanel();
-            checkDeleteAvailability();
-        });
-
-        delete.setOnAction(actionEvent -> {
-            this.deleteComicPanel();
-            if (comicPanels.getChildren().isEmpty()) delete.setDisable(true);
-            if (ui.getSelectedCharacter() == null) delete.setDisable(true);
-        });
-
-        create.setOnAction(actionEvent -> {
-            this.newComicPanel();
-            this.disableMove();
-            if (ui.getSelectedCharacter() == null) delete.setDisable(true);
-        });
-
-        moveRight.setOnAction(actionEvent -> {
-            movePanelRight();
-        });
-
-        moveLeft.setOnAction(actionEvent -> {
-            movePanelLeft();
-        });
-
-        return menu;
     }
 
     /**

@@ -1,4 +1,7 @@
-package excelsior;
+package excelsior.input;
+
+import excelsior.panel.Narration;
+import excelsior.panel.TextBubble;
 
 public class StringPreparer {
     /**

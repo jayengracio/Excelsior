@@ -1,5 +1,8 @@
-package excelsior;
+package excelsior.gui;
 
+import excelsior.panel.Character;
+import excelsior.panel.Narration;
+import excelsior.panel.TextBubble;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -13,11 +16,11 @@ import java.io.File;
 import java.io.IOException;
 
 public class ComicPane extends GridPane {
-    private  Narration topNarration = new Narration();
-    private  Character leftCharacter = new Character();
+    private Narration topNarration = new Narration();
+    private Character leftCharacter = new Character();
     private  Character rightCharacter = new Character();
     private  Narration bottomNarration = new Narration();
-    private  TextBubble leftSpeechBubble = new TextBubble();
+    private TextBubble leftSpeechBubble = new TextBubble();
     private  TextBubble rightSpeechBubble = new TextBubble();
     private boolean inEditMode = false;
 

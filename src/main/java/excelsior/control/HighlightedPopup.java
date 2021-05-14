@@ -1,4 +1,4 @@
-package excelsior;
+package excelsior.control;
 
 import javafx.event.EventHandler;
 import javafx.scene.Parent;

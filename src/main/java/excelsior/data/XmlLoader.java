@@ -1,5 +1,13 @@
-package excelsior;
+package excelsior.data;
 
+import excelsior.*;
+import excelsior.UI;
+import excelsior.panel.Character;
+import excelsior.gui.ComicPane;
+import excelsior.control.HighlightedPopup;
+import excelsior.input.StringPreparer;
+import excelsior.panel.Narration;
+import excelsior.panel.TextBubble;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;

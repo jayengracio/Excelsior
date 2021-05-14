@@ -1,5 +1,7 @@
-package excelsior;
+package excelsior.data;
 
+import excelsior.gui.ComicPane;
+import excelsior.UI;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import org.w3c.dom.Attr;

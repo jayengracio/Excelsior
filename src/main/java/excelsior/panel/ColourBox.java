@@ -1,4 +1,4 @@
-package excelsior;
+package excelsior.panel;
 
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;

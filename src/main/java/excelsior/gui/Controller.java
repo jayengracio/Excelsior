@@ -1,5 +1,8 @@
-package excelsior;
+package excelsior.gui;
 
+import excelsior.UI;
+import excelsior.control.Button;
+import excelsior.control.IconButton;
 import javafx.scene.Node;
 import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
@@ -8,12 +11,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
-public class ButtonController {
+public class Controller {
     private final DropShadow dropShadow = new DropShadow();
     private final UI ui;
     private boolean isSpeechBubble = true;
 
-    public ButtonController(UI ui) {
+    public Controller(UI ui) {
         this.ui = ui;
     }
 
@@ -24,15 +27,15 @@ public class ButtonController {
     /**
      * Gives all the buttons in the button box of UI its functionalities
      */
-    public void start() {
-        ui.getButtonBox().getChildren().add(0, new IconButtons("Left.png"));
-        ui.getButtonBox().getChildren().add(1, new IconButtons("Right.png"));
-        ui.getButtonBox().getChildren().add(2, new IconButtons("Flip.png"));
-        ui.getButtonBox().getChildren().add(3, new IconButtons("Gender.png"));
-        ui.getButtonBox().getChildren().add(4, new IconButtons("Speech Bubble.png"));
-        ui.getButtonBox().getChildren().add(5, new IconButtons("Top Narration.png"));
-        ui.getButtonBox().getChildren().add(6, new IconButtons("Thought Bubble.png"));
-        ui.getButtonBox().getChildren().add(7, new IconButtons("Bot Narration.png"));
+    public void initialize() {
+        ui.getButtonBox().getChildren().add(0, new IconButton("Left.png"));
+        ui.getButtonBox().getChildren().add(1, new IconButton("Right.png"));
+        ui.getButtonBox().getChildren().add(2, new IconButton("Flip.png"));
+        ui.getButtonBox().getChildren().add(3, new IconButton("Gender.png"));
+        ui.getButtonBox().getChildren().add(4, new IconButton("Speech Bubble.png"));
+        ui.getButtonBox().getChildren().add(5, new IconButton("Top Narration.png"));
+        ui.getButtonBox().getChildren().add(6, new IconButton("Thought Bubble.png"));
+        ui.getButtonBox().getChildren().add(7, new IconButton("Bot Narration.png"));
 
         this.leftCharacterButton(ui.getButtonBox().getChildren().get(0));
         this.rightCharacterButton(ui.getButtonBox().getChildren().get(1));

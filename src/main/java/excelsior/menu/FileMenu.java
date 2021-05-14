@@ -1,5 +1,9 @@
-package excelsior;
+package excelsior.menu;
 
+import excelsior.UI;
+import excelsior.data.HtmlSaver;
+import excelsior.data.XmlLoader;
+import excelsior.data.XmlSaver;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Menu;
@@ -10,11 +14,11 @@ import javafx.scene.input.KeyCombination;
 
 import java.util.Optional;
 
-public class ComicStripController {
+public class FileMenu {
     private final UI ui;
     private HtmlSaver htmlSaver;
 
-    public ComicStripController(UI ui) {
+    public FileMenu(UI ui) {
         this.ui = ui;
     }
 
@@ -23,7 +27,7 @@ public class ComicStripController {
      *
      * @return the panel menu with items that have key bindings
      */
-    public Menu FileMenu() {
+    public Menu getMenu() {
         XmlSaver xmlSaver = new XmlSaver(ui);
         XmlLoader xmlLoader = new XmlLoader(ui);
         htmlSaver = new HtmlSaver(ui);

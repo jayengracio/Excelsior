@@ -1,5 +1,7 @@
-package excelsior;
+package excelsior.panel;
 
+import excelsior.UI;
+import excelsior.control.IconButton;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -12,8 +14,8 @@ public class ColourPalette extends GridPane {
     UI ui;
     int option = 0;
     Label buttonPressed = new Label("Hair Colour");
-    IconButtons selected;
-    private IconButtons defaultButton;
+    IconButton selected;
+    private IconButton defaultButton;
 
     /**
      * Constructor
@@ -39,9 +41,9 @@ public class ColourPalette extends GridPane {
      * Creates the buttons
      */
     private void addButtons() {
-        IconButtons hairButton = new IconButtons("Hair.png");
-        IconButtons skinButton = new IconButtons("Skin.png");
-        IconButtons lipButton = new IconButtons("Lips.png");
+        IconButton hairButton = new IconButton("Hair.png");
+        IconButton skinButton = new IconButton("Skin.png");
+        IconButton lipButton = new IconButton("Lips.png");
         this.add(setButton(0, hairButton), 0, 1, 1, 3);
         this.add(setButton(1, skinButton), 0, 5, 1, 3);
         this.add(setButton(2, lipButton), 0, 9, 1, 3);
@@ -56,7 +58,7 @@ public class ColourPalette extends GridPane {
      * @param button to add an event handler
      * @return
      */
-    private IconButtons setButton(int option, IconButtons button) {
+    private IconButton setButton(int option, IconButton button) {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (ui.getSelectedCharacter() == null || ui.getSelectedCharacter().isEmpty()) {
                 ui.getCharWarningPopup().show(ui.getPrimaryStage());

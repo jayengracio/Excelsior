@@ -1,4 +1,4 @@
-package excelsior;
+package excelsior.panel;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

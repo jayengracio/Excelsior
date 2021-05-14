@@ -1,12 +1,12 @@
-package excelsior;
+package excelsior.control;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class IconButtons extends Button {
+public class IconButton extends Button {
     private final ImageView graphic;
 
-    IconButtons(String label) {
+    public IconButton(String label) {
         super(label);
         this.setText(null);
         graphic = new ImageView(new Image("/Icons/" + label));

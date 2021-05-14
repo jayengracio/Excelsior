@@ -1,5 +1,6 @@
-package excelsior;
+package excelsior.menu;
 
+import excelsior.control.Button;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -28,6 +29,34 @@ public class HelpMenu {
     public HelpMenu(Stage primaryStage) {
         this.primaryStage = primaryStage;
         helpWindow = createHelpMenu();
+    }
+
+    /**
+     * Creates the menu
+     * @return Menu object
+     */
+    public Menu getMenu() {
+        Menu menu = new Menu("Help");
+        MenuItem help = new MenuItem("Walkthrough");
+        MenuItem fileHelp = new MenuItem("File Help");
+        MenuItem panelHelp = new MenuItem("Panel Help");
+
+        menu.getItems().addAll(help, panelHelp, fileHelp);
+        help.setOnAction(actionEvent -> {
+            prepareHelp(0);
+            helpWindow.show();
+        });
+
+        panelHelp.setOnAction(actionEvent -> {
+            prepareHelp(10);
+            helpWindow.show();
+        });
+
+        fileHelp.setOnAction(actionEvent -> {
+            prepareHelp(11);
+            helpWindow.show();
+        });
+        return menu;
     }
 
     /**
@@ -84,34 +113,6 @@ public class HelpMenu {
         helpWindow.setResizable(false);
 
         return helpWindow;
-    }
-
-    /**
-     * Creates the menu bar
-     * @return Menu object
-     */
-    public Menu create() {
-        Menu menu = new Menu("Help");
-        MenuItem help = new MenuItem("Walkthrough");
-        MenuItem fileHelp = new MenuItem("File Help");
-        MenuItem panelHelp = new MenuItem("Panel Help");
-
-        menu.getItems().addAll(help, panelHelp, fileHelp);
-        help.setOnAction(actionEvent -> {
-            prepareHelp(0);
-            helpWindow.show();
-        });
-
-        panelHelp.setOnAction(actionEvent -> {
-            prepareHelp(10);
-            helpWindow.show();
-        });
-
-        fileHelp.setOnAction(actionEvent -> {
-            prepareHelp(11);
-            helpWindow.show();
-        });
-        return menu;
     }
 
     /**

@@ -1,5 +1,7 @@
-package excelsior;
+package excelsior.data;
 
+import excelsior.gui.ComicPane;
+import excelsior.UI;
 import javafx.scene.image.Image;
 import javafx.stage.DirectoryChooser;
 import javafx.embed.swing.SwingFXUtils;

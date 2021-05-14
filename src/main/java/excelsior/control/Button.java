@@ -1,4 +1,4 @@
-package excelsior;
+package excelsior.control;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -9,7 +9,7 @@ public class Button extends Label {
     private String value;
     private final Glow glow = new Glow();
 
-    Button(String label) {
+    public Button(String label) {
         this.value = label;
         this.setText(value);
         this.setPrefSize(107, 107);

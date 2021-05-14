@@ -1,4 +1,4 @@
-package excelsior;
+package excelsior.panel;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;

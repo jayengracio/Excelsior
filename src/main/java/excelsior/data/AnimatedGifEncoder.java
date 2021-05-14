@@ -1,4 +1,4 @@
-package excelsior;
+package excelsior.data;
 
 import java.io.*;
 import java.awt.*;

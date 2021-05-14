@@ -1,5 +1,20 @@
 package excelsior;
 
+import excelsior.data.HtmlSaver;
+import excelsior.control.Button;
+import excelsior.control.CharacterButton;
+import excelsior.control.HighlightedPopup;
+import excelsior.control.IconButton;
+import excelsior.gui.ComicPane;
+import excelsior.gui.Controller;
+import excelsior.input.StringPreparer;
+import excelsior.menu.FileMenu;
+import excelsior.menu.HelpMenu;
+import excelsior.menu.PanelMenu;
+import excelsior.panel.Character;
+import excelsior.panel.ColourPalette;
+import excelsior.panel.Narration;
+import excelsior.panel.TextBubble;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,9 +41,9 @@ public class UI {
     private final Stage primaryStage;
     private final HBox comicPanels = new HBox(15);
     private final ComicPane workPanel = new ComicPane();
-    private final PanelController panelController = new PanelController(this);
-    private final ButtonController buttonController = new ButtonController(this);
-    private final ComicStripController comicStripController = new ComicStripController(this);
+    private final PanelMenu panelMenu = new PanelMenu(this);
+    private final Controller controller = new Controller(this);
+    private final FileMenu fileMenu = new FileMenu(this);
     private final StringPreparer stringPreparer = new StringPreparer();
     private TilePane buttonBox;
     private Character selectedCharacter;
@@ -69,8 +84,8 @@ public class UI {
         return charWarningPopup;
     }
 
-    public PanelController getPanelController() {
-        return panelController;
+    public PanelMenu getPanelController() {
+        return panelMenu;
     }
 
     public HighlightedPopup getCharPosesPopup() {
@@ -137,9 +152,9 @@ public class UI {
      * @return a menu bar with its menus
      */
     public MenuBar createMenu() {
-        Menu file = comicStripController.FileMenu();
-        Menu panel = panelController.PanelMenu();
-        Menu help = new HelpMenu(primaryStage).create();
+        Menu file = fileMenu.getMenu();
+        Menu panel = panelMenu.getMenu();
+        Menu help = new HelpMenu(primaryStage).getMenu();
         MenuBar mb = new MenuBar();
         mb.getMenus().add(file);
         mb.getMenus().add(panel);
@@ -187,7 +202,7 @@ public class UI {
         buttonBox.setHgap(14);
         buttonBox.setAlignment(Pos.TOP_RIGHT);
         buttonBox.setPrefRows(4);
-        buttonController.start();
+        controller.initialize();
         return buttonBox;
     }
 
@@ -228,7 +243,7 @@ public class UI {
         Label colourLabel = new Label("Choose Theme:");
         colourLabel.setStyle("-fx-font-size: 18px;-fx-font-weight: bold;");
 
-        HtmlSaver saver = comicStripController.getHtmlSaver();
+        HtmlSaver saver = fileMenu.getHtmlSaver();
         String[] themes = saver.getThemes();
         ChoiceBox<String> themeOptions = new ChoiceBox<>( FXCollections.observableArrayList(themes));
         themeOptions.setValue(themes[0]);
@@ -253,6 +268,7 @@ public class UI {
         container.getChildren().addAll(colourLabel,themeOptions,themeSample,closeButton);
 
         htmlOptionMenu = new HighlightedPopup(primaryStage);
+        htmlOptionMenu.setAutoHide(false);
         htmlOptionMenu.getContent().add(container);
 
         closePopupButton(closeButton,htmlOptionMenu);
@@ -308,7 +324,7 @@ public class UI {
                 if (tBub.isEmpty())
                     tBub.setEmpty();
                 else {
-                    if (buttonController.isSpeechBubble())
+                    if (controller.isSpeechBubble())
                         tBub.setSpeech();
                     else
                         tBub.setThought();
@@ -446,7 +462,7 @@ public class UI {
 
             int i = 0;
             for (Resource charPose : charPoseFiles) {
-                Poses.getChildren().add(i, new CharacterPoseButton(charPose.getFilename()));
+                Poses.getChildren().add(i, new CharacterButton(charPose.getFilename()));
                 Poses.setTileAlignment(Pos.TOP_LEFT);
                 changePose(Poses.getChildren().get(i), charPose.getFilename());
                 i++;
@@ -508,9 +524,9 @@ public class UI {
         if (selectedCharacter != null) {
             selectedCharacter.setEffect(null);
             boolean isLeft = (selectedCharacter == workPanel.getLeftCharacter());
-            IconButtons curCharBtn = (IconButtons) buttonBox.getChildren().get(isLeft ? 0 : 1);
+            IconButton curCharBtn = (IconButton) buttonBox.getChildren().get(isLeft ? 0 : 1);
             curCharBtn.setIcon(isLeft ? "Left.png" : "Right.png");
-            buttonController.createCharacterButtonTooltip(curCharBtn, null);
+            controller.createCharacterButtonTooltip(curCharBtn, null);
             selectedCharacter = null;
         }
     }

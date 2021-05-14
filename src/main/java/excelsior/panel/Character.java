@@ -1,4 +1,4 @@
-package excelsior;
+package excelsior.panel;
 
 import javafx.scene.image.*;
 import javafx.scene.paint.Color;
