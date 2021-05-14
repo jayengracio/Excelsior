@@ -7,6 +7,7 @@ import excelsior.control.HighlightedPopup;
 import excelsior.control.IconButton;
 import excelsior.gui.ComicPane;
 import excelsior.gui.Controller;
+import excelsior.gui.LoadingScreen;
 import excelsior.input.StringPreparer;
 import excelsior.menu.FileMenu;
 import excelsior.menu.HelpMenu;
@@ -15,6 +16,7 @@ import excelsior.panel.Character;
 import excelsior.panel.ColourPalette;
 import excelsior.panel.Narration;
 import excelsior.panel.TextBubble;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,6 +25,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -34,6 +37,7 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+
 
 import java.io.IOException;
 
@@ -55,6 +59,9 @@ public class UI {
     private HighlightedPopup htmlOptionMenu;
     private HighlightedPopup xmlLoaderWarning;
     private ColourPalette palette;
+    private LoadingScreen loadingScreen = new LoadingScreen(this);
+    private Scene comicEditorScene;
+
 
     public UI(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -62,6 +69,10 @@ public class UI {
 
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    public LoadingScreen getLoadingScreen() {
+        return loadingScreen;
     }
 
     public ComicPane getWorkPanel() {
@@ -120,18 +131,50 @@ public class UI {
         this.xmlLoaderWarning = xmlLoaderWarning;
     }
 
+    public Scene getComicEditorScene() {
+        return comicEditorScene;
+    }
+
 
     /**
      * Sets up the stage.
+     * Shows Splash Screen while loading app
      */
-    public void setStage() {
+    public void setStage(){
+        primaryStage.setResizable(false);
+        primaryStage.setScene(getSplashScreen());
+        primaryStage.show();
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run(){
+                formUI();
+                primaryStage.setScene(comicEditorScene);
+            }
+        });
+    }
+
+    /**
+     * Creates splash screne scene and returns it to be used for app startup
+     */
+    private Scene getSplashScreen(){
+        VBox container = new VBox();
+        ImageView splash = new ImageView("/Icons/splash.png");
+        splash.setFitWidth(1250);
+        splash.setFitHeight(800);
+        container.getChildren().add(splash);
+        return new Scene(container);
+    }
+
+    /**
+     * forms UI, creating the comicEditor Scene and the popups
+     */
+    private void formUI(){
         VBox root = new VBox();
         root.getChildren().add(createMenu());
         root.getChildren().add(createView());
-        primaryStage.setResizable(false);
-        primaryStage.setScene(new Scene(root, 1250, 800));
+        comicEditorScene = new Scene(root,1250,800);
         createPopups();
-        primaryStage.show();
     }
 
     /**
@@ -143,7 +186,7 @@ public class UI {
         createTopNarrationPopup();
         createCharacterPoses();
         createTextBubbleInput();
-        createHtmlTitlePopup();
+        createHtmlOptionMenu();
     }
 
     /**
@@ -223,7 +266,7 @@ public class UI {
         return scroll;
     }
 
-    private void createHtmlTitlePopup() {
+    private void createHtmlOptionMenu() {
         VBox container = new VBox(10);
         container.setPadding(new Insets(15));
         container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3; -fx-font-size: 16px;");
@@ -267,10 +310,10 @@ public class UI {
         container.getChildren().addAll(titleLabel,textBox,typeLabel,htmlOptions);
         container.getChildren().addAll(colourLabel,themeOptions,themeSample,closeButton);
 
-        htmlOptionMenu = new HighlightedPopup(primaryStage);
+        htmlOptionMenu = new HighlightedPopup(this);
         htmlOptionMenu.setAutoHide(false);
         htmlOptionMenu.getContent().add(container);
-
+        htmlOptionMenu.setAutoHide(false);
         closePopupButton(closeButton,htmlOptionMenu);
 
         themeOptions.setOnAction((event) -> {
@@ -309,7 +352,7 @@ public class UI {
         warning.setStyle("-fx-font-size: 16; -fx-text-fill: red");
         container.getChildren().add(warning);
 
-        textBubbleInput = new HighlightedPopup(primaryStage);
+        textBubbleInput = new HighlightedPopup(this);
         textBubbleInput.getContent().add(container);
 
         EventHandler<ActionEvent> eventHandler = e -> {
@@ -381,7 +424,7 @@ public class UI {
         warning.setStyle("-fx-font-size: 16px; -fx-text-fill: red");
         container.getChildren().addAll(textBox, warning);
 
-        HighlightedPopup inputWindow = new HighlightedPopup(primaryStage);
+        HighlightedPopup inputWindow = new HighlightedPopup(this);
         inputWindow.getContent().add(container);
 
         EventHandler<ActionEvent> eventHandler = e -> {
@@ -437,7 +480,7 @@ public class UI {
         container.setAlignment(Pos.CENTER);
         container.getChildren().addAll(closeButton, selection);
 
-        charPosesPopup = new HighlightedPopup(primaryStage);
+        charPosesPopup = new HighlightedPopup(this);
         charPosesPopup.getContent().add(container);
         closePopupButton(closeButton, charPosesPopup);
     }
@@ -512,7 +555,7 @@ public class UI {
 
         container.getChildren().addAll(warning, selectCharacterWarning, closePrompt);
 
-        charWarningPopup = new HighlightedPopup(primaryStage);
+        charWarningPopup = new HighlightedPopup(this);
         charWarningPopup.getContent().add(container);
     }
 

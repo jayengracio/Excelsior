@@ -235,7 +235,7 @@ public class XmlLoader {
 
         container.getChildren().addAll(warning, loaderWarning, closePrompt);
 
-        ui.setXmlLoaderWarning(new HighlightedPopup(ui.getPrimaryStage()));
+        ui.setXmlLoaderWarning(new HighlightedPopup(ui));
         ui.getXmlLoaderWarning().getContent().add(container);
         ui.getXmlLoaderWarning().show(ui.getPrimaryStage());
     }

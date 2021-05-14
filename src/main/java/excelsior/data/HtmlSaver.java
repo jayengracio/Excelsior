@@ -1,10 +1,12 @@
 package excelsior.data;
 
-import excelsior.gui.ComicPane;
 import excelsior.UI;
+import excelsior.gui.ComicPane;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.stage.DirectoryChooser;
 import javafx.embed.swing.SwingFXUtils;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -71,8 +73,28 @@ public class HtmlSaver {
                     {
                         folderCreated = true;
                         currentComicFolderIndex = i;
-                        createImages(comicDir.getAbsolutePath()); //which will place comic panes png images in the newly created folder
-                        ui.getHtmlOptionMenu().show(ui.getPrimaryStage());
+                        ui.getLoadingScreen().show();
+                        Thread.currentThread().sleep(100); //needed to avoid rendering issue
+
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run(){
+                                try {
+                                    Thread.currentThread().sleep(500);      //minimum loading screen time
+                                    createImages(comicDir.getAbsolutePath());
+                                    ui.getLoadingScreen().hide();
+                                    Thread.currentThread().sleep(200);     //pause before html options is loaded
+                                    ui.getHtmlOptionMenu().show(ui.getPrimaryStage());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                } catch (URISyntaxException e) {
+                                    e.printStackTrace();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
                     }
                     i++;
                 }

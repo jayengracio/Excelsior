@@ -1,10 +1,10 @@
 package excelsior.control;
 
+import excelsior.UI;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.effect.GaussianBlur;
 import javafx.stage.Popup;
-import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class HighlightedPopup extends Popup {
@@ -14,8 +14,8 @@ public class HighlightedPopup extends Popup {
      * Constructor.
      * Contains an event handler which toggles blur for background to highlight popup
      */
-    public HighlightedPopup(Stage stage) {
-        sceneRoot = stage.getScene().getRoot();
+    public HighlightedPopup(UI ui) {
+        sceneRoot = ui.getComicEditorScene().getRoot();
         this.setAutoHide(true);
 
         EventHandler<WindowEvent> toggleBlur = new EventHandler<WindowEvent>() {
