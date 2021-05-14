@@ -3,8 +3,8 @@ package excelsior;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class IconButtons extends Button{
-    private ImageView graphic;
+public class IconButtons extends Button {
+    private final ImageView graphic;
 
     IconButtons(String label) {
         super(label);
@@ -16,7 +16,7 @@ public class IconButtons extends Button{
         this.setGraphic(graphic);
     }
 
-    public void setIcon(String url){
+    public void setIcon(String url) {
         graphic.setImage(new Image("/Icons/" + url));
         this.setGraphic(graphic);
     }

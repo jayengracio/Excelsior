@@ -186,6 +186,9 @@ public class ComicPane extends GridPane {
         this.getRightCharacter().setPoseString(panel.getRightCharacter().getPoseString());
     }
 
+    /**
+     * Fills up the pane with data
+     */
     private void fillPane() {
         topNarration.setAlignment(Pos.CENTER);
         bottomNarration.setAlignment(Pos.CENTER);

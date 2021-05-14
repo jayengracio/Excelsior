@@ -6,8 +6,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class ColourBox extends Rectangle {
-    DropShadow dropShadow = new DropShadow();
     private final Color background;
+    DropShadow dropShadow = new DropShadow();
 
     ColourBox(String colourHex) {
         super(20, 20);

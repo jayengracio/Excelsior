@@ -7,23 +7,23 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-public class HighlightedPopup extends Popup
-{
-    private Parent sceneRoot;
+public class HighlightedPopup extends Popup {
+    private final Parent sceneRoot;
 
-    public HighlightedPopup(Stage stage)
-    {
+    /**
+     * Constructor.
+     * Contains an event handler which toggles blur for background to highlight popup
+     */
+    public HighlightedPopup(Stage stage) {
         sceneRoot = stage.getScene().getRoot();
         this.setAutoHide(true);
 
-        //event handler which toggles blur for background to highlight popup
         EventHandler<WindowEvent> toggleBlur = new EventHandler<WindowEvent>() {
             @Override
-            public void handle(WindowEvent event)
-            {
-                sceneRoot.setEffect( (sceneRoot.getEffect() == null) ? new GaussianBlur() : null);
+            public void handle(WindowEvent event) {
+                sceneRoot.setEffect((sceneRoot.getEffect() == null) ? new GaussianBlur() : null);
             }
-         };
+        };
 
         this.setOnShowing(toggleBlur);
         this.setOnHiding(toggleBlur);

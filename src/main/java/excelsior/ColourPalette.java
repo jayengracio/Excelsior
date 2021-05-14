@@ -4,19 +4,20 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 
-
-public class ColourPalette extends GridPane{
+public class ColourPalette extends GridPane {
     UI ui;
     int option = 0;
     Label buttonPressed = new Label("Hair Colour");
     IconButtons selected;
     private IconButtons defaultButton;
 
+    /**
+     * Constructor
+     */
     public ColourPalette(UI ui) {
         this.ui = ui;
         this.setPadding(new Insets(5));
@@ -34,7 +35,10 @@ public class ColourPalette extends GridPane{
         addButtons();
     }
 
-    private void addButtons(){
+    /**
+     * Creates the buttons
+     */
+    private void addButtons() {
         IconButtons hairButton = new IconButtons("Hair.png");
         IconButtons skinButton = new IconButtons("Skin.png");
         IconButtons lipButton = new IconButtons("Lips.png");
@@ -46,20 +50,24 @@ public class ColourPalette extends GridPane{
         selected.setStyle("-fx-border-color: #000070; -fx-border-radius: 20px;");
     }
 
-    private IconButtons setButton(int option, IconButtons button){
+    /**
+     * Selectable options of a character's feature
+     * @param option of a character's feature
+     * @param button to add an event handler
+     * @return
+     */
+    private IconButtons setButton(int option, IconButtons button) {
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (ui.getSelectedCharacter() == null || ui.getSelectedCharacter().isEmpty()) {
                 ui.getCharWarningPopup().show(ui.getPrimaryStage());
             } else {
                 this.option = option;
 
-                if(option == 0){
+                if (option == 0) {
                     buttonPressed.setText("Hair Colour");
-                }
-                else if(option == 1){
+                } else if (option == 1) {
                     buttonPressed.setText("Skin Colour");
-                }
-                else if(option == 2){
+                } else if (option == 2) {
                     buttonPressed.setText("Lip Colour");
                 }
                 selected.setStyle("-fx-border-color: #000000; -fx-border-radius: 20px;");
@@ -70,13 +78,16 @@ public class ColourPalette extends GridPane{
         return button;
     }
 
+    /**
+     * Gets the colours.
+     * each row in this colour array will represent on bar of similar shade colours aka black/grays in one greens in another
+     * colour choice constraints, cannot have r value below 9 as male hair is always 9 r val higher than hair colour
+     */
     private HBox getColours(int colourInd) {
         HBox choices = new HBox();
         choices.setStyle("-fx-border-color: #000000;");
         choices.setPrefSize(100, 20);
 
-        //each row in this colour array will represent on bar of similar shade colours aka black/grays in one greens in another
-        //colour choice constraints, cannot have r value below 9 as male hair is always 9 r val higher than hair colour
         String[][] colours = {{"#0A0A0A", "#2B2B2B", "#3B3B3B", "#474747", "#575757"},
                 {"#6B6B6B", "#7F7F7F", "#989898", "#B7B7B7", "#C5C5C5"},
                 {"#342316", "#463417", "#624F1A", "#776035", "#9D846A"},
@@ -98,17 +109,21 @@ public class ColourPalette extends GridPane{
         return choices;
     }
 
+    /**
+     * Change the colour based on the colour box button clicked
+     * @param button the colour box
+     */
     private void colourChange(Node button) {
         ColourBox cur = (ColourBox) button;
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (ui.getSelectedCharacter() == null || ui.getSelectedCharacter().isEmpty()) {
                 ui.getCharWarningPopup().show(ui.getPrimaryStage());
             } else {
-                if(option == 0)
+                if (option == 0)
                     ui.getSelectedCharacter().setHairColour(cur.getBackground());
-                else if(option == 1)
+                else if (option == 1)
                     ui.getSelectedCharacter().setSkinColour(cur.getBackground());
-                else if(option == 2)
+                else if (option == 2)
                     ui.getSelectedCharacter().setLipColour(cur.getBackground());
                 if (!ui.getWorkPanel().getLeftCharacter().isEmpty() || !ui.getWorkPanel().getRightCharacter().isEmpty()) {
                     ui.getWorkPanel().setEditMode(true);
@@ -117,7 +132,10 @@ public class ColourPalette extends GridPane{
         });
     }
 
-    public void reset(){
+    /**
+     * Reset buttons
+     */
+    public void reset() {
         selected.setStyle("-fx-border-color: #000000; -fx-border-radius: 20px;");
         selected = defaultButton;
         selected.setStyle("-fx-border-color: #000080; -fx-border-radius: 20px;");

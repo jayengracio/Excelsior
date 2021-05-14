@@ -178,6 +178,7 @@ public class PanelController {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             comicPanels.getChildren().remove(selectedPanel);
             ui.resetAppFace();
+            disableMove();
         }
     }
 

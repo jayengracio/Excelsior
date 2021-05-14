@@ -163,6 +163,7 @@ public class Character extends ImageView {
 
     /**
      * Changes the hair colour
+     *
      * @param inputImage Character image to modify
      * @return the updated image
      */
@@ -172,6 +173,7 @@ public class Character extends ImageView {
 
     /**
      * Changes the skin colour
+     *
      * @param inputImage Character image to modify
      * @return the updated image
      */
@@ -181,6 +183,7 @@ public class Character extends ImageView {
 
     /**
      * Changes the lip colour
+     *
      * @param inputImage Character image to modify
      * @return the updated image
      */
@@ -190,9 +193,10 @@ public class Character extends ImageView {
 
     /**
      * Actual function to update the colour of a character's feature
-     * @param inputImage Character image to modify
+     *
+     * @param inputImage    Character image to modify
      * @param defaultColour The default colour of the character's feature
-     * @param newColour The new colour
+     * @param newColour     The new colour
      * @return the updated image with a new colour of a character's feature
      */
     private Image updateColour(Image inputImage, Color defaultColour, Color newColour) {
@@ -219,10 +223,9 @@ public class Character extends ImageView {
                     int curPixelBlue = (int) Math.round(current.getBlue() * 255);
 
                     //removes lip Anti Aliasing to improve look of brighter coloured lips
-                    if(defaultColour == defaultLipColour && curPixelRed == 255 && curPixelGreen < 232 && curPixelBlue< 216 && !current.equals(defaultLipColour)) {
+                    if (defaultColour == defaultLipColour && curPixelRed == 255 && curPixelGreen < 232 && curPixelBlue < 216 && !current.equals(defaultLipColour)) {
                         change(writer, x, y, current, defaultSkinColour);
-                    }
-                    else if (curPixelRed >= skinRed - 9 && curPixelBlue == skinBlue && curPixelGreen == skinGreen && curPixelRed <= skinRed) {
+                    } else if (curPixelRed >= skinRed - 9 && curPixelBlue == skinBlue && curPixelGreen == skinGreen && curPixelRed <= skinRed) {
                         writer.setColor(x, y, Color.rgb(curPixelRed + (newRed - skinRed), curPixelGreen + (newGreen - skinGreen), curPixelBlue + (newBlue - skinBlue)));
                     } else {
                         writer.setColor(x, y, current);
@@ -237,6 +240,7 @@ public class Character extends ImageView {
 
     /**
      * Function to change the character's gender.
+     *
      * @param inputImage Character image to modify
      * @return the updated image with no long hair and pigtails
      */
@@ -258,9 +262,9 @@ public class Character extends ImageView {
 
                     if (curPixelRed >= 240 && curPixelGreen == 255 && curPixelRed <= 255 && !current.equals(defaultHairColour)) { //hair
                         change(writer, x, y, current, Color.rgb(255, 255, 255));
-                    }else if(curPixelRed == 255 && curPixelGreen < 232 && curPixelBlue< 216 && !current.equals(defaultLipColour)) { //lip aa for male
+                    } else if (curPixelRed == 255 && curPixelGreen < 232 && curPixelBlue < 216 && !current.equals(defaultLipColour)) { //lip aa for male
                         change(writer, x, y, current, defaultSkinColour);
-                    }else if (curPixelRed >= 236 && curPixelGreen >= 180 && !current.equals(defaultHairColour)) { //pigtails
+                    } else if (curPixelRed >= 236 && curPixelGreen >= 180 && !current.equals(defaultHairColour)) { //pigtails
                         change(writer, x, y, current, Color.rgb(255, 255, 255));
                     } else {
                         writer.setColor(x, y, current);

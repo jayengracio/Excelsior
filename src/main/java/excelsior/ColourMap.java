@@ -13,7 +13,7 @@ public class ColourMap {
     }
 
     private static void createColorMap() {
-        COLOR_MAP.put("brown",  Color.web("#964B00"));
+        COLOR_MAP.put("brown", Color.web("#964B00"));
         COLOR_MAP.put("blue", Color.web("#0900FFFF"));
         COLOR_MAP.put("pink", Color.PINK);
         COLOR_MAP.put("black", Color.web("#090000"));

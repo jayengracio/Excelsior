@@ -1,7 +1,12 @@
 package excelsior;
 
 public class StringPreparer {
-    // Sort through fonts for text bubble
+    /**
+     * Sorts through fonts for text bubble
+     * @param s the text to prepare
+     * @param tBub the bubble
+     * @return the output String or null
+     */
     public String prepareTBub(String s, TextBubble tBub) {
         String output;
         int largeFont = 20;
@@ -26,7 +31,12 @@ public class StringPreparer {
         return null;
     }
 
-    // Dynamically change font size for narration depending on input length
+    /**
+     * Dynamically change font size for narration depending on input length
+     * @param s the text to prepare
+     * @param narration the narration
+     * @return the output String or null
+     */
     public String prepareNarration(String s, Narration narration) {
         String output;
 
@@ -50,7 +60,13 @@ public class StringPreparer {
         return null;
     }
 
-    // Prepares String for text bubbles and returns null if exceeds acceptable length
+    /**
+     * Prepares String for text bubbles and returns null if exceeds acceptable length
+     * @param s the text to prepare
+     * @param numLines the number of lines
+     * @param charPerLine the number of characters per line
+     * @return output String
+     */
     public String prepareString(String s, int numLines, int charPerLine) {
         String output;
         int lastSpace = 0;

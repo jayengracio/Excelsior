@@ -209,7 +209,6 @@ public class UI {
     }
 
     private void createHtmlTitlePopup() {
-
         VBox container = new VBox(10);
         container.setPadding(new Insets(15));
         container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3; -fx-font-size: 16px;");
@@ -221,7 +220,7 @@ public class UI {
 
         Label typeLabel = new Label("Choose html comic type:");
         typeLabel.setStyle("-fx-font-size: 18px;-fx-font-weight: bold;");
-        ChoiceBox  htmlOptions = new ChoiceBox();
+        ChoiceBox<String> htmlOptions = new ChoiceBox<>();
         htmlOptions.setMinWidth(220);
         htmlOptions.getItems().addAll( "Vertical single strip", "Vertical double strip", "Horizontal single strip", "GIF");
         htmlOptions.setValue("Vertical single strip");
@@ -231,7 +230,7 @@ public class UI {
 
         HtmlSaver saver = comicStripController.getHtmlSaver();
         String[] themes = saver.getThemes();
-        ChoiceBox themeOptions = new ChoiceBox( FXCollections.observableArrayList(themes));
+        ChoiceBox<String> themeOptions = new ChoiceBox<>( FXCollections.observableArrayList(themes));
         themeOptions.setValue(themes[0]);
         themeOptions.setMinWidth(220);
 
@@ -259,7 +258,7 @@ public class UI {
         closePopupButton(closeButton,htmlOptionMenu);
 
         themeOptions.setOnAction((event) -> {
-            String[] currentColours = saver.getThemeColourSet(themeOptions.getValue().toString());
+            String[] currentColours = saver.getThemeColourSet(themeOptions.getValue());
             background1.setFill(Color.web(currentColours[0]));
             background2.setFill(Color.web(currentColours[1]));
             highlight.setFill(Color.web(currentColours[2]));
@@ -267,7 +266,7 @@ public class UI {
 
         htmlOptionMenu.setOnHidden(e -> {
             saver.setComicTitle(textBox.getText());
-            saver.htmlFormer(htmlOptions.getSelectionModel().getSelectedIndex(),themeOptions.getValue().toString());
+            saver.htmlFormer(htmlOptions.getSelectionModel().getSelectedIndex(), themeOptions.getValue());
             textBox.setText("Type title here...");
             textBox.selectAll();
             htmlOptions.setValue("Vertical single strip");

@@ -3,8 +3,8 @@ package excelsior;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class CharacterPoseButton extends Button{
-    CharacterPoseButton(String label) {
+public class CharacterPoseButton extends Button {
+    public CharacterPoseButton(String label) {
         super(label);
         this.setText(null);
         ImageView graphic = new ImageView(new Image("/Character_Images/" + label));
