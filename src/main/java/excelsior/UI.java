@@ -418,10 +418,11 @@ public class UI {
      */
     private void createCharacterPoses() {
         ScrollPane selection = new ScrollPane();
-        selection.setPrefSize(261, 360);
+        selection.setPrefSize(505, 700);
 
         selection.setContent(createPoses());
         selection.setPannable(true);
+        selection.setFitToWidth(true);
 
         selection.setPadding(new Insets(5));
         selection.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-font-size: 18px;");
@@ -449,8 +450,8 @@ public class UI {
     private TilePane createPoses() {
         TilePane Poses = new TilePane();
         Poses.setMaxSize(500, 10);
-        Poses.setPrefColumns(2);
-        Poses.setPrefRows(6);
+        Poses.setPrefColumns(5);
+        Poses.setPrefRows(10);
         Poses.setVgap(11);
         Poses.setHgap(14);
         Poses.setAlignment(Pos.CENTER_RIGHT);
