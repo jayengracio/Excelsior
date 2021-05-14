@@ -109,6 +109,7 @@ public class HelpMenu {
         return menu;
     }
 
+    //loads help messages into array
     private void formHelpMessages()
     {
         helpMessages = new String[12];
@@ -162,6 +163,7 @@ public class HelpMenu {
                 "\nYou can also just use the buttons in the File dropdown shown";
     }
 
+    //loads help screen images into array
     private void formHelpScreens()
     {
         helpScreens = new Image[12];

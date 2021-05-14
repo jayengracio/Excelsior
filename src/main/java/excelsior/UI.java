@@ -1,5 +1,6 @@
 package excelsior;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -12,6 +13,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.springframework.core.io.Resource;
@@ -34,9 +37,8 @@ public class UI {
     private HighlightedPopup bottomNarrationInput;
     private HighlightedPopup topNarrationInput;
     private HighlightedPopup textBubbleInput;
-    private HighlightedPopup htmlTitleInput;
+    private HighlightedPopup htmlOptionMenu;
     private HighlightedPopup xmlLoaderWarning;
-    private HighlightedPopup htmlTypeInput;
     private ColourPalette palette;
 
     public UI(Stage primaryStage) {
@@ -87,8 +89,8 @@ public class UI {
         return textBubbleInput;
     }
 
-    public HighlightedPopup getHtmlTitleInput() {
-        return htmlTitleInput;
+    public HighlightedPopup getHtmlOptionMenu() {
+        return htmlOptionMenu;
     }
 
     public TilePane getButtonBox() {
@@ -103,13 +105,6 @@ public class UI {
         this.xmlLoaderWarning = xmlLoaderWarning;
     }
 
-    public HighlightedPopup getHtmlTypeInput() {
-        return htmlTypeInput;
-    }
-
-    public void setHtmlTypeInput(HighlightedPopup htmlTypeInput) {
-        this.htmlTypeInput = htmlTypeInput;
-    }
 
     /**
      * Sets up the stage.
@@ -214,30 +209,72 @@ public class UI {
     }
 
     private void createHtmlTitlePopup() {
-        VBox container = new VBox();
+
+        VBox container = new VBox(10);
         container.setPadding(new Insets(15));
-        container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3; -fx-font-size: 18px;");
+        container.setStyle("-fx-background-color: white; -fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 3; -fx-font-size: 16px;");
         container.setAlignment(Pos.CENTER);
 
-        TextField textBox = new TextField("Enter Comic Title");
-        container.getChildren().add(textBox);
+        Label titleLabel = new Label("Enter Comic Title:");
+        titleLabel.setStyle("-fx-font-size: 18px;-fx-font-weight: bold;");
+        TextField textBox = new TextField("Type title here...");
 
-        htmlTitleInput = new HighlightedPopup(primaryStage);
-        htmlTitleInput.getContent().add(container);
+        Label typeLabel = new Label("Choose html comic type:");
+        typeLabel.setStyle("-fx-font-size: 18px;-fx-font-weight: bold;");
+        ChoiceBox  htmlOptions = new ChoiceBox();
+        htmlOptions.setMinWidth(220);
+        htmlOptions.getItems().addAll( "Vertical single strip", "Vertical double strip", "Horizontal single strip", "GIF");
+        htmlOptions.setValue("Vertical single strip");
 
-        EventHandler<ActionEvent> eventHandler = e -> {
-            htmlTitleInput.hide();
-        };
-        textBox.setOnAction(eventHandler);
-        htmlTitleInput.setOnHidden(e -> {
-            comicStripController.getHtmlSaver().setComicTitle(textBox.getText());
-            try {
-                comicStripController.getHtmlSaver().htmlFormer();
-            } catch (IOException ioException) {
-                System.out.println("something went wrong in HTMLsaver");
-            }
-            textBox.setText("Enter Comic Title");
+        Label colourLabel = new Label("Choose Theme:");
+        colourLabel.setStyle("-fx-font-size: 18px;-fx-font-weight: bold;");
+
+        HtmlSaver saver = comicStripController.getHtmlSaver();
+        String[] themes = saver.getThemes();
+        ChoiceBox themeOptions = new ChoiceBox( FXCollections.observableArrayList(themes));
+        themeOptions.setValue(themes[0]);
+        themeOptions.setMinWidth(220);
+
+        HBox themeSample = new HBox(3);
+        themeSample.setAlignment(Pos.CENTER);
+        String[] defaultColours = saver.getThemeColourSet(themes[0]);
+        Rectangle background1 = new Rectangle(70,40);
+        background1.setFill(Color.web(defaultColours[0]));
+        Rectangle background2 = new Rectangle(70,40);
+        background2.setFill(Color.web(defaultColours[1]));
+        Rectangle highlight = new Rectangle(70,40);
+        highlight.setFill(Color.web(defaultColours[2]));
+        themeSample.getChildren().addAll(background1,background2,highlight);
+
+        Button closeButton = new Button("Confirm");
+        closeButton.setPrefSize(220,40);
+        closeButton.setStyle("-fx-border-color: #000000; -fx-border-radius: 10px; -fx-text-fill : #ffffff; -fx-background-color: #1CC415; -fx-background-radius: 10px; -fx-font-weight: Bold;-fx-font-size: 18px;");
+
+        container.getChildren().addAll(titleLabel,textBox,typeLabel,htmlOptions);
+        container.getChildren().addAll(colourLabel,themeOptions,themeSample,closeButton);
+
+        htmlOptionMenu = new HighlightedPopup(primaryStage);
+        htmlOptionMenu.getContent().add(container);
+
+        closePopupButton(closeButton,htmlOptionMenu);
+
+        themeOptions.setOnAction((event) -> {
+            String[] currentColours = saver.getThemeColourSet(themeOptions.getValue().toString());
+            background1.setFill(Color.web(currentColours[0]));
+            background2.setFill(Color.web(currentColours[1]));
+            highlight.setFill(Color.web(currentColours[2]));
+        });
+
+        htmlOptionMenu.setOnHidden(e -> {
+            saver.setComicTitle(textBox.getText());
+            saver.htmlFormer(htmlOptions.getSelectionModel().getSelectedIndex(),themeOptions.getValue().toString());
+            textBox.setText("Type title here...");
             textBox.selectAll();
+            htmlOptions.setValue("Vertical single strip");
+            themeOptions.setValue(themes[0]);
+            background1.setFill(Color.web(defaultColours[0]));
+            background2.setFill(Color.web(defaultColours[1]));
+            highlight.setFill(Color.web(defaultColours[2]));
         });
     }
 

@@ -1,19 +1,15 @@
 package excelsior;
 
-import javafx.scene.control.ChoiceDialog;
 import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
-
 import javafx.embed.swing.SwingFXUtils;
 import javax.imageio.ImageIO;
-import javax.imageio.stream.FileImageOutputStream;
-import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 
 public class HtmlSaver {
     private final UI ui;
@@ -21,18 +17,40 @@ public class HtmlSaver {
     private File comicDir;
     private int currentComicFolderIndex;
     private Image endScreen;
-    private int selectedType = 0;
+    private HashMap<String,String[]> themes = new HashMap<String,String[]>();
 
     public HtmlSaver(UI ui) {
         this.ui = ui;
         this.comicTitle="Title";
         endScreen = new Image("/Icons/end_screen.png");
+        loadThemes();
+    }
+
+    public String[] getThemes()
+    {
+        return themes.keySet().toArray(new String[themes.keySet().size()]);
+    }
+
+    public String[] getThemeColourSet(String theme)
+    {
+        return themes.get(theme);
+    }
+    public void loadThemes()
+    {
+        themes.put("Dark-red",new String[]{"#23272a","#2c2f33","#B22222"});
+        themes.put("Dark-blue",new String[]{"#23272a","#2c2f33","#2362FF"});
+        themes.put("Light-red",new String[]{"#EEEEEE","#F8F8F8","#B22222"});
+        themes.put("Light-blue",new String[]{"#EEEEEE","#F8F8F8","#2362FF"});
+        themes.put("Sky",new String[]{"#3B99FF","#94E0FF","#0E4CFF"});
+        themes.put("Desert",new String[]{"#FFD904","#FFFF65","#FFA241"});
+        themes.put("Forest",new String[]{"#005F04","#7EFF66","#3EA73A"});
+        themes.put("Seaside",new String[]{"#00ADDE","#FFFF65","#60CCFF"});
+        themes.put("Arctic",new String[]{"#4f6f86","#c1ccde","#9eddee"});
+        themes.put("Cotton Candy",new String[]{"#FF23C7","#FF98C7","#FF58C1"});
     }
 
     public void save() {
         try {
-            //could store title in this html saver or in a comic class idk
-            HBox comicPanels = ui.getComicPanels();
             String dir = chooseDirectory();
             //if they chose a directory
             if (dir != null)
@@ -52,8 +70,7 @@ public class HtmlSaver {
                         folderCreated = true;
                         currentComicFolderIndex = i;
                         createImages(comicDir.getAbsolutePath()); //which will place comic panes png images in the newly created folder
-                        createHtmlTypeInputPopup();
-                        ui.getHtmlTitleInput().show(ui.getPrimaryStage());
+                        ui.getHtmlOptionMenu().show(ui.getPrimaryStage());
                     }
                     i++;
                 }
@@ -64,7 +81,11 @@ public class HtmlSaver {
         }
     }
 
-    public void htmlFormer() throws IOException {
+    public void htmlFormer(int selectedType,String theme)
+    {
+        //System.out.println(selectedType + " "+theme + " " +themes.get(theme));
+        String[] colours = themes.get(theme);
+        //System.out.println(colours[0]+" "+colours[1]+" "+colours[2]);
         try {
             File comic = new File(comicDir.getAbsolutePath() + "\\comic" + currentComicFolderIndex + ".html");
             PrintWriter writer = new PrintWriter(comic);
@@ -72,7 +93,7 @@ public class HtmlSaver {
                     "<head>\n" +
                     "\t<style>\n" +
                     "\t\tbody{\n" +
-                    "\t\t\tbackground-color: #23272a;\n" +
+                    "\t\t\tbackground-color: "+colours[0]+";\n" +
                     "\t\t\tmargin: 0px 0px 0px 0px;\n" +
                     "\t\t\t\n" +
                     "\t\t}\n" +
@@ -84,10 +105,10 @@ public class HtmlSaver {
                     "\t\t\tfont-weight: bold;\n" +
                     "\t\t\tfont-family: Copperplate;\n" +
                     "\t\t\tpadding: 25px 10px 25px 10px;\n" +
-                    "\t\t\tbackground-color: #B22222;\n" +
+                    "\t\t\tbackground-color: "+colours[2]+";\n" +
                     "\t\t\tborder-radius: 10px;\n" +
                     "\t\t\tmargin: 10px 140px 15px 140px;\n" +
-                    "\t\t\ttext-shadow: 2px 2px 3px #2c2f33;\n" +
+                    "\t\t\ttext-shadow: 2px 2px 3px #000000;\n" +
                     "\t\t}\t\n" +
                     "\t\t\t\n" +
                     "\t\t#mainSlider{\n");
@@ -99,12 +120,12 @@ public class HtmlSaver {
                 writer.print("\t\t\tmargin: 0px 15vw 0px 15vw;\n");
             }
 
-            writer.print("\t\t\tbackground-color: #2c2f33;\n" +
+            writer.print("\t\t\tbackground-color: "+colours[1]+";\n" +
                     "\t\t\tpadding: 10px 30px 10px 30px;\n" +
                     "\t\t}\n" +
                     "\n" +
                     "\t\ttable{\n" +
-                    "\t\t\tborder: 3px solid #B22222;\n" +
+                    "\t\t\tborder: 3px solid "+colours[2]+";\n" +
                     "\t\t\tborder-radius: 15px;\n" +
                     "\t\t\tpadding: 10px;\n" +
                     "\t\t\tmargin-left: auto;\n" +
@@ -180,8 +201,8 @@ public class HtmlSaver {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
+
     private String chooseDirectory(){
         DirectoryChooser dirToSaveHtmlFolder = new DirectoryChooser();
         dirToSaveHtmlFolder.setTitle("Choose Directory to Save HTML comic folder");
@@ -207,26 +228,8 @@ public class HtmlSaver {
             ui.resetAppFace();
         }
 
-
         File file = new File(fileLocation + "\\" + ui.getComicPanels().getChildren().size() + ".png");
         ImageIO.write(SwingFXUtils.fromFXImage(endScreen, null), "png", file);
-        //Path source = Paths.get(getClass().getResource("/Icons/end_screen.png").toURI());
-        //Path target = Paths.get(fileLocation + "\\" + ui.getComicPanels().getChildren().size() + ".png");
-        //Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
-    }
-
-    public void createHtmlTypeInputPopup(){
-        String[] options = { "Vertical-1", "Vertical-2", "Horizontal",
-                "GIF"};
-        ChoiceDialog d = new ChoiceDialog(options[0], options);
-        d.setHeaderText("Select preferred HTML layout");
-        d.showAndWait();
-        switch (d.getSelectedItem().toString()) {
-            case "Vertical-1" -> selectedType = 0;
-            case "Vertical-2" -> selectedType = 1;
-            case "Horizontal" -> selectedType = 2;
-            case "GIF" -> selectedType = 3;
-        }
     }
 
     public void createGif() throws IOException {
