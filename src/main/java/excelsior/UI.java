@@ -1,10 +1,8 @@
 package excelsior;
 
-import excelsior.data.HtmlSaver;
+import excelsior.control.*;
 import excelsior.control.Button;
-import excelsior.control.CharacterButton;
-import excelsior.control.HighlightedPopup;
-import excelsior.control.IconButton;
+import excelsior.data.HtmlSaver;
 import excelsior.gui.ComicPane;
 import excelsior.gui.Controller;
 import excelsior.gui.LoadingScreen;
@@ -506,7 +504,7 @@ public class UI {
 
             int i = 0;
             for (Resource charPose : charPoseFiles) {
-                Poses.getChildren().add(i, new CharacterButton(charPose.getFilename()));
+                Poses.getChildren().add(i, new ImageButton("/Character_Images/",charPose.getFilename()));
                 Poses.setTileAlignment(Pos.TOP_LEFT);
                 changePose(Poses.getChildren().get(i), charPose.getFilename());
                 i++;
@@ -568,8 +566,8 @@ public class UI {
         if (selectedCharacter != null) {
             selectedCharacter.setEffect(null);
             boolean isLeft = (selectedCharacter == workPanel.getLeftCharacter());
-            IconButton curCharBtn = (IconButton) buttonBox.getChildren().get(isLeft ? 0 : 1);
-            curCharBtn.setIcon(isLeft ? "Left.png" : "Right.png");
+            ImageButton curCharBtn = (ImageButton) buttonBox.getChildren().get(isLeft ? 0 : 1);
+            curCharBtn.setImage("/Icons/",isLeft ? "Left.png" : "Right.png");
             controller.createCharacterButtonTooltip(curCharBtn, null);
             selectedCharacter = null;
         }

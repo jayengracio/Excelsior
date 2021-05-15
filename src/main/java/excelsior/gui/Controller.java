@@ -2,7 +2,7 @@ package excelsior.gui;
 
 import excelsior.UI;
 import excelsior.control.Button;
-import excelsior.control.IconButton;
+import excelsior.control.ImageButton;
 import javafx.scene.Node;
 import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
@@ -28,14 +28,14 @@ public class Controller {
      * Gives all the buttons in the button box of UI its functionalities
      */
     public void initialize() {
-        ui.getButtonBox().getChildren().add(0, new IconButton("Left.png"));
-        ui.getButtonBox().getChildren().add(1, new IconButton("Right.png"));
-        ui.getButtonBox().getChildren().add(2, new IconButton("Flip.png"));
-        ui.getButtonBox().getChildren().add(3, new IconButton("Gender.png"));
-        ui.getButtonBox().getChildren().add(4, new IconButton("Speech Bubble.png"));
-        ui.getButtonBox().getChildren().add(5, new IconButton("Top Narration.png"));
-        ui.getButtonBox().getChildren().add(6, new IconButton("Thought Bubble.png"));
-        ui.getButtonBox().getChildren().add(7, new IconButton("Bot Narration.png"));
+        ui.getButtonBox().getChildren().add(0, new ImageButton("/Icons/","Left.png"));
+        ui.getButtonBox().getChildren().add(1, new ImageButton("/Icons/","Right.png"));
+        ui.getButtonBox().getChildren().add(2, new ImageButton("/Icons/","Flip.png"));
+        ui.getButtonBox().getChildren().add(3, new ImageButton("/Icons/","Gender.png"));
+        ui.getButtonBox().getChildren().add(4, new ImageButton("/Icons/","Speech Bubble.png"));
+        ui.getButtonBox().getChildren().add(5, new ImageButton("/Icons/","Top Narration.png"));
+        ui.getButtonBox().getChildren().add(6, new ImageButton("/Icons/","Thought Bubble.png"));
+        ui.getButtonBox().getChildren().add(7, new ImageButton("/Icons/","Bot Narration.png"));
 
         this.leftCharacterButton(ui.getButtonBox().getChildren().get(0));
         this.rightCharacterButton(ui.getButtonBox().getChildren().get(1));
