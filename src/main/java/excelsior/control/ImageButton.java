@@ -21,6 +21,7 @@ public class ImageButton extends Button {
         this.setValue(filename);
         this.setText(null);
         graphic.setImage(new Image(resourcePath+filename));
+        this.setGraphic(graphic);
     }
 }
 
