@@ -258,7 +258,7 @@ public class HtmlSaver {
         comicImagePanels = clean(comicImagePanels);
         AnimatedGifEncoder e = new AnimatedGifEncoder();
         e.start(comicDir.getAbsolutePath() + "/GIF" + ".gif");
-        e.setDelay(4000);   // number of milliseconds between frames
+        e.setDelay(6000);   // number of milliseconds between frames
 
         for (File comicImagePanel : comicImagePanels) {
             BufferedImage nextImage = ImageIO.read(comicImagePanel);
