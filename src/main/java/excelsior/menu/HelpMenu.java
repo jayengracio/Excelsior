@@ -160,7 +160,7 @@ public class HelpMenu {
                 "\nCreate a new panel using 'Shift+N'" +
                 "\nSelect a panel by clicking it, you can now re-edit that panel" +
                 "\nDelete the selected panel using 'Delete' on keyboard" +
-                "\nShift the selected panel position left using 'A' or right using 'S'" +
+                "\nShift the selected panel position left using 'A' or right using 'D'" +
                 "\nYou can also just use the buttons in the Panel dropdown shown";
 
         helpMessages[11] = "Save your comic as a Html file using 'Ctrl+H'" +
