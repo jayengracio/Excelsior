@@ -8,6 +8,7 @@ import excelsior.control.HighlightedPopup;
 import excelsior.input.StringPreparer;
 import excelsior.panel.Narration;
 import excelsior.panel.TextBubble;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -22,6 +23,8 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class XmlLoader {
     UI ui;
@@ -31,7 +34,7 @@ public class XmlLoader {
         this.ui = ui;
     }
 
-    public void load() {
+    public void load(){
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml");
         fileChooser.getExtensionFilters().add(extFilter);
@@ -42,7 +45,25 @@ public class XmlLoader {
             ui.getPanelController().clearWorkPanel();
             ui.getComicPanels().getChildren().clear();
 
-            loadFile(file);
+            ui.getLoadingScreen().show();
+            try {
+                Thread.currentThread().sleep(100); //needed to avoid rendering issue
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run(){
+                    try {
+                        Thread.currentThread().sleep(500);      //minimum loading screen time
+                        loadFile(file);
+                        ui.getLoadingScreen().hide();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
             double elapsedTimeInSec = (System.nanoTime() - start) * 1.0e-9;
             System.out.println("Loaded In: " + elapsedTimeInSec);
         }
