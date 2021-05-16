@@ -29,6 +29,7 @@ import java.net.URISyntaxException;
 public class XmlLoader {
     UI ui;
     StringPreparer stringPreparer = new StringPreparer();
+    Boolean issues = false;
 
     public XmlLoader(UI ui) {
         this.ui = ui;
@@ -58,14 +59,17 @@ public class XmlLoader {
                         Thread.currentThread().sleep(500);      //minimum loading screen time
                         loadFile(file);
                         ui.getLoadingScreen().hide();
+                        if(issues){
+                            createWarning("There were issues loading your XML file...\nCharacter poses, colours or text may be changed");
+                            Thread.currentThread().sleep(300);
+                            ui.getXmlLoaderWarning().show(ui.getPrimaryStage());
+                            issues = false;
+                        }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             });
-
-            double elapsedTimeInSec = (System.nanoTime() - start) * 1.0e-9;
-            System.out.println("Loaded In: " + elapsedTimeInSec);
         }
     }
 
@@ -143,8 +147,10 @@ public class XmlLoader {
                     tBub.setSpeech();
                 else if (eElement.getAttribute("status").equals("thought"))
                     tBub.setThought();
-
-                tBub.setText(stringPreparer.prepareTBub(eElement.getElementsByTagName("content").item(0).getTextContent(), tBub));
+                String text = stringPreparer.prepareTBub(eElement.getElementsByTagName("content").item(0).getTextContent(), tBub);
+                if(text == null)
+                    issues = true;
+                tBub.setText(text);
             }
         }
 
@@ -157,7 +163,10 @@ public class XmlLoader {
             Node nNode = above.item(0);
             if (nNode.getNodeType() == nNode.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
-                label.setText(stringPreparer.prepareNarration(eElement.getTextContent(), label));
+                String text = stringPreparer.prepareNarration(eElement.getTextContent(), label);
+                if(text == null)
+                    issues = true;
+                label.setText(text);
             }
         }
         return label;
@@ -169,7 +178,11 @@ public class XmlLoader {
             Node nNode = below.item(0);
             if (nNode.getNodeType() == nNode.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
-                label.setText(stringPreparer.prepareNarration(eElement.getTextContent(), label));
+                String text = stringPreparer.prepareNarration(eElement.getTextContent(), label);
+                if(text == null)
+                    issues = true;
+                label.setText(text);
+
             }
         }
         return label;
@@ -194,6 +207,7 @@ public class XmlLoader {
                             c.setPoseString(character);
                         }
                     }catch (Exception e){
+                        issues=true;
                         c.setDefaultPose();
                     }
                 }
@@ -201,25 +215,35 @@ public class XmlLoader {
                 if (eElement.getElementsByTagName("facing").getLength() > 0 &&
                         eElement.getElementsByTagName("facing").item(0).getTextContent().equals("left"))
                     c.flipDefaultOrientation();
+                else if (!eElement.getElementsByTagName("facing").item(0).getTextContent().equals("right"))
+                    issues = true;
 
                 if (eElement.getElementsByTagName("appearance").getLength() > 0 &&
                         eElement.getElementsByTagName("appearance").item(0).getTextContent().equals("male"))
                     c.setFemale(false);
+                else if (!eElement.getElementsByTagName("appearance").item(0).getTextContent().equals("female"))
+                    issues = true;
 
                 Color colour = getColour(eElement.getElementsByTagName("lips").item(0).getTextContent());
                 if (eElement.getElementsByTagName("lips").getLength() > 0 && colour!= null) {
                     c.setLipColour(colour);
                 }
+                else if (colour == null)
+                    issues = true;
 
                 colour = getColour(eElement.getElementsByTagName("hair").item(0).getTextContent());
                 if (eElement.getElementsByTagName("hair").getLength() > 0 && colour!= null) {
                     c.setHairColour(colour);
                 }
+                else if (colour == null)
+                    issues = true;
 
                 colour = getColour(eElement.getElementsByTagName("skin").item(0).getTextContent());
                 if (eElement.getElementsByTagName("skin").getLength() > 0 && colour!= null) {
                     c.setSkinColour(colour);
                 }
+                else if (colour == null)
+                    issues = true;
             }
         }
         c.minimise();
@@ -258,6 +282,5 @@ public class XmlLoader {
 
         ui.setXmlLoaderWarning(new HighlightedPopup(ui));
         ui.getXmlLoaderWarning().getContent().add(container);
-        ui.getXmlLoaderWarning().show(ui.getPrimaryStage());
     }
 }
