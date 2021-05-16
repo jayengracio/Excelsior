@@ -319,4 +319,10 @@ public class Character extends ImageView {
 
         return col;
     }
+
+    public void setDefaultPose(){
+        String address = "/Icons/default.png";
+        setCharacter(address);
+        setPoseString("default.png");
+    }
 }

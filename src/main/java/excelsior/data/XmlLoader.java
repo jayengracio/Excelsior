@@ -194,7 +194,7 @@ public class XmlLoader {
                             c.setPoseString(character);
                         }
                     }catch (Exception e){
-                        System.out.println("could not find character image: " + character);
+                        c.setDefaultPose();
                     }
                 }
 
