@@ -63,7 +63,7 @@ public class Character extends ImageView {
     }
 
     public void setLipColour(Color lipColour) {
-        this.lipColour = lipColour;
+        this.lipColour = checkDefaultColour(lipColour, 0);
         updateImage();
     }
 
@@ -90,7 +90,7 @@ public class Character extends ImageView {
     }
 
     public void setHairColour(Color hairColour) {
-        this.hairColour = hairColour;
+        this.hairColour = checkDefaultColour(hairColour,2);
         updateImage();
     }
 
@@ -99,7 +99,7 @@ public class Character extends ImageView {
     }
 
     public void setSkinColour(Color skinColour) {
-        this.skinColour = skinColour;
+        this.skinColour = checkDefaultColour(skinColour, 1);
         updateImage();
     }
 
@@ -307,5 +307,16 @@ public class Character extends ImageView {
         isFemale = true;
         poseString = "#empty.png";
         setCharacterPose("#empty.png");
+    }
+
+    private Color checkDefaultColour(Color col, int ignore){
+        if(col == defaultLipColour && ignore != 0)
+            return Color.web("#FF0002");
+        if(col == defaultSkinColour && ignore != 1)
+            return Color.web("#FFE8DA");
+        if(col == defaultHairColour && ignore != 2)
+            return Color.web("#F9FF02");
+
+        return col;
     }
 }
