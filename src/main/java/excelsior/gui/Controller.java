@@ -37,14 +37,14 @@ public class Controller {
         ui.getButtonBox().getChildren().add(6, new ImageButton("/Icons/","Thought Bubble.png"));
         ui.getButtonBox().getChildren().add(7, new ImageButton("/Icons/","Bot Narration.png"));
 
-        this.leftCharacterButton(ui.getButtonBox().getChildren().get(0));
-        this.rightCharacterButton(ui.getButtonBox().getChildren().get(1));
-        this.switchOrientationButton(ui.getButtonBox().getChildren().get(2));
-        this.changeGenderButton(ui.getButtonBox().getChildren().get(3));
-        this.speechBubbleButton(ui.getButtonBox().getChildren().get(4));
-        this.topNarrationButton(ui.getButtonBox().getChildren().get(5));
-        this.thoughtBubbleButton(ui.getButtonBox().getChildren().get(6));
-        this.botNarrationButton(ui.getButtonBox().getChildren().get(7));
+        this.leftCharacterButton((ImageButton) ui.getButtonBox().getChildren().get(0));
+        this.rightCharacterButton((ImageButton)ui.getButtonBox().getChildren().get(1));
+        this.switchOrientationButton((ImageButton)ui.getButtonBox().getChildren().get(2));
+        this.changeGenderButton((ImageButton)ui.getButtonBox().getChildren().get(3));
+        this.speechBubbleButton((ImageButton)ui.getButtonBox().getChildren().get(4));
+        this.topNarrationButton((ImageButton)ui.getButtonBox().getChildren().get(5));
+        this.thoughtBubbleButton((ImageButton)ui.getButtonBox().getChildren().get(6));
+        this.botNarrationButton((ImageButton)ui.getButtonBox().getChildren().get(7));
     }
 
     /**
@@ -53,9 +53,8 @@ public class Controller {
      *
      * @param button node of the left character in the button box
      */
-    private void leftCharacterButton(Node button) {
-        Button cur = (Button) button;
-        Button right = (Button) ui.getButtonBox().getChildren().get(1);
+    private void leftCharacterButton(ImageButton button) {
+        ImageButton right = (ImageButton) ui.getButtonBox().getChildren().get(1);
         buttonTooltip(button, "Select Character");
 
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
@@ -66,13 +65,9 @@ public class Controller {
                 ui.getWorkPanel().getLeftCharacter().setEffect(dropShadow);
                 ui.getWorkPanel().getRightCharacter().setEffect(null);
 
-                ImageView graphic = new ImageView(new Image("/Icons/Right.png"));
-                graphic.setStyle("-fx-background-radius: 20px; -fx-border-radius: 20px;");
-                graphic.setFitWidth(90);
-                graphic.setFitHeight(90);
-                right.setGraphic(graphic);
+                right.setImage("/Icons/","Right.png");
 
-                createCharacterButtonTooltip(cur, right);
+                createCharacterButtonTooltip(button, right);
             }
             button.setEffect(dropShadow);
         });
@@ -84,9 +79,8 @@ public class Controller {
      *
      * @param button node of the right character in the button box
      */
-    private void rightCharacterButton(Node button) {
-        Button cur = (Button) button;
-        Button left = (Button) ui.getButtonBox().getChildren().get(0);
+    private void rightCharacterButton(ImageButton button) {
+        ImageButton left = (ImageButton) ui.getButtonBox().getChildren().get(0);
         buttonTooltip(button, "Select Character");
 
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
@@ -97,13 +91,9 @@ public class Controller {
                 ui.getWorkPanel().getRightCharacter().setEffect(dropShadow);
                 ui.getWorkPanel().getLeftCharacter().setEffect(null);
 
-                ImageView graphic = new ImageView(new Image("/Icons/Left.png"));
-                graphic.setStyle("-fx-background-radius: 20px; -fx-border-radius: 20px;");
-                graphic.setFitWidth(90);
-                graphic.setFitHeight(90);
-                left.setGraphic(graphic);
+                left.setImage("/Icons/","Left.png");
 
-                createCharacterButtonTooltip(cur, left);
+                createCharacterButtonTooltip(button, left);
             }
             button.setEffect(dropShadow);
         });
@@ -114,7 +104,7 @@ public class Controller {
      *
      * @param button node for flip orientation in the button box
      */
-    private void switchOrientationButton(Node button) {
+    private void switchOrientationButton(ImageButton button) {
         buttonTooltip(button, "Flip where the character is facing");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (ui.getSelectedCharacter() == null || ui.getSelectedCharacter().isEmpty()) {
@@ -132,7 +122,7 @@ public class Controller {
      *
      * @param button node for gender in the button box
      */
-    private void changeGenderButton(Node button) {
+    private void changeGenderButton(ImageButton button) {
         buttonTooltip(button, "Change the gender of the character");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (ui.getSelectedCharacter() == null || ui.getSelectedCharacter().isEmpty()) {
@@ -150,7 +140,7 @@ public class Controller {
      *
      * @param button node for the speech bubble in the button box
      */
-    private void speechBubbleButton(Node button) {
+    private void speechBubbleButton(ImageButton button) {
         buttonTooltip(button, "Add a speech bubble for the selected character");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (ui.getSelectedCharacter() == null || ui.getSelectedCharacter().isEmpty()) {
@@ -169,7 +159,7 @@ public class Controller {
      *
      * @param button node for the thought bubble in the button box
      */
-    private void thoughtBubbleButton(Node button) {
+    private void thoughtBubbleButton(ImageButton button) {
         buttonTooltip(button, "Add a thought bubble for the selected character");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (ui.getSelectedCharacter() == null || ui.getSelectedCharacter().isEmpty()) {
@@ -188,7 +178,7 @@ public class Controller {
      *
      * @param button node for the top narration in the button box
      */
-    private void topNarrationButton(Node button) {
+    private void topNarrationButton(ImageButton button) {
         buttonTooltip(button, "Add the top narration of the panel");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             ui.getTopNarrationInput().show(ui.getPrimaryStage());
@@ -202,7 +192,7 @@ public class Controller {
      *
      * @param button node for the bottom narration in the button box
      */
-    private void botNarrationButton(Node button) {
+    private void botNarrationButton(ImageButton button) {
         buttonTooltip(button, "Add the bottom narration of the panel");
         button.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             ui.getBottomNarrationInput().show(ui.getPrimaryStage());
@@ -217,11 +207,10 @@ public class Controller {
      * @param button of which to add the tooltip for
      * @param text   for tooltip information
      */
-    private void buttonTooltip(Node button, String text) {
-        Button castedButton = (Button) button;
-        castedButton.setTooltip(new Tooltip(text));
-        castedButton.getTooltip().setShowDelay(Duration.seconds(0.1));
-        castedButton.getTooltip().setStyle("-fx-font-size: 12;");
+    private void buttonTooltip(Button button, String text) {
+        button.setTooltip(new Tooltip(text));
+        button.getTooltip().setShowDelay(Duration.seconds(0.1));
+        button.getTooltip().setStyle("-fx-font-size: 12;");
     }
 
     /**
@@ -230,15 +219,11 @@ public class Controller {
      * @param current button
      * @param next    button
      */
-    public void createCharacterButtonTooltip(Button current, Button next) {
+    public void createCharacterButtonTooltip(ImageButton current, ImageButton next) {
         if (next == null) {
             current.getTooltip().setText("Select Character");
         } else {
-            ImageView graphic = new ImageView(new Image("/Icons/SelectPose.png"));
-            graphic.setStyle("-fx-background-radius: 20px; -fx-border-radius: 20px;");
-            graphic.setFitWidth(90);
-            graphic.setFitHeight(90);
-            current.setGraphic(graphic);
+            current.setImage("/Icons/","SelectPose.png");
 
             current.setTooltip(new Tooltip("Change character pose"));
             next.setTooltip(new Tooltip("Select Character"));
