@@ -279,7 +279,9 @@ public class Character extends ImageView {
             return this.character;
     }
 
-    // Change gender helper function
+    /**
+     * Change gender helper function
+     */
     private void change(PixelWriter writer, int x, int y, Color current, Color newColour) {
         if (current.equals(Color.web("#FBFF5E")) || current.equals(Color.web("#FDFC9E")))          //yellow exemptions
             writer.setColor(x, y, current);
@@ -312,6 +314,9 @@ public class Character extends ImageView {
         setCharacterPose("#empty.png");
     }
 
+    /**
+     * checks for default colour used, used in xml loader error handling
+     */
     private Color checkDefaultColour(Color col, int ignore){
         if(col.toString().equals(defaultLipColour.toString()) && ignore != 0)
             return Color.web("#FF0002");
@@ -323,6 +328,9 @@ public class Character extends ImageView {
         return col;
     }
 
+    /**
+     * sets Default pose without setting empty to false, used in xml loading error handling
+     */
     public void setDefaultPose(){
         String address = "/Icons/default.png";
         setCharacter(address);

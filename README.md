@@ -194,6 +194,11 @@ Additional Features/Work:
  - Moved to Maven for dependency management and other useful features (simplified jar making process).
  - Decided against adding a dark theme as not only was it a sizable undertaking but it didn’t seem to be appealing aesthetically (taking into consideration the text bubbles).
 
+### Testing 
+ - Completed tests using a combination of standard output testing and unit testing.
+ - Tested most of our application manually using standard output testing.
+ - Tested some backend classes using unit testing.
+ 
 ## Special Thanks
 
  - To our mental stability for staying strong

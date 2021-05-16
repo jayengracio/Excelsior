@@ -168,15 +168,8 @@ public class XmlSaver {
         DOMSource source = new DOMSource(doc);
 
         if (file != null) {
-            long start = System.nanoTime();
             StreamResult result = new StreamResult(file);
             transformer.transform(source, result);
-
-            /*// debug
-            StreamResult consoleResult = new StreamResult(System.out);
-            transformer.transform(source, consoleResult);*/
-            double elapsedTimeInSec = (System.nanoTime() - start) * 1.0e-9;
-            System.out.println("Saved In: " + elapsedTimeInSec);
         }
     }
 }

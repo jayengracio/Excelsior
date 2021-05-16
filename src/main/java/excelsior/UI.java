@@ -77,17 +77,13 @@ public class UI {
         return workPanel;
     }
 
-    public Character getSelectedCharacter() {
-        return selectedCharacter;
-    }
+    public Character getSelectedCharacter() { return selectedCharacter; }
 
     public void setSelectedCharacter(Character selectedCharacter) {
         this.selectedCharacter = selectedCharacter;
     }
 
-    public HBox getComicPanels() {
-        return comicPanels;
-    }
+    public HBox getComicPanels() { return comicPanels; }
 
     public HighlightedPopup getCharWarningPopup() {
         return charWarningPopup;
@@ -153,7 +149,7 @@ public class UI {
     }
 
     /**
-     * Creates splash screne scene and returns it to be used for app startup
+     * Creates splash screen scene and returns it to be used for app startup
      */
     private Scene getSplashScreen(){
         VBox container = new VBox();
@@ -264,6 +260,9 @@ public class UI {
         return scroll;
     }
 
+    /**
+     * Creates popup for users to choose the options for their exported html file
+     */
     private void createHtmlOptionMenu() {
         VBox container = new VBox(10);
         container.setPadding(new Insets(15));

@@ -82,6 +82,4 @@ public class TextBubbleTest {
         assertTrue(tbub.getBubble().getFitWidth() == 135);
         assertTrue(((int) tbub.getText().getMaxWidth()) == 135);
     }
-
-
 }

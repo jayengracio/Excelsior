@@ -21,6 +21,9 @@ public class Narration extends Label {
         this.setStyle(style);
     }
 
+    /**
+     * Minimises narration for smaller panel display
+     */
     public void minimise() {
         this.setStyle("-fx-font-size:" + (fontSize / 2) + "; -fx-font-weight: bold; -fx-font-family: 'monospaced';");
     }

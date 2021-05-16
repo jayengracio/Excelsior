@@ -30,15 +30,25 @@ public class HtmlSaver {
         loadThemes();
     }
 
+    /**
+     * returns an array of names of all of the themes
+     */
     public String[] getThemes()
     {
         return themes.keySet().toArray(new String[themes.keySet().size()]);
     }
 
+    /**
+     * returns the colours associated with a particular theme
+     */
     public String[] getThemeColourSet(String theme)
     {
         return themes.get(theme);
     }
+
+    /**
+     * loads the themes hashmap with themes
+     */
     public void loadThemes()
     {
         themes.put("Dark-red",new String[]{"#23272a","#2c2f33","#B22222"});
@@ -53,21 +63,23 @@ public class HtmlSaver {
         themes.put("Cotton Candy",new String[]{"#FF23C7","#FF98C7","#FF58C1"});
     }
 
+    /**
+     * Saves the html file
+     * -Creates the directory in required location and loads the comic images into the folder
+     * -Runs loading screen while creating images, then HtmlOptionMenuPopup shows
+     */
     public void save() {
         try {
             String dir = chooseDirectory();
             //if they chose a directory
             if (dir != null)
             {
-                //System.out.println(dir);
-
                 int i = 0;
                 Boolean folderCreated = false;
 
                 //Creates comic directory with name "comic-0", iterating through numbers until it creates a directory that hadn't existed
                 while(!folderCreated)
                 {
-                    //System.out.println(dir + "\\comic-"+i);
                     comicDir = new File(dir + "\\comic-"+i);
                     if(comicDir.mkdirs())
                     {
@@ -92,7 +104,6 @@ public class HtmlSaver {
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
-
                             }
                         });
                     }
@@ -105,11 +116,12 @@ public class HtmlSaver {
         }
     }
 
+    /**
+     * Forms the html file based on selected type of comic and colour theme
+     */
     public void htmlFormer(int selectedType,String theme)
     {
-        //System.out.println(selectedType + " "+theme + " " +themes.get(theme));
         String[] colours = themes.get(theme);
-        //System.out.println(colours[0]+" "+colours[1]+" "+colours[2]);
         try {
             File comic = new File(comicDir.getAbsolutePath() + "\\comic" + currentComicFolderIndex + ".html");
             PrintWriter writer = new PrintWriter(comic);
@@ -224,6 +236,9 @@ public class HtmlSaver {
         }
     }
 
+    /**
+     * Opens directory chooser and returns the path of the chosen directory
+     */
     private String chooseDirectory(){
         DirectoryChooser dirToSaveHtmlFolder = new DirectoryChooser();
         dirToSaveHtmlFolder.setTitle("Choose Directory to Save HTML comic folder");
@@ -241,6 +256,9 @@ public class HtmlSaver {
         this.comicTitle = comicTitle;
     }
 
+    /**
+     * Create all the images of comic panels from the comic
+     */
     public void createImages(String fileLocation) throws IOException, URISyntaxException {
         for (int i = 0; i < ui.getComicPanels().getChildren().size(); i++) {
             ComicPane pane = (ComicPane) ui.getComicPanels().getChildren().get(i);
@@ -253,6 +271,9 @@ public class HtmlSaver {
         ImageIO.write(SwingFXUtils.fromFXImage(endScreen, null), "png", file);
     }
 
+    /**
+     * Creates a gif using comic panel images in directory created earlier in html process
+     */
     public void createGif() throws IOException {
         File[] comicImagePanels = comicDir.listFiles();
         comicImagePanels = clean(comicImagePanels);
@@ -267,6 +288,9 @@ public class HtmlSaver {
         e.finish();
     }
 
+    /**
+     * Clean function removes all non png files from the input array and returns it
+     */
     private File[] clean(File[] images){
         int count = 0;
         for (File image : images) {
@@ -278,7 +302,6 @@ public class HtmlSaver {
         for(int i=0, j=0; i< images.length; i++){
             if(images[i].getName().endsWith(".png")){
                 array[j++] = images[i];
-                System.out.println("count = " + i + ", name: " + images[i].getName() + "\n");
             }
         }
         return array;
