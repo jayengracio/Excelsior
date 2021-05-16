@@ -161,17 +161,17 @@ public class HtmlSaver {
 
             if(selectedType == 0 || selectedType == 3){
                 writer.print("\t\t\twidth: 45vw;\n" +
-                        "\t\t\theight: 80vh;\n");
+                        "\t\t\theight: 40vw;\n");
             }
 
             if(selectedType == 1){
                 writer.print("\t\t\twidth: 30vw;\n" +
-                        "\t\t\theight: 54vh;\n");
+                        "\t\t\theight: 27vw;\n");
             }
 
             if(selectedType == 2){
-                writer.print("\t\t\twidth: 39vw;\n" +
-                        "\t\t\theight: 70vh;\n");
+                writer.print("\t\t\twidth: 79vmin;\n" +
+                        "\t\t\theight: 70vmin;\n");
             }
 
             writer.print("\t\t\tborder-radius: 10px;\n" +
