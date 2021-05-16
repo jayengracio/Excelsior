@@ -50,96 +50,100 @@ public class XmlSaver {
                 panel.appendChild(above);
 
                 // LEFT CHARACTER
-                Element left = doc.createElement("left");
-                panel.appendChild(left);
+                    Element left = doc.createElement("left");
+                    panel.appendChild(left);
+                if(!pane.getLeftCharacter().getPoseString().equals("default.png")) {
 
-                Element figure = doc.createElement("figure");
-                left.appendChild(figure);
+                    Element figure = doc.createElement("figure");
+                    left.appendChild(figure);
 
-                Element appearance = doc.createElement("appearance");
-                appearance.appendChild(doc.createTextNode(pane.getLeftCharacter().getGender()));
-                figure.appendChild(appearance);
+                    Element appearance = doc.createElement("appearance");
+                    appearance.appendChild(doc.createTextNode(pane.getLeftCharacter().getGender()));
+                    figure.appendChild(appearance);
 
-                Element skin = doc.createElement("skin");
-                skin.appendChild(doc.createTextNode(pane.getLeftCharacter().getSkinColourAsHex()));
-                figure.appendChild(skin);
+                    Element skin = doc.createElement("skin");
+                    skin.appendChild(doc.createTextNode(pane.getLeftCharacter().getSkinColourAsHex()));
+                    figure.appendChild(skin);
 
-                Element hair = doc.createElement("hair");
-                hair.appendChild(doc.createTextNode(pane.getLeftCharacter().getHairColourAsHex()));
-                figure.appendChild(hair);
+                    Element hair = doc.createElement("hair");
+                    hair.appendChild(doc.createTextNode(pane.getLeftCharacter().getHairColourAsHex()));
+                    figure.appendChild(hair);
 
-                Element lips = doc.createElement("lips");
-                lips.appendChild(doc.createTextNode(pane.getLeftCharacter().getLipColourAsHex()));
-                figure.appendChild(lips);
+                    Element lips = doc.createElement("lips");
+                    lips.appendChild(doc.createTextNode(pane.getLeftCharacter().getLipColourAsHex()));
+                    figure.appendChild(lips);
 
-                Element pose = doc.createElement("pose");
-                pose.appendChild(doc.createTextNode(pane.getLeftCharacter().getPoseString()));
-                figure.appendChild(pose);
+                    Element pose = doc.createElement("pose");
+                    pose.appendChild(doc.createTextNode(pane.getLeftCharacter().getPoseString()));
+                    figure.appendChild(pose);
 
-                Element facing = doc.createElement("facing");
-                facing.appendChild(doc.createTextNode(pane.getLeftCharacter().getFacing()));
-                figure.appendChild(facing);
+                    Element facing = doc.createElement("facing");
+                    facing.appendChild(doc.createTextNode(pane.getLeftCharacter().getFacing()));
+                    figure.appendChild(facing);
 
-                Element balloon = doc.createElement("balloon");
-                left.appendChild(balloon);
+                    Element balloon = doc.createElement("balloon");
+                    left.appendChild(balloon);
 
-                Attr status = doc.createAttribute("status");
-                if (pane.getLeftSpeechBubble().getBubbleType().equals("speech")) status.setValue("speech");
-                else if (pane.getLeftSpeechBubble().getBubbleType().equals("thought")) status.setValue("thought");
-                else status.setValue("");
-                balloon.setAttributeNode(status);
+                    Attr status = doc.createAttribute("status");
+                    if (pane.getLeftSpeechBubble().getBubbleType().equals("speech")) status.setValue("speech");
+                    else if (pane.getLeftSpeechBubble().getBubbleType().equals("thought")) status.setValue("thought");
+                    else status.setValue("");
+                    balloon.setAttributeNode(status);
 
-                Element content = doc.createElement("content");
-                String s = pane.getLeftSpeechBubble().getText().getText();
-                s = s.replaceAll("\n", " ");
-                content.appendChild(doc.createTextNode(s));
-                balloon.appendChild(content);
+                    Element content = doc.createElement("content");
+                    String s = pane.getLeftSpeechBubble().getText().getText();
+                    s = s.replaceAll("\n", " ");
+                    content.appendChild(doc.createTextNode(s));
+                    balloon.appendChild(content);
+                }
 
                 // RIGHT CHARACTER
-                Element right = doc.createElement("right");
-                panel.appendChild(right);
+                    Element right = doc.createElement("right");
+                    panel.appendChild(right);
+                if(!pane.getRightCharacter().getPoseString().equals("default.png")) {
 
-                Element rFigure = doc.createElement("figure");
-                right.appendChild(rFigure);
+                    Element rFigure = doc.createElement("figure");
+                    right.appendChild(rFigure);
 
-                Element rAppearance = doc.createElement("appearance");
-                rAppearance.appendChild(doc.createTextNode(pane.getRightCharacter().getGender()));
-                rFigure.appendChild(rAppearance);
+                    Element rAppearance = doc.createElement("appearance");
+                    rAppearance.appendChild(doc.createTextNode(pane.getRightCharacter().getGender()));
+                    rFigure.appendChild(rAppearance);
 
-                Element rSkin = doc.createElement("skin");
-                rSkin.appendChild(doc.createTextNode(pane.getRightCharacter().getSkinColourAsHex()));
-                rFigure.appendChild(rSkin);
+                    Element rSkin = doc.createElement("skin");
+                    rSkin.appendChild(doc.createTextNode(pane.getRightCharacter().getSkinColourAsHex()));
+                    rFigure.appendChild(rSkin);
 
-                Element rHair = doc.createElement("hair");
-                rHair.appendChild(doc.createTextNode(pane.getRightCharacter().getHairColourAsHex()));
-                rFigure.appendChild(rHair);
+                    Element rHair = doc.createElement("hair");
+                    rHair.appendChild(doc.createTextNode(pane.getRightCharacter().getHairColourAsHex()));
+                    rFigure.appendChild(rHair);
 
-                Element rLips = doc.createElement("lips");
-                rLips.appendChild(doc.createTextNode(pane.getRightCharacter().getLipColourAsHex()));
-                rFigure.appendChild(rLips);
+                    Element rLips = doc.createElement("lips");
+                    rLips.appendChild(doc.createTextNode(pane.getRightCharacter().getLipColourAsHex()));
+                    rFigure.appendChild(rLips);
 
-                Element rPose = doc.createElement("pose");
-                rPose.appendChild(doc.createTextNode(pane.getRightCharacter().getPoseString()));
-                rFigure.appendChild(rPose);
+                    Element rPose = doc.createElement("pose");
+                    rPose.appendChild(doc.createTextNode(pane.getRightCharacter().getPoseString()));
+                    rFigure.appendChild(rPose);
 
-                Element rFacing = doc.createElement("facing");
-                rFacing.appendChild(doc.createTextNode(pane.getRightCharacter().getFacing()));
-                rFigure.appendChild(rFacing);
+                    Element rFacing = doc.createElement("facing");
+                    rFacing.appendChild(doc.createTextNode(pane.getRightCharacter().getFacing()));
+                    rFigure.appendChild(rFacing);
 
-                Element rBalloon = doc.createElement("balloon");
-                right.appendChild(rBalloon);
+                    Element rBalloon = doc.createElement("balloon");
+                    right.appendChild(rBalloon);
 
-                Attr rStatus = doc.createAttribute("status");
-                if (pane.getRightSpeechBubble().getBubbleType().equals("speech")) rStatus.setValue("speech");
-                else if (pane.getRightSpeechBubble().getBubbleType().equals("thought")) rStatus.setValue("thought");
-                else rStatus.setValue("");
-                rBalloon.setAttributeNode(rStatus);
+                    Attr rStatus = doc.createAttribute("status");
+                    if (pane.getRightSpeechBubble().getBubbleType().equals("speech")) rStatus.setValue("speech");
+                    else if (pane.getRightSpeechBubble().getBubbleType().equals("thought")) rStatus.setValue("thought");
+                    else rStatus.setValue("");
+                    rBalloon.setAttributeNode(rStatus);
 
-                Element rContent = doc.createElement("content");
-                s = pane.getRightSpeechBubble().getText().getText();
-                s = s.replaceAll("\n", " ");
-                rContent.appendChild(doc.createTextNode(s));
-                rBalloon.appendChild(rContent);
+                    Element rContent = doc.createElement("content");
+                    String s = pane.getRightSpeechBubble().getText().getText();
+                    s = s.replaceAll("\n", " ");
+                    rContent.appendChild(doc.createTextNode(s));
+                    rBalloon.appendChild(rContent);
+                }
 
                 Element below = doc.createElement("below");
                 below.appendChild(doc.createTextNode(pane.getBottomNarration().getText()));
