@@ -186,31 +186,26 @@ public class HtmlSaver {
 
             //get all of the comic Panes loaded into the folder and add them to the html comic
             File[] comicImagePanels = comicDir.listFiles();
+            comicImagePanels = clean(comicImagePanels);
             if (selectedType == 0) {
-                for (File comicPanel : comicImagePanels) {
-                    if (comicPanel.getName().endsWith(".png")) {
-                        writer.print("\t\t\t<tr><td><img src=\"" + comicPanel.getName() + "\" ></td></tr>\n");
-                    }
+                for (int i = 0; i < comicImagePanels.length; i++) {
+                    writer.print("\t\t\t<tr><td><img src=\"" + i + ".png" + "\" ></td></tr>\n");
                 }
             }
 
             else if (selectedType == 1) {
-                comicImagePanels = clean(comicImagePanels);
-
                 for (int i = 0; i < comicImagePanels.length; i++) {
                     if (i % 2 == 0)
-                        writer.print("\t\t\t<tr><td><img src=\"" + comicImagePanels[i].getName() + "\" ></td>\n");
+                        writer.print("\t\t\t<tr><td><img src=\"" + i + ".png" + "\" ></td>\n");
                     else
-                        writer.print("\t\t\t<td><img src=\"" + comicImagePanels[i].getName() + "\" ></td></tr>\n");
+                        writer.print("\t\t\t<td><img src=\"" + i + ".png" + "\" ></td></tr>\n");
                 }
             }
 
             else if (selectedType == 2) {
                 writer.print("\t\t\t<tr>");
-                for (File comicPanel : comicImagePanels) {
-                    if (comicPanel.getName().endsWith(".png")) {
-                        writer.print("<td><img src=\"" + comicPanel.getName() + "\" ></td>");
-                    }
+                for (int i = 0; i < comicImagePanels.length; i++) {
+                    writer.print("<td><img src=\"" + i + ".png" + "\" ></td>");
                 }
                 writer.print("</tr>\n");
             }
