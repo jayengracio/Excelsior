@@ -28,6 +28,7 @@ public class Character extends ImageView {
     public void setCharacterPose(String character) {
         String address = "/Character_Images/" + character;
         setCharacter(address);
+        setPoseString(character);
         setEmpty(character.equals("#empty.png"));
     }
 
@@ -44,7 +45,7 @@ public class Character extends ImageView {
         updateImage();
     }
 
-    public void setCharacter(String url) {
+    private void setCharacter(String url) {
         this.character = new Image(url);
         updateImage();
     }
@@ -312,11 +313,11 @@ public class Character extends ImageView {
     }
 
     private Color checkDefaultColour(Color col, int ignore){
-        if(col == defaultLipColour && ignore != 0)
+        if(col.toString().equals(defaultLipColour.toString()) && ignore != 0)
             return Color.web("#FF0002");
-        if(col == defaultSkinColour && ignore != 1)
+        if(col.toString().equals(defaultSkinColour.toString()) && ignore != 1)
             return Color.web("#FFE8DA");
-        if(col == defaultHairColour && ignore != 2)
+        if(col.toString().equals(defaultHairColour.toString()) && ignore != 2)
             return Color.web("#F9FF02");
 
         return col;
