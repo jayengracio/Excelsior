@@ -3,11 +3,8 @@ package excelsior.gui;
 import excelsior.UI;
 import excelsior.control.Button;
 import excelsior.control.ImageButton;
-import javafx.scene.Node;
 import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
@@ -232,6 +229,5 @@ public class Controller {
             current.getTooltip().setStyle("-fx-font-size: 12;");
             next.getTooltip().setStyle("-fx-font-size: 12;");
         }
-
     }
 }
