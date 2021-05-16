@@ -38,7 +38,7 @@ public class AnimatedGifEncoder {
 
     protected int transIndex; // transparent index in color table
 
-    protected int repeat = 5; // no repeat
+    protected int repeat = 10; // no repeat
 
     protected int delay = 0; // frame delay (hundredths)
 
