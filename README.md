@@ -14,8 +14,8 @@ Using the jar file:
 > 1. In command line: Change the working directory to where the jar file is located.
 > 2. Type in: "java -jar Tintin-Excelsior.jar"
 
-Using Maven:
-> 1. In terminal: Type command "mvn compile"
+Using Maven: (also builds jar file)
+> 1. In terminal: Type command "mvn clean compile assembly:single"
 > 2. In terminal: Type command "mvn exec:java"
 
 ## Project's Sprints & Workflow
