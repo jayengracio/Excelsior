@@ -138,9 +138,10 @@ public class HtmlSaver {
                     "\t\t#mainSlider{\n");
 
             if (selectedType == 2) {
-                writer.print("\t\t\tmargin: 55px 0vw 55px 0vw;\n" +
+                writer.print("\t\t\tmargin: 30px 0vw 0px 0vw;\n" +
                         "\t\t\toverflow: auto;\n");
-            } else {
+            }
+            else {
                 writer.print("\t\t\tmargin: 0px 15vw 0px 15vw;\n");
             }
 
@@ -164,13 +165,13 @@ public class HtmlSaver {
             }
 
             if(selectedType == 1){
-                writer.print("\t\t\twidth: 40vw;\n" +
-                        "\t\t\theight: 70vh;\n");
+                writer.print("\t\t\twidth: 30vw;\n" +
+                        "\t\t\theight: 54vh;\n");
             }
 
             if(selectedType == 2){
-                writer.print("\t\t\twidth: 35vw;\n" +
-                        "\t\t\theight: 62vh;\n");
+                writer.print("\t\t\twidth: 39vw;\n" +
+                        "\t\t\theight: 70vh;\n");
             }
 
             writer.print("\t\t\tborder-radius: 10px;\n" +
@@ -178,8 +179,9 @@ public class HtmlSaver {
                     "\t</style>\n" +
                     "</head>\n" +
                     "<body>\n" +
+                    (selectedType == 2? "\t\t<h2>" + comicTitle + "</h2>\n" : "") +
                     "\t<div id=\"mainSlider\">\n" +
-                    "\t\t<h2>" + comicTitle + "</h2>\n" +
+                    (selectedType != 2? "\t\t<h2>" + comicTitle + "</h2>\n" : "") +
                     "\t\t<table>\n");
 
             //get all of the comic Panes loaded into the folder and add them to the html comic
