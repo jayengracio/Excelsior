@@ -163,15 +163,19 @@ public class ComicPane extends GridPane {
         this.getBottomNarration().setText(panel.getBottomNarration().getText());
         this.getBottomNarration().setTextSize(panel.getBottomNarration().getTextSize());
 
-        this.getLeftSpeechBubble().getBubble().setImage(panel.getLeftSpeechBubble().getBubble().getImage());
+        if( panel.getLeftSpeechBubble().getBubbleType().equals("speech"))
+            this.getLeftSpeechBubble().setSpeech();
+        else if(panel.getLeftSpeechBubble().getBubbleType().equals("thought"))
+            this.getLeftSpeechBubble().setThought();
         this.getLeftSpeechBubble().getText().setText(panel.getLeftSpeechBubble().getText().getText());
         this.getLeftSpeechBubble().setTextSize(panel.getLeftSpeechBubble().getTextSize());
-        this.getLeftSpeechBubble().setBubbleType(panel.getLeftSpeechBubble().getBubbleType());
 
-        this.getRightSpeechBubble().getBubble().setImage(panel.getRightSpeechBubble().getBubble().getImage());
+        if( panel.getRightSpeechBubble().getBubbleType().equals("speech"))
+            this.getRightSpeechBubble().setSpeech();
+        else if(panel.getRightSpeechBubble().getBubbleType().equals("thought"))
+            this.getRightSpeechBubble().setThought();
         this.getRightSpeechBubble().getText().setText(panel.getRightSpeechBubble().getText().getText());
         this.getRightSpeechBubble().setTextSize(panel.getRightSpeechBubble().getTextSize());
-        this.getRightSpeechBubble().setBubbleType(panel.getRightSpeechBubble().getBubbleType());
 
         this.getRightCharacter().setSkinColour(panel.getRightCharacter().getSkinColour());
         this.getRightCharacter().setHairColour(panel.getRightCharacter().getHairColour());

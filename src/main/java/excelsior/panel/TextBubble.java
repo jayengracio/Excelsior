@@ -24,7 +24,7 @@ public class TextBubble extends StackPane {
         text.setPadding(new Insets(15, 38, 55, 50));
         text.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-font-family: 'monospaced';");
         text.setAlignment(Pos.CENTER);
-        text.maxWidth(300);
+        text.setMaxWidth(300);
         this.getChildren().add(bubble);
         this.getChildren().add(text);
     }
@@ -100,14 +100,6 @@ public class TextBubble extends StackPane {
         else return bubbleType;
     }
 
-    /**
-     * Bubble type Setter in String form
-     *
-     * @param type to set as
-     */
-    public void setBubbleType(String type) {
-        this.bubbleType = type;
-    }
 
     /**
      * Empties the bubble
@@ -115,7 +107,7 @@ public class TextBubble extends StackPane {
     public void setEmpty() {
         bubble.setImage(null);
         text.setText("");
-        bubbleType = "";
+        bubbleType = null;
     }
 
     /**
@@ -156,6 +148,6 @@ public class TextBubble extends StackPane {
         bubble.setFitHeight(80);
         text.setPadding(new Insets(5, 15, 23, 22));
         text.setStyle("-fx-font-size:" + (fontSize / 2) + "; -fx-font-weight: bold; -fx-font-family: 'monospaced';");
-        text.maxWidth(135);
+        text.setMaxWidth(135);
     }
 }

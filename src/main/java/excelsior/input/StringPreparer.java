@@ -12,22 +12,20 @@ public class StringPreparer {
      */
     public String prepareTBub(String s, TextBubble tBub) {
         String output;
-        int largeFont = 20;
-        int mediumFont = 16;
-        int smallFont = 13;
+
         output = prepareString(s, 3, 17);
         if (output != null) {
-            tBub.setTextSize(largeFont);
+            tBub.setTextSize(20);
             return output;
         }
         output = prepareString(s, 4, 18);
         if (output != null) {
-            tBub.setTextSize(mediumFont);
+            tBub.setTextSize(16);
             return output;
         }
         output = prepareString(s, 5, 25);
         if (output != null) {
-            tBub.setTextSize(smallFont);
+            tBub.setTextSize(13);
             return output;
         }
 
@@ -70,7 +68,7 @@ public class StringPreparer {
      * @param charPerLine the number of characters per line
      * @return output String
      */
-    public String prepareString(String s, int numLines, int charPerLine) {
+    private String prepareString(String s, int numLines, int charPerLine) {
         String output;
         int lastSpace = 0;
         int lineLength = 0;
