@@ -42,7 +42,6 @@ public class XmlLoader {
         File file = fileChooser.showOpenDialog(ui.getPrimaryStage());
 
         if (file != null) {
-            long start = System.nanoTime();
             ui.getPanelController().clearWorkPanel();
             ui.getComicPanels().getChildren().clear();
 
