@@ -199,6 +199,9 @@ Additional Features/Work:
  - Tested most of our application manually using standard output testing.
  - Tested some backend classes using unit testing.
  
+## Credits
+"Funnybone" character designs by © Tony Veale
+
 ## Special Thanks
 
  - To our mental stability for staying strong
